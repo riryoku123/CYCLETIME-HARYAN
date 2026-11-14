@@ -10,28 +10,20 @@
   <meta name="description" content="Aplikasi Stopwatch Cycle Time & Analisis Line Produksi Garmen Mandiri (100% Offline PWA)" />
   <title>Cycle Time Haryan — Offline PWA Stopwatch</title>
 
-  <!-- Favicon & Apple Touch Icon Inline SVG (Mandiri Tanpa File Eksternal) -->
+  <!-- Favicon & Apple Touch Icon Inline SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23020617' stroke-width='8'/%3E%3Cpath d='M50 32v20l14 8' fill='none' stroke='%23020617' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23020617' stroke-width='8'/%3E%3Cpath d='M50 32v20l14 8' fill='none' stroke='%23020617' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React & ReactDOM Production UMD (Siap Static Hosting GitHub Pages / Cloudflare Pages) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- Google Font Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
   <style>
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #020617;
+      color: #f1f5f9;
       -webkit-tap-highlight-color: transparent;
     }
     .custom-table-scroll::-webkit-scrollbar {
@@ -52,196 +44,15 @@
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
-  <div id="root"></div>
+  <div id="app"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
-
+  <script>
     // ============================================================================
-    // IKON SVG STANDALONE (Mandiri 100%, Tanpa Ketergantungan Library Eksternal)
-    // ============================================================================
-    const Icon = ({ name, className = "w-5 h-5" }) => {
-      const icons = {
-        clock: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
-        ),
-        play: (
-          <svg className={className} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="5 3 19 12 5 21 5 3"/>
-          </svg>
-        ),
-        square: (
-          <svg className={className} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="4" width="16" height="16" rx="2"/>
-          </svg>
-        ),
-        reset: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-          </svg>
-        ),
-        plus: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-        ),
-        trash: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-          </svg>
-        ),
-        settings: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-          </svg>
-        ),
-        download: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-        ),
-        chart: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-          </svg>
-        ),
-        checkCircle: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-          </svg>
-        ),
-        sun: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        ),
-        moon: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        ),
-        zoomIn: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-          </svg>
-        ),
-        zoomOut: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>
-          </svg>
-        ),
-        menu: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        ),
-        x: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        ),
-        pencil: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
-          </svg>
-        ),
-        check: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-        ),
-        users: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        ),
-        alert: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        ),
-        wifi: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>
-          </svg>
-        ),
-        wifiOff: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>
-          </svg>
-        ),
-        smartphone: (
-          <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
-          </svg>
-        )
-      };
-      return icons[name] || null;
-    };
-
-    // ============================================================================
-    // PENYIMPANAN OFFLINE INDEXED-DB (100% Client-Side, Tanpa Layanan Eksternal)
+    // 1. STATE APLIKASI & PENYIMPANAN OFFLINE INDEXED-DB (100% PURE VANILLA JS)
     // ============================================================================
     const DB_NAME = 'CycleTimeHaryanOfflineDB';
     const DB_VERSION = 1;
     const STORE_NAME = 'appStateStore';
-
-    const openOfflineDB = () => {
-      return new Promise((resolve, reject) => {
-        if (!window.indexedDB) {
-          reject(new Error('IndexedDB tidak didukung'));
-          return;
-        }
-        const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME);
-          }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-    };
-
-    const saveStateToIndexedDB = async (key, data) => {
-      try {
-        const db = await openOfflineDB();
-        return new Promise((resolve, reject) => {
-          const tx = db.transaction(STORE_NAME, 'readwrite');
-          const store = tx.objectStore(STORE_NAME);
-          const req = store.put(data, key);
-          req.onsuccess = () => resolve(true);
-          req.onerror = () => reject(req.error);
-        });
-      } catch (err) {
-        try {
-          localStorage.setItem(key, JSON.stringify(data));
-        } catch (e) {}
-      }
-    };
-
-    const loadStateFromIndexedDB = async (key) => {
-      try {
-        const db = await openOfflineDB();
-        return new Promise((resolve, reject) => {
-          const tx = db.transaction(STORE_NAME, 'readonly');
-          const store = tx.objectStore(STORE_NAME);
-          const req = store.get(key);
-          req.onsuccess = () => resolve(req.result);
-          req.onerror = () => reject(req.error);
-        });
-      } catch (err) {
-        try {
-          const fallback = localStorage.getItem(key);
-          return fallback ? JSON.parse(fallback) : null;
-        } catch (e) {
-          return null;
-        }
-      }
-    };
 
     const DEFAULT_CYCLES = [
       { id: 101, lapTime: 42.0, vsTarget: -3.0, processName: 'Persiapan Kerah', operatorName: 'Siti Rahma', machineName: 'Single Needle Lockstitch', timestamp: new Date(Date.now() - 300000).toISOString() },
@@ -251,1058 +62,733 @@
       { id: 105, lapTime: 44.8, vsTarget: -0.2, processName: 'Inspeksi & Trimming', operatorName: 'Ani Yulianti', machineName: 'Manual Table', timestamp: new Date(Date.now() - 60000).toISOString() }
     ];
 
-    function App() {
-      const [activeTab, setActiveTab] = useState('tracker');
-      const [isDarkMode, setIsDarkMode] = useState(true);
-      const [zoomLevel, setZoomLevel] = useState(100);
-      const [isMenuOpen, setIsMenuOpen] = useState(false);
-      const [isOnline, setIsOnline] = useState(navigator.onLine);
-      const [isHydrated, setIsHydrated] = useState(false);
-      const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const state = {
+      activeTab: 'tracker', // 'tracker' | 'analysis' | 'settings'
+      isDarkMode: true,
+      zoomLevel: 100,
+      isMenuOpen: false,
+      isOnline: navigator.onLine,
+      deferredPrompt: null,
+      taktTime: 45,
+      timeUnit: 'seconds', // 'seconds' | 'minutes'
+      lineName: 'Line A - Jahit Kemeja',
+      styleName: 'Style Formal Slimfit',
+      isRunning: false,
+      seconds: 0,
+      cycles: [...DEFAULT_CYCLES],
+      editingCycleId: null
+    };
 
-      // Parameter Line Produksi
-      const [taktTime, setTaktTime] = useState(45);
-      const [timeUnit, setTimeUnit] = useState('seconds');
-      const [lineName, setLineName] = useState('Line A - Jahit Kemeja');
-      const [styleName, setStyleName] = useState('Style Formal Slimfit');
+    let startTimePerf = 0;
+    let accumulatedSecs = 0;
+    let timerInterval = null;
 
-      // State Stopwatch Presisi Tinggi (menggunakan performance.now agar akurat saat pindah tab)
-      const [isRunning, setIsRunning] = useState(false);
-      const [seconds, setSeconds] = useState(0);
-      const startTimeRef = useRef(0);
-      const accumulatedRef = useRef(0);
-      const timerRef = useRef(null);
-
-      // Data Siklus
-      const [cycles, setCycles] = useState(DEFAULT_CYCLES);
-      const [editingCycleId, setEditingCycleId] = useState(null);
-
-      const tableContainerRef = useRef(null);
-
-      // 1. Inisialisasi PWA Manifest, Service Worker Offline & Muat Data IndexedDB
-      useEffect(() => {
-        const handleOnline = () => setIsOnline(true);
-        const handleOffline = () => setIsOnline(false);
-        const handleBeforeInstallPrompt = (e) => {
-          e.preventDefault();
-          setDeferredPrompt(e);
-        };
-
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
-        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-        const initOfflineData = async () => {
-          const savedCycles = await loadStateFromIndexedDB('cycles_data');
-          const savedSettings = await loadStateFromIndexedDB('settings_data');
-
-          if (Array.isArray(savedCycles)) {
-            setCycles(savedCycles);
+    function openOfflineDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) return reject(new Error('No IndexedDB'));
+        const req = window.indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME);
           }
-          if (savedSettings) {
-            if (typeof savedSettings.taktTime === 'number') setTaktTime(savedSettings.taktTime);
-            if (savedSettings.timeUnit) setTimeUnit(savedSettings.timeUnit);
-            if (savedSettings.lineName) setLineName(savedSettings.lineName);
-            if (savedSettings.styleName) setStyleName(savedSettings.styleName);
-            if (typeof savedSettings.isDarkMode === 'boolean') setIsDarkMode(savedSettings.isDarkMode);
-          }
-          setIsHydrated(true);
         };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
 
-        initOfflineData();
+    async function saveToDB(key, val) {
+      try {
+        const db = await openOfflineDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(val, key);
+      } catch (e) {
+        try { localStorage.setItem(key, JSON.stringify(val)); } catch (err) {}
+      }
+    }
 
-        // Injeksi Dynamic Web App Manifest agar bisa di-Install ke Home Screen HP/Desktop
-        try {
-          const manifestObj = {
-            name: 'Cycle Time Haryan - Offline Stopwatch',
-            short_name: 'CycleTime',
-            start_url: './',
-            scope: './',
-            display: 'standalone',
-            orientation: 'any',
-            background_color: '#020617',
-            theme_color: '#10b981',
-            description: 'Aplikasi Stopwatch Cycle Time & Analisis Line Produksi Garmen Mandiri (100% Offline)',
-            icons: [
-              {
-                src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%2310b981'/%3E%3Ccircle cx='96' cy='96' r='56' fill='none' stroke='%23020617' stroke-width='14'/%3E%3Cpath d='M96 62v38l26 16' fill='none' stroke='%23020617' stroke-width='14' stroke-linecap='round'/%3E%3C/svg%3E",
-                sizes: '192x192',
-                type: 'image/svg+xml',
-                purpose: 'any maskable'
-              },
-              {
-                src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2310b981'/%3E%3Ccircle cx='256' cy='256' r='150' fill='none' stroke='%23020617' stroke-width='36'/%3E%3Cpath d='M256 165v100l70 42' fill='none' stroke='%23020617' stroke-width='36' stroke-linecap='round'/%3E%3C/svg%3E",
-                sizes: '512x512',
-                type: 'image/svg+xml',
-                purpose: 'any maskable'
-              }
-            ]
-          };
-          const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
-          const manifestUrl = URL.createObjectURL(manifestBlob);
-          const manifestLink = document.createElement('link');
-          manifestLink.rel = 'manifest';
-          manifestLink.href = manifestUrl;
-          document.head.appendChild(manifestLink);
-
-          // Service Worker Offline Cache otomatis untuk GitHub Pages & Cloudflare Pages (HTTPS)
-          if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-            const swCode = `
-              const CACHE_NAME = 'cycle-time-haryan-offline-v2';
-              self.addEventListener('install', (event) => {
-                self.skipWaiting();
-              });
-              self.addEventListener('activate', (event) => {
-                event.waitUntil(self.clients.claim());
-              });
-              self.addEventListener('fetch', (event) => {
-                if (event.request.method !== 'GET') return;
-                event.respondWith(
-                  caches.match(event.request).then((cachedResponse) => {
-                    const fetchPromise = fetch(event.request).then((networkResponse) => {
-                      if (networkResponse && networkResponse.status === 200) {
-                        const clone = networkResponse.clone();
-                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-                      }
-                      return networkResponse;
-                    }).catch(() => cachedResponse);
-                    return cachedResponse || fetchPromise;
-                  })
-                );
-              });
-            `;
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl).catch(() => {});
-          }
-        } catch (err) {}
-
-        return () => {
-          window.removeEventListener('online', handleOnline);
-          window.removeEventListener('offline', handleOffline);
-          window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-        };
-      }, []);
-
-      // Simpan otomatis perubahan Cycles ke IndexedDB
-      useEffect(() => {
-        if (!isHydrated) return;
-        saveStateToIndexedDB('cycles_data', cycles);
-      }, [cycles, isHydrated]);
-
-      // Simpan otomatis perubahan Setting ke IndexedDB
-      useEffect(() => {
-        if (!isHydrated) return;
-        saveStateToIndexedDB('settings_data', {
-          taktTime,
-          timeUnit,
-          lineName,
-          styleName,
-          isDarkMode
+    async function loadFromDB(key) {
+      try {
+        const db = await openOfflineDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const req = tx.objectStore(STORE_NAME).get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
         });
-      }, [taktTime, timeUnit, lineName, styleName, isDarkMode, isHydrated]);
+      } catch (e) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) { return null; }
+      }
+    }
 
-      // Auto-scroll ke baris terbaru pada tabel Log
-      useEffect(() => {
-        if (tableContainerRef.current && activeTab === 'tracker') {
-          tableContainerRef.current.scrollTo({
-            top: tableContainerRef.current.scrollHeight,
-            behavior: 'smooth'
-          });
-        }
-      }, [cycles.length, activeTab]);
+    function persistAll() {
+      saveToDB('cycles_data', state.cycles);
+      saveToDB('settings_data', {
+        taktTime: state.taktTime,
+        timeUnit: state.timeUnit,
+        lineName: state.lineName,
+        styleName: state.styleName,
+        isDarkMode: state.isDarkMode
+      });
+    }
 
-      // Mesin Stopwatch Akurat Berbasis Timestamp
-      useEffect(() => {
-        if (isRunning) {
-          startTimeRef.current = performance.now();
-          timerRef.current = setInterval(() => {
-            const elapsed = (performance.now() - startTimeRef.current) / 1000;
-            setSeconds(accumulatedRef.current + elapsed);
-          }, 50);
-        } else {
-          clearInterval(timerRef.current);
-        }
-        return () => clearInterval(timerRef.current);
-      }, [isRunning]);
+    // ============================================================================
+    // 2. HELPER PERHITUNGAN & FORMATTER
+    // ============================================================================
+    function getUnitSymbol() {
+      return state.timeUnit === 'minutes' ? 'm' : 's';
+    }
 
-      const handleInstallApp = async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          setDeferredPrompt(null);
-        }
-      };
+    function formatTimeValue(valInSeconds) {
+      if (state.timeUnit === 'minutes') {
+        return (valInSeconds / 60).toFixed(2);
+      }
+      return valInSeconds.toFixed(1);
+    }
 
-      const handleStart = () => {
-        if (!isRunning) {
-          accumulatedRef.current = seconds;
-          setIsRunning(true);
-        }
-      };
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
 
-      const handleStop = () => {
-        if (isRunning) {
-          const elapsed = (performance.now() - startTimeRef.current) / 1000;
-          accumulatedRef.current += elapsed;
-          setSeconds(accumulatedRef.current);
-          setIsRunning(false);
-        }
-      };
-
-      const handleReset = () => {
-        setIsRunning(false);
-        accumulatedRef.current = 0;
-        setSeconds(0);
-      };
-
-      const handleLap = () => {
-        if (seconds <= 0) return;
-        const currentLap = parseFloat(seconds.toFixed(1));
-        const vsTargetVal = parseFloat((currentLap - taktTime).toFixed(1));
-
-        if (editingCycleId) {
-          handleConfirmReTime();
-          return;
-        }
-
-        const nextCycleNumber = cycles.length + 1;
-        const newCycle = {
-          id: Date.now(),
-          lapTime: currentLap,
-          vsTarget: vsTargetVal,
-          processName: `Proses #${nextCycleNumber}`,
-          operatorName: '',
-          machineName: '',
-          timestamp: new Date().toISOString()
-        };
-        setCycles([newCycle, ...cycles]);
-        accumulatedRef.current = 0;
-        startTimeRef.current = performance.now();
-        setSeconds(0);
-      };
-
-      const handleDeleteCycle = (id) => {
-        if (editingCycleId === id) {
-          setEditingCycleId(null);
-        }
-        setCycles(cycles.filter((c) => c.id !== id));
-      };
-
-      const handleClearLog = () => {
-        setCycles([]);
-        setEditingCycleId(null);
-      };
-
-      const handleProcessNameChange = (id, val) => {
-        setCycles(cycles.map((c) => (c.id === id ? { ...c, processName: val } : c)));
-      };
-
-      const handleOperatorNameChange = (id, val) => {
-        setCycles(cycles.map((c) => (c.id === id ? { ...c, operatorName: val } : c)));
-      };
-
-      const handleMachineNameChange = (id, val) => {
-        setCycles(cycles.map((c) => (c.id === id ? { ...c, machineName: val } : c)));
-      };
-
-      const handleStartReTime = (cycle) => {
-        setEditingCycleId(cycle.id);
-        accumulatedRef.current = 0;
-        startTimeRef.current = performance.now();
-        setSeconds(0);
-        setIsRunning(true);
-      };
-
-      const handleConfirmReTime = () => {
-        if (!editingCycleId) return;
-        const newLapTime = parseFloat(seconds.toFixed(1));
-        const vsTargetVal = parseFloat((newLapTime - taktTime).toFixed(1));
-
-        setCycles(
-          cycles.map((c) =>
-            c.id === editingCycleId
-              ? { ...c, lapTime: newLapTime, vsTarget: vsTargetVal }
-              : c
-          )
-        );
-
-        setIsRunning(false);
-        accumulatedRef.current = 0;
-        setSeconds(0);
-        setEditingCycleId(null);
-      };
-
-      const handleCancelReTime = () => {
-        setIsRunning(false);
-        accumulatedRef.current = 0;
-        setSeconds(0);
-        setEditingCycleId(null);
-      };
-
-      const formatTimeValue = (valInSeconds) => {
-        if (timeUnit === 'minutes') {
-          return (valInSeconds / 60).toFixed(2);
-        }
-        return valInSeconds.toFixed(1);
-      };
-
-      const getUnitSymbol = () => (timeUnit === 'minutes' ? 'm' : 's');
-
-      const averageCycleTime = cycles.length > 0 
-        ? (cycles.reduce((acc, curr) => acc + curr.lapTime, 0) / cycles.length)
-        : 0;
-
-      const totalCycleTime = cycles.reduce((acc, curr) => acc + curr.lapTime, 0);
-      const avgSecs = timeUnit === 'minutes' ? averageCycleTime * 60 : averageCycleTime;
+    function getMetrics() {
+      const totalCycleTime = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const averageCycleTime = state.cycles.length > 0 ? totalCycleTime / state.cycles.length : 0;
+      const avgSecs = state.timeUnit === 'minutes' ? averageCycleTime * 60 : averageCycleTime;
       const overallCapacityPcs = avgSecs > 0 ? Math.floor(3600 / avgSecs) : 0;
+      return { totalCycleTime, averageCycleTime, overallCapacityPcs };
+    }
 
-      const getSequentialGroupedData = () => {
-        const chronological = [...cycles].reverse();
-        return chronological.map((c, index) => ({
-          id: c.id,
-          cycleNum: index + 1,
-          name: c.processName || `Proses #${index + 1}`,
-          totalTime: parseFloat(c.lapTime.toFixed(1)),
-          operatorName: c.operatorName || '-',
-          machineName: c.machineName || '-'
-        }));
-      };
+    function getSequentialData() {
+      const chronological = [...state.cycles].reverse();
+      return chronological.map((c, index) => ({
+        id: c.id,
+        cycleNum: index + 1,
+        name: c.processName || `Proses #${index + 1}`,
+        totalTime: parseFloat(c.lapTime.toFixed(1)),
+        operatorName: c.operatorName || '-',
+        machineName: c.machineName || '-'
+      }));
+    }
 
-      const sequentialData = getSequentialGroupedData();
-      const sortedForChart = [...sequentialData].sort((a, b) => b.totalTime - a.totalTime);
-
-      const getItemStatusInfo = (item) => {
-        const topBottleneckIds = sortedForChart.slice(0, 2).map((i) => i.id);
-        const isTopBottleneck = topBottleneckIds.includes(item.id);
-        const isOverTakt = item.totalTime > taktTime;
-        const isCombine = item.totalTime <= (taktTime / 2);
-
-        if (isTopBottleneck) {
-          return { barColor: 'bg-rose-600', textColor: 'text-rose-500' };
-        } else if (isOverTakt) {
-          return { barColor: 'bg-amber-500', textColor: 'text-amber-500' };
-        } else if (isCombine) {
-          return { barColor: 'bg-blue-500', textColor: 'text-blue-400' };
-        } else {
-          return { barColor: 'bg-emerald-500', textColor: 'text-emerald-500' };
+    // ============================================================================
+    // 3. AKSI STOPWATCH & DATA
+    // ============================================================================
+    function updateLiveTimerDisplay() {
+      const swEl = document.getElementById('live-stopwatch-val');
+      if (swEl) {
+        swEl.textContent = formatTimeValue(state.seconds);
+      }
+      if (state.editingCycleId) {
+        const editEl = document.getElementById(`edit-lap-${state.editingCycleId}`);
+        if (editEl) {
+          editEl.textContent = `${formatTimeValue(state.seconds)}${getUnitSymbol()}`;
         }
-      };
+      }
+    }
 
-      const handleExportCSV = () => {
-        if (cycles.length === 0) return;
-        const maxProcessId = sortedForChart[0]?.id;
-        const chronologicalCycles = [...cycles].reverse();
+    function startStopwatch() {
+      if (state.isRunning) return;
+      state.isRunning = true;
+      accumulatedSecs = state.seconds;
+      startTimePerf = performance.now();
+      timerInterval = setInterval(() => {
+        state.seconds = accumulatedSecs + (performance.now() - startTimePerf) / 1000;
+        updateLiveTimerDisplay();
+      }, 50);
+      render();
+    }
 
-        const rowsHtml = chronologicalCycles.map((c, idx) => {
-          const cycleNum = idx + 1;
-          const lapT = formatTimeValue(c.lapTime);
-          const vsT = c.vsTarget > 0 ? `+${formatTimeValue(c.vsTarget)}` : formatTimeValue(c.vsTarget);
-          const pName = c.processName || '-';
-          const opName = c.operatorName || '-';
-          const mName = c.machineName || '-';
-          const timestampFormatted = new Date(c.timestamp).toLocaleString('id-ID');
-          const totalSeconds = timeUnit === 'minutes' ? c.lapTime * 60 : c.lapTime;
-          const capacityPcsPerHour = totalSeconds > 0 ? Math.floor(3600 / totalSeconds) : 0;
+    function stopStopwatch() {
+      if (!state.isRunning) return;
+      clearInterval(timerInterval);
+      state.seconds = accumulatedSecs + (performance.now() - startTimePerf) / 1000;
+      accumulatedSecs = state.seconds;
+      state.isRunning = false;
+      render();
+    }
 
-          let statusText = 'Normal Balance';
-          if (c.id === maxProcessId) statusText = 'Improve Immediately';
-          else if (c.lapTime > taktTime) statusText = 'Bottleneck';
-          else if (c.lapTime <= taktTime / 2) statusText = 'Potential Combine';
+    function resetStopwatch() {
+      clearInterval(timerInterval);
+      state.isRunning = false;
+      accumulatedSecs = 0;
+      state.seconds = 0;
+      render();
+    }
+
+    function recordLap() {
+      if (state.seconds <= 0) return;
+      if (state.editingCycleId) {
+        confirmReTime();
+        return;
+      }
+      const currentLap = parseFloat(state.seconds.toFixed(1));
+      const vsTargetVal = parseFloat((currentLap - state.taktTime).toFixed(1));
+      const nextCycleNumber = state.cycles.length + 1;
+
+      state.cycles.unshift({
+        id: Date.now(),
+        lapTime: currentLap,
+        vsTarget: vsTargetVal,
+        processName: `Proses #${nextCycleNumber}`,
+        operatorName: '',
+        machineName: '',
+        timestamp: new Date().toISOString()
+      });
+
+      accumulatedSecs = 0;
+      startTimePerf = performance.now();
+      state.seconds = 0;
+      persistAll();
+      render();
+
+      const tableBox = document.getElementById('log-table-container');
+      if (tableBox) tableBox.scrollTop = tableBox.scrollHeight;
+    }
+
+    function startReTime(id) {
+      state.editingCycleId = id;
+      clearInterval(timerInterval);
+      accumulatedSecs = 0;
+      state.seconds = 0;
+      state.isRunning = true;
+      startTimePerf = performance.now();
+      timerInterval = setInterval(() => {
+        state.seconds = accumulatedSecs + (performance.now() - startTimePerf) / 1000;
+        updateLiveTimerDisplay();
+      }, 50);
+      render();
+    }
+
+    function confirmReTime() {
+      if (!state.editingCycleId) return;
+      const newLapTime = parseFloat(state.seconds.toFixed(1));
+      const vsTargetVal = parseFloat((newLapTime - state.taktTime).toFixed(1));
+
+      state.cycles = state.cycles.map((c) =>
+        c.id === state.editingCycleId ? { ...c, lapTime: newLapTime, vsTarget: vsTargetVal } : c
+      );
+
+      clearInterval(timerInterval);
+      state.isRunning = false;
+      accumulatedSecs = 0;
+      state.seconds = 0;
+      state.editingCycleId = null;
+      persistAll();
+      render();
+    }
+
+    function cancelReTime() {
+      clearInterval(timerInterval);
+      state.isRunning = false;
+      accumulatedSecs = 0;
+      state.seconds = 0;
+      state.editingCycleId = null;
+      render();
+    }
+
+    function deleteCycle(id) {
+      if (state.editingCycleId === id) state.editingCycleId = null;
+      state.cycles = state.cycles.filter((c) => c.id !== id);
+      persistAll();
+      render();
+    }
+
+    function clearAllCycles() {
+      state.cycles = [];
+      state.editingCycleId = null;
+      persistAll();
+      render();
+    }
+
+    function updateCycleField(id, field, value) {
+      const target = state.cycles.find((c) => c.id === id);
+      if (target) {
+        target[field] = value;
+        persistAll();
+      }
+    }
+
+    function exportExcelReport() {
+      if (state.cycles.length === 0) return;
+      const sequentialData = getSequentialData();
+      const sortedForChart = [...sequentialData].sort((a, b) => b.totalTime - a.totalTime);
+      const maxProcessId = sortedForChart[0]?.id;
+      const { totalCycleTime, averageCycleTime, overallCapacityPcs } = getMetrics();
+      const chronologicalCycles = [...state.cycles].reverse();
+
+      const rowsHtml = chronologicalCycles.map((c, idx) => {
+        const cycleNum = idx + 1;
+        const lapT = formatTimeValue(c.lapTime);
+        const vsT = c.vsTarget > 0 ? `+${formatTimeValue(c.vsTarget)}` : formatTimeValue(c.vsTarget);
+        const timestampFormatted = new Date(c.timestamp).toLocaleString('id-ID');
+        const totalSeconds = state.timeUnit === 'minutes' ? c.lapTime * 60 : c.lapTime;
+        const capacityPcsPerHour = totalSeconds > 0 ? Math.floor(3600 / totalSeconds) : 0;
+
+        let statusText = 'Normal Balance';
+        if (c.id === maxProcessId) statusText = 'Improve Immediately';
+        else if (c.lapTime > state.taktTime) statusText = 'Bottleneck';
+        else if (c.lapTime <= state.taktTime / 2) statusText = 'Potential Combine';
+
+        return `
+          <tr>
+            <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${cycleNum}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px;">${timestampFormatted}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right; font-weight: bold;">${lapT} ${getUnitSymbol()}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right;">${vsT} ${getUnitSymbol()}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px;">${escapeHtml(c.processName || '-')}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px;">${escapeHtml(c.operatorName || '-')}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px;">${escapeHtml(c.machineName || '-')}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${statusText}</td>
+            <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right;">${capacityPcsPerHour} pcs/jam</td>
+          </tr>
+        `;
+      }).join('');
+
+      const excelHtml = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8" /></head>
+        <body>
+          <h3>REPORT CYCLE TIME HARYAN</h3>
+          <p><b>Line:</b> ${escapeHtml(state.lineName)} | <b>Style:</b> ${escapeHtml(state.styleName)} | <b>Takt Time:</b> ${state.taktTime}${getUnitSymbol()} | <b>Total CT:</b> ${formatTimeValue(totalCycleTime)}${getUnitSymbol()} | <b>Avg CT Total:</b> ${formatTimeValue(averageCycleTime)}${getUnitSymbol()} | <b>Kapasitas Total:</b> ${overallCapacityPcs} pcs/jam</p>
+          <table>
+            <thead>
+              <tr style="background: #0f172a; color: #ffffff;">
+                <th>Cycle #</th><th>Waktu</th><th>Lap Time</th><th>Vs Target</th><th>Proses</th><th>Operator</th><th>Machine</th><th>Action</th><th>Kapasitas</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `report_cycle_time_${state.lineName.replace(/\s+/g, '_')}.xls`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    // ============================================================================
+    // 4. RENDER ANTARMUKA UI (100% LANGSUNG TANPA DELAY COMPILER)
+    // ============================================================================
+    function render() {
+      const dark = state.isDarkMode;
+      const unit = getUnitSymbol();
+      const { totalCycleTime, averageCycleTime, overallCapacityPcs } = getMetrics();
+      const sequentialData = getSequentialData();
+      const sortedForChart = [...sequentialData].sort((a, b) => b.totalTime - a.totalTime);
+      const topBottleneckIds = sortedForChart.slice(0, 2).map((i) => i.id);
+
+      document.body.className = dark
+        ? 'bg-slate-950 text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950'
+        : 'bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-slate-950';
+
+      // TAB 1: STOPWATCH LOG
+      let tabContentHtml = '';
+      if (state.activeTab === 'tracker') {
+        const reversedCycles = [...state.cycles].reverse();
+        const rowsHtml = reversedCycles.length === 0
+          ? `<tr><td colspan="7" class="text-center py-12 ${dark ? 'text-slate-400' : 'text-slate-500'} text-sm">Belum ada data siklus. Tekan tombol <strong class="text-emerald-400">START</strong> lalu <strong class="text-emerald-400">LAP / CYCLE</strong> di bawah untuk mencatat waktu.</td></tr>`
+          : reversedCycles.map((cycle, index) => {
+              const cycleNum = index + 1;
+              const isEdit = state.editingCycleId === cycle.id;
+              const dispLap = isEdit ? state.seconds : cycle.lapTime;
+              const dispVs = isEdit ? (state.seconds - state.taktTime) : cycle.vsTarget;
+              const isOver = dispLap > state.taktTime;
+              const fmtVs = dispVs > 0 ? `+${formatTimeValue(dispVs)}` : formatTimeValue(dispVs);
+
+              return `
+                <tr class="${isEdit ? (dark ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-amber-50 border-l-4 border-amber-500') : (dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all">
+                  <td class="p-3.5 font-bold whitespace-nowrap ${dark ? 'text-slate-200' : 'text-slate-800'}">#${cycleNum}</td>
+                  <td class="p-3.5 font-mono font-bold text-base whitespace-nowrap">
+                    ${isEdit
+                      ? `<span class="text-amber-400 animate-pulse"><span id="edit-lap-${cycle.id}">${formatTimeValue(state.seconds)}${unit}</span> <span class="text-xs text-amber-500 ml-1 font-normal">(Ambil Ulang...)</span></span>`
+                      : `<span class="text-emerald-400">${formatTimeValue(cycle.lapTime)}${unit}</span>`
+                    }
+                  </td>
+                  <td class="p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${fmtVs}${unit}</td>
+                  <td class="p-3.5">
+                    <input type="text" value="${escapeHtml(cycle.processName)}" oninput="updateCycleField(${cycle.id}, 'processName', this.value)"
+                      class="w-full min-w-[200px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                  </td>
+                  <td class="p-3.5">
+                    <input type="text" value="${escapeHtml(cycle.operatorName)}" placeholder="Nama operator..." oninput="updateCycleField(${cycle.id}, 'operatorName', this.value)"
+                      class="w-full min-w-[170px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                  </td>
+                  <td class="p-3.5">
+                    <input type="text" value="${escapeHtml(cycle.machineName)}" placeholder="Jenis mesin..." oninput="updateCycleField(${cycle.id}, 'machineName', this.value)"
+                      class="w-full min-w-[180px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                  </td>
+                  <td class="p-3.5 text-center whitespace-nowrap">
+                    ${isEdit
+                      ? `<div class="flex items-center justify-center gap-1.5">
+                          <button onclick="confirmReTime()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2.5 py-1.5 rounded-lg text-xs font-extrabold cursor-pointer">✓ Simpan</button>
+                          <button onclick="cancelReTime()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 px-2.5 py-1.5 rounded-lg text-xs font-bold cursor-pointer">✕</button>
+                        </div>`
+                      : `<div class="flex items-center justify-center gap-1.5">
+                          <button onclick="startReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 px-2 py-1 rounded-lg text-xs font-bold border border-amber-500/30 cursor-pointer" title="Ambil Ulang Stopwatch">✎ Ulang</button>
+                          <button onclick="deleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 px-2 py-1 rounded-lg text-xs font-bold border border-rose-500/30 cursor-pointer" title="Hapus Baris">🗑</button>
+                        </div>`
+                    }
+                  </td>
+                </tr>
+              `;
+            }).join('');
+
+        tabContentHtml = `
+          <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold text-emerald-400">📊 Log Pencatatan (${state.cycles.length} Siklus)</h2>
+              ${state.cycles.length > 0 ? `<button onclick="clearAllCycles()" class="text-xs sm:text-sm text-rose-400 hover:text-rose-300 font-bold cursor-pointer">🗑 Hapus Semua Log</button>` : ''}
+            </div>
+            <div id="log-table-container" class="overflow-x-auto overflow-y-auto custom-table-scroll border ${dark ? 'border-slate-800' : 'border-slate-200'} rounded-xl max-h-[52vh] pb-1">
+              <table class="w-full min-w-[920px] text-left text-sm">
+                <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b sticky top-0 z-10 whitespace-nowrap">
+                  <tr>
+                    <th class="p-3.5 w-24">Cycle #</th>
+                    <th class="p-3.5">Lap Time (${unit})</th>
+                    <th class="p-3.5">Vs Target (${unit})</th>
+                    <th class="p-3.5 min-w-[210px]">Proses</th>
+                    <th class="p-3.5 min-w-[180px]">Nama Operator</th>
+                    <th class="p-3.5 min-w-[190px]">Machine</th>
+                    <th class="p-3.5 w-32 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y ${dark ? 'divide-slate-800/40' : 'divide-slate-200'}">${rowsHtml}</tbody>
+              </table>
+            </div>
+          </section>
+        `;
+      }
+
+      // TAB 2: ANALISIS & PARETO
+      if (state.activeTab === 'analysis') {
+        const maxVal = sequentialData.length > 0 ? Math.max(...sequentialData.map((s) => s.totalTime), state.taktTime) : state.taktTime;
+        const heightPx = 208;
+        const taktRatio = maxVal > 0 ? Math.min(1, Math.max(0, state.taktTime / maxVal)) : 0;
+        const bottomPixelOffset = Math.round(taktRatio * heightPx) + 48;
+
+        const barsHtml = sequentialData.map((item) => {
+          const isTopBottleneck = topBottleneckIds.includes(item.id);
+          const isOverTakt = item.totalTime > state.taktTime;
+          const isCombine = item.totalTime <= state.taktTime / 2;
+          let barColor = 'bg-emerald-500';
+          let textColor = 'text-emerald-500';
+          if (isTopBottleneck) { barColor = 'bg-rose-600'; textColor = 'text-rose-500'; }
+          else if (isOverTakt) { barColor = 'bg-amber-500'; textColor = 'text-amber-500'; }
+          else if (isCombine) { barColor = 'bg-blue-500'; textColor = 'text-blue-400'; }
+
+          const heightPercent = maxVal > 0 ? Math.min(100, Math.max(8, (item.totalTime / maxVal) * 100)) : 8;
+          const isMaxBottleneck = sortedForChart[0]?.id === item.id;
 
           return `
-            <tr>
-              <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${cycleNum}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px;">${timestampFormatted}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right; font-weight: bold;">${lapT} ${getUnitSymbol()}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right;">${vsT} ${getUnitSymbol()}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px;">${pName}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px;">${opName}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px;">${mName}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${statusText}</td>
-              <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: right;">${capacityPcsPerHour} pcs/jam</td>
-            </tr>
+            <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
+              <span class="text-xs font-bold ${textColor}">${item.totalTime}${unit}</span>
+              <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
+                <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
+                  ${isMaxBottleneck ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/60 px-1 py-0.5 rounded">MAX</span></div>` : ''}
+                </div>
+              </div>
+              <div class="text-center w-full">
+                <p class="text-xs font-bold truncate ${dark ? 'text-slate-200' : 'text-slate-800'}" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</p>
+                <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${item.cycleNum}</p>
+                <p class="text-[10px] text-slate-400 truncate">${escapeHtml(item.operatorName)}</p>
+              </div>
+            </div>
           `;
         }).join('');
 
-        const excelHtml = `
-          <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-          <head><meta charset="utf-8" /></head>
-          <body>
-            <h3>REPORT CYCLE TIME HARYAN</h3>
-            <p><b>Line:</b> ${lineName} | <b>Style:</b> ${styleName} | <b>Takt Time:</b> ${taktTime}${getUnitSymbol()} | <b>Total CT:</b> ${formatTimeValue(totalCycleTime)}${getUnitSymbol()} | <b>Avg CT Total:</b> ${formatTimeValue(averageCycleTime)}${getUnitSymbol()} | <b>Kapasitas Total:</b> ${overallCapacityPcs} pcs/jam</p>
-            <table>
-              <thead>
-                <tr style="background: #0f172a; color: #ffffff;">
-                  <th>Cycle #</th><th>Waktu</th><th>Lap Time</th><th>Vs Target</th><th>Proses</th><th>Operator</th><th>Machine</th><th>Action</th><th>Kapasitas</th>
+        const detailRowsHtml = sequentialData.length === 0
+          ? `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data rincian proses.</td></tr>`
+          : sequentialData.map((item) => {
+              const vsTargetVal = parseFloat((item.totalTime - state.taktTime).toFixed(1));
+              const isOver = item.totalTime > state.taktTime;
+              const isBottleneck = sortedForChart[0]?.id === item.id;
+              const isCombine = item.totalTime <= state.taktTime / 2;
+              const totalSecs = state.timeUnit === 'minutes' ? item.totalTime * 60 : item.totalTime;
+              const capacityPcs = totalSecs > 0 ? Math.floor(3600 / totalSecs) : 0;
+
+              let actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
+              if (isBottleneck) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>`;
+              else if (isOver) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">⚠️ Bottleneck</span>`;
+              else if (isCombine) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">💡 Potential Combine</span>`;
+
+              return `
+                <tr class="${dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}">
+                  <td class="p-3.5 font-bold whitespace-nowrap">#${item.cycleNum}</td>
+                  <td class="p-3.5 font-bold whitespace-nowrap">${escapeHtml(item.name)}</td>
+                  <td class="p-3.5 text-slate-400 whitespace-nowrap">${escapeHtml(item.operatorName)}</td>
+                  <td class="p-3.5 text-slate-400 whitespace-nowrap">${escapeHtml(item.machineName)}</td>
+                  <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${item.totalTime}${unit}</td>
+                  <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsTargetVal > 0 ? '+' + vsTargetVal : vsTargetVal}${unit}</td>
+                  <td class="p-3.5 whitespace-nowrap">${actionBadge}</td>
+                  <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capacityPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
                 </tr>
-              </thead>
-              <tbody>${rowsHtml}</tbody>
-            </table>
-          </body>
-          </html>
+              `;
+            }).join('');
+
+        tabContentHtml = `
+          <div class="space-y-6">
+            <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
+              <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+                <h2 class="text-lg font-bold text-emerald-400">📈 Analisis Pareto & Bottleneck Proses</h2>
+                ${sortedForChart.length > 0 ? `<span class="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">⚠️ Bottleneck Utama: ${escapeHtml(sortedForChart[0].name)}</span>` : ''}
+              </div>
+              ${sequentialData.length === 0
+                ? `<div class="text-center py-12 text-slate-400">Belum ada data untuk dianalisis. Silakan rekam waktu pada menu Stopwatch terlebih dahulu.</div>`
+                : `<div class="overflow-x-auto custom-table-scroll pb-4 pt-6">
+                    <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
+                      <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomPixelOffset}px">
+                        <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">Target Takt Time: ${state.taktTime}${unit}</span>
+                      </div>
+                      ${barsHtml}
+                    </div>
+                  </div>`
+              }
+            </section>
+
+            <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
+              <h2 class="text-lg font-bold text-emerald-400 mb-4">📋 Detail Analysis & Action</h2>
+              <div class="overflow-x-auto custom-table-scroll border ${dark ? 'border-slate-800' : 'border-slate-200'} rounded-xl pb-1">
+                <table class="w-full min-w-[880px] text-left text-sm">
+                  <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b whitespace-nowrap">
+                    <tr>
+                      <th class="p-3.5 w-20">Cycle #</th>
+                      <th class="p-3.5">Proses</th>
+                      <th class="p-3.5">Operator</th>
+                      <th class="p-3.5">Machine</th>
+                      <th class="p-3.5">CT (${unit})</th>
+                      <th class="p-3.5">Vs Takt (${unit})</th>
+                      <th class="p-3.5">Action</th>
+                      <th class="p-3.5">Kapasitas Maks (pcs/jam)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y ${dark ? 'divide-slate-800/40' : 'divide-slate-200'}">${detailRowsHtml}</tbody>
+                </table>
+              </div>
+            </section>
+          </div>
         `;
+      }
 
-        const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `report_cycle_time_${lineName.replace(/\s+/g, '_')}.xls`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      };
-
-      return (
-        <div 
-          className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 pb-40 text-base origin-top-left overflow-x-hidden`}
-          style={{ 
-            transform: `scale(${zoomLevel / 100})`, 
-            width: `${100 / (zoomLevel / 100)}%`,
-            minHeight: `${100 / (zoomLevel / 100)}vh`
-          }}
-        >
-          {/* Header Navigasi */}
-          <header className={`${isDarkMode ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200 shadow-sm'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2`}>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0 text-slate-950">
-                <Icon name="clock" className="w-5 h-5" />
+      // TAB 3: SETTING PARAMETER
+      if (state.activeTab === 'settings') {
+        tabContentHtml = `
+          <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+            <h2 class="text-lg font-bold text-emerald-400">⚙️ Setting Parameter Line</h2>
+            <div class="flex flex-col space-y-4">
+              <div>
+                <label class="text-xs font-bold block mb-1.5">Line Produksi</label>
+                <input type="text" value="${escapeHtml(state.lineName)}" oninput="state.lineName=this.value; persistAll();"
+                  class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
               </div>
               <div>
-                <h1 className="text-base sm:text-lg font-extrabold tracking-tight leading-tight">Cycle Time Haryan</h1>
-                <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'} hidden sm:block`}>
-                  {lineName} — {styleName} (Takt: {taktTime}{getUnitSymbol()})
-                </p>
+                <label class="text-xs font-bold block mb-1.5">Model / Style</label>
+                <input type="text" value="${escapeHtml(state.styleName)}" oninput="state.styleName=this.value; persistAll();"
+                  class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="text-xs font-bold block mb-1.5">Target Takt Time (${unit})</label>
+                <input type="number" value="${state.taktTime}" oninput="state.taktTime=Number(this.value)||0; persistAll();"
+                  class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="text-xs font-bold block mb-1.5">Satuan Waktu</label>
+                <select onchange="state.timeUnit=this.value; persistAll(); render();"
+                  class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                  <option value="seconds" ${state.timeUnit === 'seconds' ? 'selected' : ''}>Detik / Seconds (s)</option>
+                  <option value="minutes" ${state.timeUnit === 'minutes' ? 'selected' : ''}>Menit / Minutes (m)</option>
+                </select>
               </div>
             </div>
-
-            <div className="flex items-center gap-2">
-              {/* Tombol Install PWA jika tersedia */}
-              {deferredPrompt && (
-                <button
-                  onClick={handleInstallApp}
-                  className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md transition-all cursor-pointer"
-                >
-                  <Icon name="smartphone" className="w-3.5 h-3.5" />
-                  <span>Install App</span>
-                </button>
-              )}
-
-              {/* Indikator Status Offline PWA */}
-              <span 
-                title={isOnline ? 'Siap Offline (Penyimpanan Lokal IndexedDB)' : 'Mode Offline Aktif (100% Lokal)'}
-                className={`flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg border ${
-                  isOnline 
-                    ? (isDarkMode ? 'bg-slate-800/80 border-slate-700 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700')
-                    : (isDarkMode ? 'bg-amber-500/15 border-amber-500/40 text-amber-400' : 'bg-amber-50 border-amber-300 text-amber-700')
-                }`}
-              >
-                <Icon name={isOnline ? 'wifi' : 'wifiOff'} className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">{isOnline ? 'Offline Ready' : 'Offline Mode'}</span>
-              </span>
-
-              <span className={`text-xs font-bold px-3 py-1.5 rounded-lg ${isDarkMode ? 'bg-slate-800 text-emerald-400' : 'bg-slate-200 text-emerald-700'} capitalize`}>
-                {activeTab === 'tracker' ? 'Stopwatch' : activeTab === 'analysis' ? 'Analisis' : 'Setting'}
-              </span>
-
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-bold border transition-all cursor-pointer ${
-                  isDarkMode 
-                    ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' 
-                    : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
-                }`}
-              >
-                <Icon name={isMenuOpen ? 'x' : 'menu'} className={`w-5 h-5 ${isMenuOpen ? 'text-rose-400' : 'text-emerald-400'}`} />
-                <span>Menu</span>
+            <div class="pt-4 border-t border-slate-800/60 flex justify-end">
+              <button onclick="state.activeTab='tracker'; render();" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg cursor-pointer">
+                ✓ Simpan & Kembali ke Stopwatch
               </button>
             </div>
+          </section>
+        `;
+      }
 
-            {/* Dropdown Menu */}
-            {isMenuOpen && (
-              <>
-                <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40" onClick={() => setIsMenuOpen(false)} />
-                <div className={`absolute top-full right-2 sm:right-4 mt-2 w-80 z-50 p-4 rounded-2xl border shadow-2xl transition-all ${
-                  isDarkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'
-                }`}>
-                  <div className="space-y-4">
-                    <div>
-                      <label className={`text-xs font-extrabold uppercase tracking-wider block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                        Navigasi Modul Simulasi
-                      </label>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        <button
-                          onClick={() => { setActiveTab('settings'); setIsMenuOpen(false); }}
-                          className={`p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${
-                            activeTab === 'settings' 
-                              ? 'bg-emerald-500 border-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' 
-                              : isDarkMode 
-                                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
-                                : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
-                          }`}
-                        >
-                          Setting
-                        </button>
-                        <button
-                          onClick={() => { setActiveTab('tracker'); setIsMenuOpen(false); }}
-                          className={`p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${
-                            activeTab === 'tracker' 
-                              ? 'bg-emerald-500 border-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' 
-                              : isDarkMode 
-                                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
-                                : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
-                          }`}
-                        >
-                          Stopwatch
-                        </button>
-                        <button
-                          onClick={() => { setActiveTab('analysis'); setIsMenuOpen(false); }}
-                          className={`p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${
-                            activeTab === 'analysis' 
-                              ? 'bg-emerald-500 border-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' 
-                              : isDarkMode 
-                                ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' 
-                                : 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'
-                          }`}
-                        >
-                          Analisis
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className={`text-xs font-extrabold uppercase tracking-wider block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                        Ekspor Laporan
-                      </label>
-                      <button
-                        onClick={() => { handleExportCSV(); setIsMenuOpen(false); }}
-                        disabled={cycles.length === 0}
-                        className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer"
-                      >
-                        <Icon name="download" className="w-4 h-4" />
-                        <span>Download Laporan Excel (.xls)</span>
-                      </button>
-                    </div>
-
-                    <div className={`pt-3 border-t ${isDarkMode ? 'border-slate-800' : 'border-slate-200'}`}>
-                      <label className={`text-xs font-extrabold uppercase tracking-wider block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                        Tampilan & Skala
-                      </label>
-                      <div className="flex items-center justify-between gap-2">
-                        <button
-                          onClick={() => setIsDarkMode(!isDarkMode)}
-                          className={`flex-1 flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold border cursor-pointer ${isDarkMode ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-300 text-slate-700'}`}
-                        >
-                          <Icon name={isDarkMode ? 'sun' : 'moon'} className="w-4 h-4" />
-                          <span>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
-                        </button>
-
-                        <div className={`flex items-center p-1 rounded-xl border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-300'}`}>
-                          <button onClick={() => setZoomLevel((prev) => Math.max(50, prev - 10))} className="p-1 text-slate-400 hover:text-emerald-400 cursor-pointer" title="Zoom Out">
-                            <Icon name="zoomOut" className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="text-xs font-bold px-1.5">{zoomLevel}%</span>
-                          <button onClick={() => setZoomLevel((prev) => Math.min(150, prev + 10))} className="p-1 text-slate-400 hover:text-emerald-400 cursor-pointer" title="Zoom In">
-                            <Icon name="zoomIn" className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      // DROPDOWN MENU
+      const menuHtml = state.isMenuOpen ? `
+        <div class="fixed inset-0 bg-slate-950/60 z-40" onclick="state.isMenuOpen=false; render();"></div>
+        <div class="absolute top-full right-2 sm:right-4 mt-2 w-80 z-50 p-4 rounded-2xl border shadow-2xl ${dark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'}">
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">Navigasi Modul</label>
+              <div class="grid grid-cols-3 gap-1.5">
+                <button onclick="state.activeTab='settings'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border text-center cursor-pointer ${state.activeTab === 'settings' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Setting</button>
+                <button onclick="state.activeTab='tracker'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border text-center cursor-pointer ${state.activeTab === 'tracker' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Stopwatch</button>
+                <button onclick="state.activeTab='analysis'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border text-center cursor-pointer ${state.activeTab === 'analysis' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Analisis</button>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">Ekspor Laporan</label>
+              <button onclick="exportExcelReport(); state.isMenuOpen=false; render();" ${state.cycles.length === 0 ? 'disabled' : ''} class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white p-2.5 rounded-xl text-xs font-bold shadow-md cursor-pointer">
+                ⬇ Download Laporan Excel (.xls)
+              </button>
+            </div>
+            <div class="pt-3 border-t ${dark ? 'border-slate-800' : 'border-slate-200'}">
+              <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">Tampilan & Skala</label>
+              <div class="flex items-center justify-between gap-2">
+                <button onclick="state.isDarkMode=!state.isDarkMode; persistAll(); render();" class="flex-1 p-2 rounded-xl text-xs font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-300 text-slate-700'}">
+                  ${dark ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                </button>
+                <div class="flex items-center p-1 rounded-xl border ${dark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-300'}">
+                  <button onclick="state.zoomLevel=Math.max(50, state.zoomLevel-10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">-</button>
+                  <span class="text-xs font-bold px-1">${state.zoomLevel}%</span>
+                  <button onclick="state.zoomLevel=Math.min(150, state.zoomLevel+10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">+</button>
                 </div>
-              </>
-            )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ` : '';
+
+      const appEl = document.getElementById('app');
+      appEl.innerHTML = `
+        <div class="min-h-screen pb-40 text-base origin-top-left overflow-x-hidden" style="transform: scale(${state.zoomLevel / 100}); width: ${100 / (state.zoomLevel / 100)}%; min-height: ${100 / (state.zoomLevel / 100)}vh;">
+          
+          <!-- HEADER -->
+          <header class="${dark ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200 shadow-sm'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0 text-slate-950 font-black text-lg">⏱</div>
+              <div>
+                <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">Cycle Time Haryan</h1>
+                <p class="text-xs ${dark ? 'text-slate-400' : 'text-slate-500'} hidden sm:block">${escapeHtml(state.lineName)} — ${escapeHtml(state.styleName)} (Takt: ${state.taktTime}${unit})</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-bold px-2.5 py-1.5 rounded-lg border ${state.isOnline ? (dark ? 'bg-slate-800/80 border-slate-700 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700') : 'bg-amber-500/15 border-amber-500/40 text-amber-400'}">
+                ${state.isOnline ? '● Offline Ready' : '● Offline Mode'}
+              </span>
+              <span class="text-xs font-bold px-3 py-1.5 rounded-lg ${dark ? 'bg-slate-800 text-emerald-400' : 'bg-slate-200 text-emerald-700'}">
+                ${state.activeTab === 'tracker' ? 'Stopwatch' : state.activeTab === 'analysis' ? 'Analisis' : 'Setting'}
+              </span>
+              <button onclick="state.isMenuOpen=!state.isMenuOpen; render();" class="px-3.5 py-2 rounded-xl text-sm font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'}">
+                ${state.isMenuOpen ? '✕ Tutup' : '☰ Menu'}
+              </button>
+            </div>
+            ${menuHtml}
           </header>
 
-          {/* Konten Utama */}
-          <main className="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 space-y-6">
-
-            {/* TAB 1: STOPWATCH & LOG */}
-            {activeTab === 'tracker' && (
-              <div className="space-y-6">
-                <section className={`${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2 text-emerald-500">
-                      <Icon name="chart" className="w-5 h-5" />
-                      <h2 className={`text-base font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                        Log ({cycles.length})
-                      </h2>
-                    </div>
-                    {cycles.length > 0 && (
-                      <button
-                        onClick={handleClearLog}
-                        className="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors flex items-center gap-1"
-                      >
-                        <Icon name="trash" className="w-4 h-4" />
-                        <span>Hapus Semua Log</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div 
-                    ref={tableContainerRef}
-                    className={`overflow-x-auto overflow-y-auto custom-table-scroll border ${isDarkMode ? 'border-slate-800' : 'border-slate-200'} rounded-xl max-h-[50vh] pb-1`}
-                  >
-                    <table className="w-full min-w-[920px] text-left text-sm">
-                      <thead className={`${isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b sticky top-0 z-10 shadow-sm whitespace-nowrap`}>
-                        <tr>
-                          <th className="p-3.5 w-24 whitespace-nowrap">Cycle #</th>
-                          <th className="p-3.5 whitespace-nowrap">Lap Time ({getUnitSymbol()})</th>
-                          <th className="p-3.5 whitespace-nowrap">Vs Target ({getUnitSymbol()})</th>
-                          <th className="p-3.5 min-w-[210px] whitespace-nowrap">Proses</th>
-                          <th className="p-3.5 min-w-[180px] whitespace-nowrap">Nama Operator</th>
-                          <th className="p-3.5 min-w-[190px] whitespace-nowrap">Machine</th>
-                          <th className="p-3.5 w-28 text-center whitespace-nowrap">Edit Time</th>
-                        </tr>
-                      </thead>
-                      <tbody className={`divide-y ${isDarkMode ? 'divide-slate-800/40' : 'divide-slate-200'}`}>
-                        {cycles.length === 0 ? (
-                          <tr>
-                            <td colSpan="7" className={`text-center py-12 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'} text-sm`}>
-                              Belum ada data siklus. Tekan tombol <strong className="text-emerald-400">START</strong> lalu <strong className="text-emerald-400">LAP / CYCLE</strong> di bilah kontrol bawah untuk mencatat durasi proses.
-                            </td>
-                          </tr>
-                        ) : (
-                          [...cycles].reverse().map((cycle, index) => {
-                            const cycleNumber = index + 1;
-                            const isEditingThis = editingCycleId === cycle.id;
-                            const displayedLapTime = isEditingThis ? seconds : cycle.lapTime;
-                            const displayedVsTarget = isEditingThis ? (seconds - taktTime) : cycle.vsTarget;
-                            const isOver = displayedLapTime > taktTime;
-                            const formattedVsTarget = displayedVsTarget > 0 ? `+${formatTimeValue(displayedVsTarget)}` : formatTimeValue(displayedVsTarget);
-                            
-                            return (
-                              <tr 
-                                key={cycle.id} 
-                                className={`${isEditingThis ? (isDarkMode ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-amber-50 border-l-4 border-amber-500') : (isDarkMode ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all`}
-                              >
-                                <td className={`p-3.5 font-bold whitespace-nowrap ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
-                                  #{cycleNumber}
-                                </td>
-                                <td className="p-3.5 font-mono font-bold text-base whitespace-nowrap">
-                                  {isEditingThis ? (
-                                    <span className="text-amber-400 animate-pulse">
-                                      {formatTimeValue(seconds)}{getUnitSymbol()}
-                                      <span className="text-xs text-amber-500 ml-1.5 font-normal">(Ambil Ulang...)</span>
-                                    </span>
-                                  ) : (
-                                    <span className="text-emerald-400">
-                                      {formatTimeValue(cycle.lapTime)}{getUnitSymbol()}
-                                    </span>
-                                  )}
-                                </td>
-                                <td className={`p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}`}>
-                                  {formattedVsTarget}{getUnitSymbol()}
-                                </td>
-                                <td className="p-3.5">
-                                  <input
-                                    type="text"
-                                    value={cycle.processName}
-                                    onChange={(e) => handleProcessNameChange(cycle.id, e.target.value)}
-                                    className={`w-full min-w-[200px] ${isDarkMode ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500`}
-                                  />
-                                </td>
-                                <td className="p-3.5">
-                                  <input
-                                    type="text"
-                                    value={cycle.operatorName}
-                                    onChange={(e) => handleOperatorNameChange(cycle.id, e.target.value)}
-                                    placeholder="Nama operator..."
-                                    className={`w-full min-w-[170px] ${isDarkMode ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500`}
-                                  />
-                                </td>
-                                <td className="p-3.5">
-                                  <input
-                                    type="text"
-                                    value={cycle.machineName || ''}
-                                    onChange={(e) => handleMachineNameChange(cycle.id, e.target.value)}
-                                    placeholder="Jenis mesin..."
-                                    className={`w-full min-w-[180px] ${isDarkMode ? 'bg-slate-950 border-slate-700/80 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500`}
-                                  />
-                                </td>
-                                <td className="p-3.5 text-center whitespace-nowrap">
-                                  {isEditingThis ? (
-                                    <div className="flex items-center justify-center gap-1.5">
-                                      <button
-                                        onClick={handleConfirmReTime}
-                                        className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 p-1.5 rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-500/20"
-                                        title="Simpan Waktu Baru"
-                                      >
-                                        <Icon name="check" className="w-4 h-4" />
-                                      </button>
-                                      <button
-                                        onClick={handleCancelReTime}
-                                        className="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 p-1.5 rounded-lg transition-colors cursor-pointer"
-                                        title="Batal Edit"
-                                      >
-                                        <Icon name="x" className="w-4 h-4" />
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <div className="flex items-center justify-center gap-1">
-                                      <button
-                                        onClick={() => handleStartReTime(cycle)}
-                                        className="text-amber-400 hover:text-amber-300 p-1.5 rounded-lg transition-colors cursor-pointer"
-                                        title="Ambil Ulang Stopwatch"
-                                      >
-                                        <Icon name="pencil" className="w-4 h-4" />
-                                      </button>
-                                      <button
-                                        onClick={() => handleDeleteCycle(cycle.id)}
-                                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg transition-colors cursor-pointer"
-                                        title="Hapus Baris"
-                                      >
-                                        <Icon name="trash" className="w-4 h-4" />
-                                      </button>
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {/* TAB 2: ANALISIS & PARETO */}
-            {activeTab === 'analysis' && (
-              <div className="space-y-6">
-                <section className={`${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl`}>
-                  <div className="flex items-center justify-between flex-wrap gap-2 mb-6">
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Icon name="chart" className="w-5 h-5" />
-                      <h2 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Analisis Pareto & Bottleneck Proses</h2>
-                    </div>
-                    {sortedForChart.length > 0 && (
-                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1">
-                        <Icon name="alert" className="w-3.5 h-3.5" />
-                        <span>Bottleneck Utama: {sortedForChart[0]?.name}</span>
-                      </span>
-                    )}
-                  </div>
-
-                  {sequentialData.length === 0 ? (
-                    <div className={`text-center py-12 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                      Belum ada data untuk dianalisis. Silakan rekam siklus waktu pada modul Stopwatch terlebih dahulu.
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="overflow-x-auto custom-table-scroll pb-4 pt-6">
-                        <div className="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
-                          {(() => {
-                            const maxVal = Math.max(...sequentialData.map((s) => s.totalTime), taktTime);
-                            const heightPx = 208;
-                            const taktRatio = Math.min(1, Math.max(0, taktTime / maxVal));
-                            const bottomPixelOffset = Math.round(taktRatio * heightPx) + 48;
-
-                            return (
-                              <div 
-                                className="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4"
-                                style={{ bottom: `${bottomPixelOffset}px` }}
-                              >
-                                <span className="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">
-                                  Target Takt Time: {taktTime}{getUnitSymbol()}
-                                </span>
-                              </div>
-                            );
-                          })()}
-
-                          {sequentialData.map((item, idx) => {
-                            const status = getItemStatusInfo(item);
-                            const maxVal = Math.max(...sequentialData.map((s) => s.totalTime), taktTime);
-                            const heightPercent = Math.min(100, Math.max(8, (item.totalTime / maxVal) * 100));
-                            const isMaxBottleneck = sortedForChart[0]?.id === item.id;
-
-                            return (
-                              <div key={item.id || idx} className="flex flex-col items-center gap-2 w-24 flex-shrink-0 group z-0">
-                                <span className={`text-xs font-bold ${status.textColor}`}>
-                                  {item.totalTime}{getUnitSymbol()}
-                                </span>
-
-                                <div className={`w-full h-52 rounded-t-xl ${isDarkMode ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden`}>
-                                  <div
-                                    className={`w-full rounded-t-lg transition-all duration-500 relative ${status.barColor}`}
-                                    style={{ height: `${heightPercent}%` }}
-                                  >
-                                    {isMaxBottleneck && (
-                                      <div className="absolute top-1 left-0 right-0 text-center">
-                                        <span className="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">
-                                          MAX
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="text-center w-full">
-                                  <p className={`text-xs font-bold truncate ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`} title={item.name}>
-                                    {item.name}
-                                  </p>
-                                  <p className="text-[11px] font-extrabold text-emerald-400 mt-0.5">
-                                    #{item.cycleNum}
-                                  </p>
-                                  <p className="text-[10px] text-slate-400 truncate" title={item.operatorName}>
-                                    {item.operatorName}
-                                  </p>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </section>
-
-                <section className={`${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Icon name="users" className="w-5 h-5" />
-                      <h2 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Detail Analysis & Action</h2>
-                    </div>
-                  </div>
-
-                  <div className={`overflow-x-auto custom-table-scroll border ${isDarkMode ? 'border-slate-800' : 'border-slate-200'} rounded-xl pb-1`}>
-                    <table className="w-full min-w-[880px] text-left text-sm">
-                      <thead className={`${isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b whitespace-nowrap`}>
-                        <tr>
-                          <th className="p-3.5 w-20 whitespace-nowrap">Cycle #</th>
-                          <th className="p-3.5 whitespace-nowrap">Proses</th>
-                          <th className="p-3.5 whitespace-nowrap">Operator</th>
-                          <th className="p-3.5 whitespace-nowrap">Machine</th>
-                          <th className="p-3.5 whitespace-nowrap">CT ({getUnitSymbol()})</th>
-                          <th className="p-3.5 whitespace-nowrap">Vs Takt ({getUnitSymbol()})</th>
-                          <th className="p-3.5 whitespace-nowrap">Action</th>
-                          <th className="p-3.5 whitespace-nowrap">Kapasitas Maks (pcs/jam)</th>
-                        </tr>
-                      </thead>
-                      <tbody className={`divide-y ${isDarkMode ? 'divide-slate-800/40' : 'divide-slate-200'}`}>
-                        {sequentialData.length === 0 ? (
-                          <tr>
-                            <td colSpan="8" className={`text-center py-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                              Tidak ada data rincian proses.
-                            </td>
-                          </tr>
-                        ) : (
-                          sequentialData.map((item, idx) => {
-                            const vsTargetVal = parseFloat((item.totalTime - taktTime).toFixed(1));
-                            const isOver = item.totalTime > taktTime;
-                            const isBottleneck = sortedForChart[0]?.id === item.id;
-                            const isCombine = item.totalTime <= taktTime / 2;
-
-                            const totalSecs = timeUnit === 'minutes' ? item.totalTime * 60 : item.totalTime;
-                            const capacityPcs = totalSecs > 0 ? Math.floor(3600 / totalSecs) : 0;
-
-                            return (
-                              <tr key={item.id || idx} className={isDarkMode ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}>
-                                <td className={`p-3.5 font-bold whitespace-nowrap ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-                                  #{item.cycleNum}
-                                </td>
-                                <td className={`p-3.5 font-bold whitespace-nowrap ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{item.name}</td>
-                                <td className="p-3.5 text-slate-400 whitespace-nowrap">{item.operatorName}</td>
-                                <td className="p-3.5 text-slate-400 whitespace-nowrap">{item.machineName}</td>
-                                <td className="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">{item.totalTime}{getUnitSymbol()}</td>
-                                <td className={`p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}`}>
-                                  {vsTargetVal > 0 ? `+${vsTargetVal}` : vsTargetVal}{getUnitSymbol()}
-                                </td>
-                                <td className="p-3.5 whitespace-nowrap">
-                                  {isBottleneck ? (
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">
-                                      🚨 Improve Immediately
-                                    </span>
-                                  ) : isOver ? (
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">
-                                      ⚠️ Bottleneck
-                                    </span>
-                                  ) : isCombine ? (
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">
-                                      💡 Potential Combine
-                                    </span>
-                                  ) : (
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-                                      ✅ Normal Balance
-                                    </span>
-                                  )}
-                                </td>
-                                <td className="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">
-                                  {capacityPcs} <span className="text-xs font-normal text-slate-400">pcs/jam</span>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {/* TAB 3: SETTING PARAMETER */}
-            {activeTab === 'settings' && (
-              <div className="space-y-6">
-                <section className={`${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4`}>
-                  <h2 className="text-lg font-bold flex items-center gap-2 text-emerald-400">
-                    <Icon name="settings" className="w-5 h-5" />
-                    <span className={isDarkMode ? 'text-white' : 'text-slate-900'}>Setting Parameter</span>
-                  </h2>
-
-                  <div className="flex flex-col space-y-4">
-                    <div>
-                      <label className={`text-xs font-bold block mb-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Line</label>
-                      <input
-                        type="text"
-                        value={lineName}
-                        onChange={(e) => setLineName(e.target.value)}
-                        className={`w-full ${isDarkMode ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500`}
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-xs font-bold block mb-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Model / Style</label>
-                      <input
-                        type="text"
-                        value={styleName}
-                        onChange={(e) => setStyleName(e.target.value)}
-                        className={`w-full ${isDarkMode ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500`}
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-xs font-bold block mb-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Target Takt Time ({getUnitSymbol()})</label>
-                      <input
-                        type="number"
-                        value={taktTime}
-                        onChange={(e) => setTaktTime(Number(e.target.value))}
-                        className={`w-full ${isDarkMode ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500`}
-                      />
-                    </div>
-                    <div>
-                      <label className={`text-xs font-bold block mb-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Satuan Waktu</label>
-                      <select
-                        value={timeUnit}
-                        onChange={(e) => setTimeUnit(e.target.value)}
-                        className={`w-full ${isDarkMode ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500`}
-                      >
-                        <option value="seconds">Detik / Seconds (s)</option>
-                        <option value="minutes">Menit / Minutes (m)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-800/60 flex justify-end">
-                    <button
-                      onClick={() => setActiveTab('tracker')}
-                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95"
-                    >
-                      <Icon name="checkCircle" className="w-4 h-4" />
-                      <span>Simpan & Kembali ke Stopwatch</span>
-                    </button>
-                  </div>
-                </section>
-              </div>
-            )}
-
+          <!-- MAIN CONTENT -->
+          <main class="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 space-y-6">
+            ${tabContentHtml}
           </main>
 
-          {/* Bilah Kontrol Stopwatch Bawah */}
-          <div className={`fixed bottom-0 left-0 right-0 z-50 ${isDarkMode ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl`}>
-            <div className="max-w-7xl mx-auto flex flex-col gap-2.5">
+          <!-- BOTTOM STOPWATCH CONTROLLER -->
+          <div class="fixed bottom-0 left-0 right-0 z-50 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl">
+            <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
               
-              {/* Panel Indikator Data Langsung */}
-              <div className={`grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full ${isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}`}>
-                <div className="flex items-center justify-between sm:justify-center gap-2 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
-                  <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    STOPWATCH:
-                  </span>
-                  <div className="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
-                    <span>{formatTimeValue(seconds)}</span>
-                    <span className="text-[10px] font-normal text-amber-500">{getUnitSymbol()}</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}">
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
+                  <span class="text-[10px] sm:text-xs font-bold uppercase text-slate-400">STOPWATCH:</span>
+                  <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
+                    <span id="live-stopwatch-val">${formatTimeValue(state.seconds)}</span>
+                    <span class="text-[10px] font-normal text-amber-500">${unit}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-center gap-2 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-4 border-slate-700/50">
-                  <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    TOTAL CT:
-                  </span>
-                  <div className="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
-                    <span>{formatTimeValue(totalCycleTime)}</span>
-                    <span className="text-[10px] font-normal text-emerald-500">{getUnitSymbol()}</span>
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-4 border-slate-700/50">
+                  <span class="text-[10px] sm:text-xs font-bold uppercase text-slate-400">TOTAL CT:</span>
+                  <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
+                    <span>${formatTimeValue(totalCycleTime)}</span>
+                    <span class="text-[10px] font-normal text-emerald-500">${unit}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-center gap-2 border-r pt-1 sm:pt-0 pr-2 sm:pr-4 border-slate-700/50">
-                  <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    AVG CT:
-                  </span>
-                  <div className="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
-                    <span>{formatTimeValue(averageCycleTime)}</span>
-                    <span className="text-[10px] font-normal text-cyan-500">{getUnitSymbol()}</span>
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-r pt-1 sm:pt-0 pr-2 sm:pr-4 border-slate-700/50">
+                  <span class="text-[10px] sm:text-xs font-bold uppercase text-slate-400">AVG CT:</span>
+                  <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
+                    <span>${formatTimeValue(averageCycleTime)}</span>
+                    <span class="text-[10px] font-normal text-cyan-500">${unit}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-center gap-2 pt-1 sm:pt-0 pl-1 sm:pl-0">
-                  <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    KAPASITAS:
-                  </span>
-                  <div className="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
-                    <span>{overallCapacityPcs}</span>
-                    <span className="text-[10px] font-normal text-purple-400">pcs/h</span>
+                <div class="flex items-center justify-between sm:justify-center gap-2 pt-1 sm:pt-0 pl-1 sm:pl-0">
+                  <span class="text-[10px] sm:text-xs font-bold uppercase text-slate-400">KAPASITAS:</span>
+                  <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
+                    <span>${overallCapacityPcs}</span>
+                    <span class="text-[10px] font-normal text-purple-400">pcs/h</span>
                   </div>
                 </div>
               </div>
 
-              {/* Tombol Kontrol Stopwatch */}
-              <div className="grid grid-cols-4 gap-2 sm:gap-3 w-full">
-                <button
-                  onClick={handleStart}
-                  disabled={isRunning}
-                  className="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95"
-                >
-                  <Icon name="play" className="w-4 h-4" />
-                  <span>START</span>
-                </button>
-
-                <button
-                  onClick={handleStop}
-                  disabled={!isRunning}
-                  className="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-600/20 transition-all cursor-pointer active:scale-95"
-                >
-                  <Icon name="square" className="w-4 h-4" />
-                  <span>STOP</span>
-                </button>
-
-                <button
-                  onClick={handleReset}
-                  className={`flex items-center justify-center p-3 rounded-xl font-bold border transition-all cursor-pointer active:scale-95 ${
-                    isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 border-slate-300 text-slate-800 hover:bg-slate-300'
-                  }`}
-                  title="Reset Stopwatch"
-                >
-                  <Icon name="reset" className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={handleLap}
-                  className="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition-all cursor-pointer active:scale-95"
-                >
-                  <Icon name="plus" className="w-4 h-4" />
-                  <span>LAP / CYCLE</span>
-                </button>
+              <div class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
+                <button onclick="startStopwatch()" ${state.isRunning ? 'disabled' : ''} class="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">▶ START</button>
+                <button onclick="stopStopwatch()" ${!state.isRunning ? 'disabled' : ''} class="bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">■ STOP</button>
+                <button onclick="resetStopwatch()" class="p-3 rounded-xl font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 border-slate-300 text-slate-800 hover:bg-slate-300'}">↺ RESET</button>
+                <button onclick="recordLap()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">+ LAP / CYCLE</button>
               </div>
 
             </div>
           </div>
+
         </div>
-      );
+      `;
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    // ============================================================================
+    // 5. BOOTSTRAP AWAL & REGISTRASI PWA OFFLINE
+    // ============================================================================
+    (async function initApp() {
+      // Langsung render tampilan seketika agar tidak pernah muncul layar putih
+      render();
+
+      window.addEventListener('online', () => { state.isOnline = true; render(); });
+      window.addEventListener('offline', () => { state.isOnline = false; render(); });
+
+      // Muat data tersimpan dari IndexedDB
+      const savedCycles = await loadFromDB('cycles_data');
+      const savedSettings = await loadFromDB('settings_data');
+      if (Array.isArray(savedCycles)) state.cycles = savedCycles;
+      if (savedSettings) {
+        if (typeof savedSettings.taktTime === 'number') state.taktTime = savedSettings.taktTime;
+        if (savedSettings.timeUnit) state.timeUnit = savedSettings.timeUnit;
+        if (savedSettings.lineName) state.lineName = savedSettings.lineName;
+        if (savedSettings.styleName) state.styleName = savedSettings.styleName;
+        if (typeof savedSettings.isDarkMode === 'boolean') state.isDarkMode = savedSettings.isDarkMode;
+      }
+      render();
+
+      // Manifest PWA
+      try {
+        const manifestObj = {
+          name: 'Cycle Time Haryan - Offline Stopwatch',
+          short_name: 'CycleTime',
+          start_url: './',
+          display: 'standalone',
+          background_color: '#020617',
+          theme_color: '#10b981',
+          icons: [{
+            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%2310b981'/%3E%3Ccircle cx='96' cy='96' r='56' fill='none' stroke='%23020617' stroke-width='14'/%3E%3Cpath d='M96 62v38l26 16' fill='none' stroke='%23020617' stroke-width='14' stroke-linecap='round'/%3E%3C/svg%3E",
+            sizes: '192x192',
+            type: 'image/svg+xml'
+          }]
+        };
+        const blob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = URL.createObjectURL(blob);
+        document.head.appendChild(link);
+      } catch (e) {}
+    })();
   </script>
 </body>
 </html>
