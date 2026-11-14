@@ -401,7 +401,7 @@
       if (state.cycles.length === 0) return;
       const chronologicalCycles = [...state.cycles].reverse();
       const sorted = [...chronologicalCycles].sort((a, b) => b.lapTime - a.lapTime);
-      const maxId = sorted[0]?.id;
+      const top3BottleneckIds = sorted.slice(0, 3).map((item) => item.id);
 
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
       const avgCT = totalCT / state.cycles.length;
@@ -415,7 +415,7 @@
         const capPerHour = totalSeconds > 0 ? Math.floor(3600 / totalSeconds) : 0;
 
         let statusText = 'Normal Balance';
-        if (c.id === maxId) statusText = 'Improve Immediately';
+        if (top3BottleneckIds.includes(c.id)) statusText = 'Improve Immediately (Top 3)';
         else if (c.lapTime > state.taktTime) statusText = 'Bottleneck';
         else if (c.lapTime <= state.taktTime / 2) statusText = 'Potential Combine';
 
@@ -476,7 +476,7 @@
 
       const chronological = [...state.cycles].reverse();
       const sortedForChart = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      const topBottleneckIds = sortedForChart.slice(0, 2).map((i) => i.id);
+      const topBottleneckIds = sortedForChart.slice(0, 3).map((i) => i.id);
 
       let mainContentHtml = '';
 
@@ -625,13 +625,13 @@
           : chronological.map((item, idx) => {
               const vsTargetVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
               const isOver = item.lapTime > state.taktTime;
-              const isBottleneck = sortedForChart[0]?.id === item.id;
+              const isTop3Bottleneck = topBottleneckIds.includes(item.id);
               const isCombine = item.lapTime <= state.taktTime / 2;
               const totalSecs = state.timeUnit === 'minutes' ? item.lapTime * 60 : item.lapTime;
               const capPcs = totalSecs > 0 ? Math.floor(3600 / totalSecs) : 0;
 
               let actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
-              if (isBottleneck) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>`;
+              if (isTop3Bottleneck) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>`;
               else if (isOver) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">⚠️ Bottleneck</span>`;
               else if (isCombine) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">💡 Potential Combine</span>`;
 
