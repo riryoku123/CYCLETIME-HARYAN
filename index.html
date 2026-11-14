@@ -92,28 +92,21 @@
     <div class="flex flex-col items-center text-center max-w-md mx-auto splash-glow">
       <!-- Logo Stopwatch dengan Huruf H di Tengah -->
       <svg class="w-40 h-44 sm:w-48 sm:h-52 mb-6" viewBox="0 0 220 250" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Tombol Atas Stopwatch -->
         <rect x="92" y="12" width="36" height="16" rx="4" fill="#f6f1e3" />
         <rect x="103" y="26" width="14" height="14" fill="#f6f1e3" />
-        <!-- Tombol Samping Kanan Atas -->
         <g transform="translate(166, 46) rotate(42)">
           <rect x="-12" y="-7" width="24" height="11" rx="3" fill="#f6f1e3" />
           <rect x="-5" y="3" width="10" height="11" fill="#f6f1e3" />
         </g>
-        <!-- Lingkaran Luar Stopwatch (Terbuka di bagian bawah menyatu dengan huruf H) -->
         <path d="M 90 218 A 84 84 0 1 1 130 218" stroke="#f6f1e3" stroke-width="15" stroke-linecap="butt" />
-        <!-- Huruf H Terintegrasi -->
         <path d="M 74 102 L 92 102 L 92 224 L 74 224 Z" fill="#f6f1e3" />
         <rect x="86" y="148" width="48" height="16" fill="#f6f1e3" />
         <path d="M 128 126 L 146 126 L 146 218 L 128 224 Z" fill="#f6f1e3" />
-        <!-- Jarum Jam & Menit -->
         <line x1="110" y1="126" x2="110" y2="74" stroke="#f6f1e3" stroke-width="7" stroke-linecap="round" />
         <line x1="110" y1="126" x2="147" y2="89" stroke="#f6f1e3" stroke-width="7" stroke-linecap="round" />
-        <!-- Poros Tengah Jarum -->
         <circle cx="110" cy="126" r="9" fill="#f6f1e3" />
       </svg>
 
-      <!-- Judul Utama -->
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-[0.14em] uppercase splash-text-glow text-[#f6f1e3] leading-tight">
         CYCLE TIME
       </h1>
@@ -121,13 +114,11 @@
         HARYAN
       </p>
 
-      <!-- Indikator Loading Halus 3 Detik -->
       <div class="w-40 h-1 bg-white/15 rounded-full overflow-hidden mt-7">
         <div class="h-full bg-[#f6f1e3] rounded-full" style="animation: splashProgress 3s linear forwards;"></div>
       </div>
     </div>
 
-    <!-- Kutipan Bawah -->
     <p class="text-xs sm:text-sm italic text-[#e5dec9]/90 text-center max-w-xs sm:max-w-md leading-relaxed tracking-wide splash-text-glow">
       “What is made with your whole heart<br />will be received with an open heart”
     </p>
@@ -463,10 +454,41 @@
       URL.revokeObjectURL(url);
     }
 
+    function sendReportToWhatsApp() {
+      if (state.cycles.length === 0) return;
+      
+      exportExcel();
+
+      const chronologicalCycles = [...state.cycles].reverse();
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const avgCT = totalCT / state.cycles.length;
+      const avgSecs = state.timeUnit === 'minutes' ? avgCT * 60 : avgCT;
+      const overallCap = avgSecs > 0 ? Math.floor(3600 / avgSecs) : 0;
+      const unit = getUnitSymbol();
+
+      let text = `📊 *LAPORAN CYCLE TIME HARYAN*%0A`;
+      text += `🏢 *Line:* ${encodeURIComponent(state.lineName)}%0A`;
+      text += `👕 *Style:* ${encodeURIComponent(state.styleName)}%0A`;
+      text += `⏱ *Takt Time:* ${state.taktTime}${unit} | *Kapasitas:* ${overallCap} pcs/jam%0A`;
+      text += `📈 *Total CT:* ${formatTimeValue(totalCT)}${unit} | *Avg CT:* ${formatTimeValue(avgCT)}${unit}%0A%0A`;
+      text += `📋 *Rincian Proses (${state.cycles.length}):*%0A`;
+
+      chronologicalCycles.forEach((c, idx) => {
+        text += `${idx + 1}. *${encodeURIComponent(c.processName || 'Proses')}* (${formatTimeValue(c.lapTime)}${unit}) - ${encodeURIComponent(c.operatorName || 'Operator -')}%0A`;
+      });
+
+      text += `%0A📎 _File laporan Excel (.xls) telah diunduh ke perangkat Anda. Silakan lampirkan file tersebut ke chat ini jika diperlukan._`;
+      
+      window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
+    }
+
     // ============================================================================
     // 4. RENDER ANTARMUKA PENGGUNA (UI)
     // ============================================================================
     function render() {
+      const app = document.getElementById('app');
+      if (!app) return;
+
       const dark = state.isDarkMode;
       const unit = getUnitSymbol();
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
@@ -476,209 +498,189 @@
 
       const chronological = [...state.cycles].reverse();
       const sortedForChart = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      const topBottleneckIds = sortedForChart.slice(0, 3).map((i) => i.id);
+      const top3BottleneckIds = sortedForChart.slice(0, 3).map((item) => item.id);
 
       let mainContentHtml = '';
 
       if (state.activeTab === 'tracker') {
-        const rowsHtml = chronological.length === 0
-          ? `<tr>
-              <td colspan="7" class="text-center py-12 ${dark ? 'text-slate-400' : 'text-slate-500'} text-sm">
-                Belum ada data siklus. Tekan tombol <strong class="text-emerald-400">START</strong> lalu <strong class="text-emerald-400">LAP / CYCLE</strong> di bilah kontrol bawah untuk mencatat durasi proses.
-              </td>
-            </tr>`
-          : chronological.map((cycle, index) => {
-              const cycleNum = index + 1;
-              const isEditing = state.editingCycleId === cycle.id;
-              const dispLap = isEditing ? state.seconds : cycle.lapTime;
-              const dispVs = isEditing ? (state.seconds - state.taktTime) : cycle.vsTarget;
-              const isOver = dispLap > state.taktTime;
-              const vsFormatted = (dispVs > 0 ? '+' + formatTimeValue(dispVs) : formatTimeValue(dispVs)) + unit;
-
-              return `
-                <tr class="${isEditing ? (dark ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-amber-50 border-l-4 border-amber-500') : (dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all">
-                  <td class="p-3.5 font-bold whitespace-nowrap ${dark ? 'text-slate-200' : 'text-slate-800'}">#${cycleNum}</td>
-                  <td class="p-3.5 font-mono font-bold text-base whitespace-nowrap">
-                    ${isEditing
-                      ? `<span class="text-amber-400 animate-pulse"><span id="editing-lap-${cycle.id}">${formatTimeValue(state.seconds)}${unit}</span> <span class="text-xs text-amber-500 ml-1 font-normal">(Ambil Ulang...)</span></span>`
-                      : `<span class="text-emerald-400">${formatTimeValue(cycle.lapTime)}${unit}</span>`
-                    }
-                  </td>
-                  <td id="editing-vs-${cycle.id}" class="p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">
-                    ${vsFormatted}
-                  </td>
-                  <td class="p-3.5">
-                    <input
-                      type="text"
-                      value="${escapeHtml(cycle.processName)}"
-                      oninput="updateCycleField(${cycle.id}, 'processName', this.value)"
-                      class="w-full min-w-[200px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
-                    />
-                  </td>
-                  <td class="p-3.5">
-                    <input
-                      type="text"
-                      value="${escapeHtml(cycle.operatorName)}"
-                      placeholder="Nama operator..."
-                      oninput="updateCycleField(${cycle.id}, 'operatorName', this.value)"
-                      class="w-full min-w-[170px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
-                    />
-                  </td>
-                  <td class="p-3.5">
-                    <input
-                      type="text"
-                      value="${escapeHtml(cycle.machineName || '')}"
-                      placeholder="Jenis mesin..."
-                      oninput="updateCycleField(${cycle.id}, 'machineName', this.value)"
-                      class="w-full min-w-[180px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
-                    />
-                  </td>
-                  <td class="p-3.5 text-center whitespace-nowrap">
-                    ${isEditing
-                      ? `<div class="flex items-center justify-center gap-1.5">
-                          <button onclick="confirmReTime()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2.5 py-1.5 rounded-lg font-bold text-xs cursor-pointer shadow-md" title="Simpan Waktu Baru">✓</button>
-                          <button onclick="cancelReTime()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 px-2.5 py-1.5 rounded-lg font-bold text-xs cursor-pointer" title="Batal">✕</button>
-                        </div>`
-                      : `<div class="flex items-center justify-center gap-1.5">
-                          <button onclick="startReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 p-1.5 rounded-lg cursor-pointer" title="Ambil Ulang Stopwatch">✎</button>
-                          <button onclick="deleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg cursor-pointer" title="Hapus Baris">🗑</button>
-                        </div>`
-                    }
-                  </td>
-                </tr>
-              `;
-            }).join('');
-
         mainContentHtml = `
-          <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <span class="text-emerald-500 font-bold text-lg">📊</span>
-                <h2 class="text-base font-bold ${dark ? 'text-white' : 'text-slate-900'}">Log (${state.cycles.length})</h2>
+          <div class="space-y-6">
+            <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-500 font-bold">📊</span>
+                  <h2 class="text-base font-bold ${dark ? 'text-white' : 'text-slate-900'}">
+                    Log (${state.cycles.length})
+                  </h2>
+                </div>
+                ${state.cycles.length > 0 ? `
+                  <button onclick="clearAllCycles()" class="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors flex items-center gap-1">
+                    <span>🗑 Hapus Semua Log</span>
+                  </button>
+                ` : ''}
               </div>
-              ${state.cycles.length > 0 ? `
-                <button onclick="clearAllCycles()" class="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors">
-                  🗑 Hapus Semua Log
-                </button>
-              ` : ''}
-            </div>
 
-            <div id="tracker-table-container" class="overflow-x-auto overflow-y-auto custom-table-scroll border ${dark ? 'border-slate-800' : 'border-slate-200'} rounded-xl max-h-[50vh] pb-1">
-              <table class="w-full min-w-[920px] text-left text-sm">
-                <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b sticky top-0 z-10 shadow-sm whitespace-nowrap">
-                  <tr>
-                    <th class="p-3.5 w-24">Cycle #</th>
-                    <th class="p-3.5">Lap Time (${unit})</th>
-                    <th class="p-3.5">Vs Target (${unit})</th>
-                    <th class="p-3.5 min-w-[210px]">Proses</th>
-                    <th class="p-3.5 min-w-[180px]">Nama Operator</th>
-                    <th class="p-3.5 min-w-[190px]">Machine</th>
-                    <th class="p-3.5 w-28 text-center">Edit Time</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y ${dark ? 'divide-slate-800/40' : 'divide-slate-200'}">
-                  ${rowsHtml}
-                </tbody>
-              </table>
-            </div>
-          </section>
+              <div id="tracker-table-container" class="overflow-x-auto overflow-y-auto custom-table-scroll border ${dark ? 'border-slate-800' : 'border-slate-200'} rounded-xl max-h-[50vh] pb-1">
+                <table class="w-full min-w-[920px] text-left text-sm">
+                  <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b sticky top-0 z-10 shadow-sm whitespace-nowrap">
+                    <tr>
+                      <th class="p-3.5 w-24">Cycle #</th>
+                      <th class="p-3.5">Lap Time (${unit})</th>
+                      <th class="p-3.5">Vs Target (${unit})</th>
+                      <th class="p-3.5 min-w-[210px]">Proses</th>
+                      <th class="p-3.5 min-w-[180px]">Nama Operator</th>
+                      <th class="p-3.5 min-w-[190px]">Machine</th>
+                      <th class="p-3.5 w-28 text-center">Edit Time</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y ${dark ? 'divide-slate-800/40' : 'divide-slate-200'}">
+                    ${state.cycles.length === 0 ? `
+                      <tr>
+                        <td colspan="7" class="text-center py-12 ${dark ? 'text-slate-400' : 'text-slate-500'} text-sm">
+                          Belum ada data siklus. Tekan tombol <strong class="text-emerald-400">START</strong> lalu <strong class="text-emerald-400">LAP / CYCLE</strong> di bilah kontrol bawah.
+                        </td>
+                      </tr>
+                    ` : chronological.map((c, index) => {
+                      const cycleNumber = index + 1;
+                      const isEditingThis = state.editingCycleId === c.id;
+                      const displayedLapTime = isEditingThis ? state.seconds : c.lapTime;
+                      const displayedVsTarget = isEditingThis ? (state.seconds - state.taktTime) : c.vsTarget;
+                      const isOver = displayedLapTime > state.taktTime;
+                      const formattedVsTarget = displayedVsTarget > 0 ? '+' + formatTimeValue(displayedVsTarget) : formatTimeValue(displayedVsTarget);
+
+                      return `
+                        <tr class="${isEditingThis ? (dark ? 'bg-amber-500/10 border-l-4 border-amber-500' : 'bg-amber-50 border-l-4 border-amber-500') : (dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all">
+                          <td class="p-3.5 font-bold whitespace-nowrap ${dark ? 'text-slate-200' : 'text-slate-800'}">#${cycleNumber}</td>
+                          <td class="p-3.5 font-mono font-bold text-base whitespace-nowrap">
+                            ${isEditingThis ? `
+                              <span id="editing-lap-${c.id}" class="text-amber-400 animate-pulse">
+                                ${formatTimeValue(state.seconds)}${unit}
+                                <span class="text-xs text-amber-500 ml-1.5 font-normal">(Ambil Ulang...)</span>
+                              </span>
+                            ` : `
+                              <span class="text-emerald-400">${formatTimeValue(c.lapTime)}${unit}</span>
+                            `}
+                          </td>
+                          <td id="editing-vs-${c.id}" class="p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">
+                            ${formattedVsTarget}${unit}
+                          </td>
+                          <td class="p-3.5">
+                            <input type="text" value="${escapeHtml(c.processName)}" oninput="updateCycleField(${c.id}, 'processName', this.value)" class="w-full min-w-[200px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                          </td>
+                          <td class="p-3.5">
+                            <input type="text" value="${escapeHtml(c.operatorName)}" oninput="updateCycleField(${c.id}, 'operatorName', this.value)" placeholder="Nama operator..." class="w-full min-w-[170px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                          </td>
+                          <td class="p-3.5">
+                            <input type="text" value="${escapeHtml(c.machineName || '')}" oninput="updateCycleField(${c.id}, 'machineName', this.value)" placeholder="Jenis mesin..." class="w-full min-w-[180px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+                          </td>
+                          <td class="p-3.5 text-center whitespace-nowrap">
+                            ${isEditingThis ? `
+                              <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="confirmReTime()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">Simpan</button>
+                                <button onclick="cancelReTime()" class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded-lg text-xs font-bold cursor-pointer">Batal</button>
+                              </div>
+                            ` : `
+                              <div class="flex items-center justify-center gap-2">
+                                <button onclick="startReTime(${c.id})" class="text-amber-400 hover:text-amber-300 text-xs font-bold cursor-pointer" title="Ambil Ulang">✏️</button>
+                                <button onclick="deleteCycle(${c.id})" class="text-rose-400 hover:text-rose-300 text-xs font-bold cursor-pointer" title="Hapus">🗑</button>
+                              </div>
+                            `}
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
         `;
       } else if (state.activeTab === 'analysis') {
-        const maxVal = chronological.length > 0 ? Math.max(...chronological.map((s) => s.lapTime), state.taktTime) : state.taktTime;
-        const heightPx = 208;
-        const taktRatio = Math.min(1, Math.max(0, state.taktTime / (maxVal || 1)));
-        const bottomPixelOffset = Math.round(taktRatio * heightPx) + 48;
+        const sequentialData = chronological.map((c, index) => ({
+          id: c.id,
+          cycleNum: index + 1,
+          name: c.processName || ('Proses #' + (index + 1)),
+          totalTime: parseFloat(c.lapTime.toFixed(1)),
+          operatorName: c.operatorName || '-',
+          machineName: c.machineName || '-'
+        }));
 
-        const barsHtml = chronological.map((item, idx) => {
-          const isTopBottleneck = topBottleneckIds.includes(item.id);
-          const isOver = item.lapTime > state.taktTime;
-          const isCombine = item.lapTime <= state.taktTime / 2;
-          const isMax = sortedForChart[0]?.id === item.id;
-
-          let barColor = 'bg-emerald-500';
-          let textColor = 'text-emerald-500';
-          if (isTopBottleneck) { barColor = 'bg-rose-600'; textColor = 'text-rose-500'; }
-          else if (isOver) { barColor = 'bg-amber-500'; textColor = 'text-amber-500'; }
-          else if (isCombine) { barColor = 'bg-blue-500'; textColor = 'text-blue-400'; }
-
-          const heightPercent = Math.min(100, Math.max(8, (item.lapTime / (maxVal || 1)) * 100));
-
-          return `
-            <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
-              <span class="text-xs font-bold ${textColor}">${item.lapTime.toFixed(1)}${unit}</span>
-              <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
-                <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
-                  ${isMax ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">MAX</span></div>` : ''}
-                </div>
-              </div>
-              <div class="text-center w-full">
-                <p class="text-xs font-bold truncate ${dark ? 'text-slate-200' : 'text-slate-800'}" title="${escapeHtml(item.processName)}">${escapeHtml(item.processName || 'Proses #' + (idx + 1))}</p>
-                <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${idx + 1}</p>
-                <p class="text-[10px] text-slate-400 truncate">${escapeHtml(item.operatorName || '-')}</p>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        const detailRowsHtml = chronological.length === 0
-          ? `<tr><td colspan="8" class="text-center py-8 ${dark ? 'text-slate-400' : 'text-slate-500'}">Tidak ada data rincian proses.</td></tr>`
-          : chronological.map((item, idx) => {
-              const vsTargetVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
-              const isOver = item.lapTime > state.taktTime;
-              const isTop3Bottleneck = topBottleneckIds.includes(item.id);
-              const isCombine = item.lapTime <= state.taktTime / 2;
-              const totalSecs = state.timeUnit === 'minutes' ? item.lapTime * 60 : item.lapTime;
-              const capPcs = totalSecs > 0 ? Math.floor(3600 / totalSecs) : 0;
-
-              let actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
-              if (isTop3Bottleneck) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>`;
-              else if (isOver) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">⚠️ Bottleneck</span>`;
-              else if (isCombine) actionBadge = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">💡 Potential Combine</span>`;
-
-              return `
-                <tr class="${dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}">
-                  <td class="p-3.5 font-bold whitespace-nowrap ${dark ? 'text-slate-300' : 'text-slate-700'}">#${idx + 1}</td>
-                  <td class="p-3.5 font-bold whitespace-nowrap ${dark ? 'text-slate-200' : 'text-slate-800'}">${escapeHtml(item.processName || '-')}</td>
-                  <td class="p-3.5 text-slate-400 whitespace-nowrap">${escapeHtml(item.operatorName || '-')}</td>
-                  <td class="p-3.5 text-slate-400 whitespace-nowrap">${escapeHtml(item.machineName || '-')}</td>
-                  <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${item.lapTime.toFixed(1)}${unit}</td>
-                  <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsTargetVal > 0 ? '+' + vsTargetVal : vsTargetVal}${unit}</td>
-                  <td class="p-3.5 whitespace-nowrap">${actionBadge}</td>
-                  <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
-                </tr>
-              `;
-            }).join('');
+        const sortedForChart = [...sequentialData].sort((a, b) => b.totalTime - a.totalTime);
+        const top3Ids = sortedForChart.slice(0, 3).map((item) => item.id);
 
         mainContentHtml = `
           <div class="space-y-6">
             <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
-              <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
-                <h2 class="text-lg font-bold">📊 Analisis Pareto & Bottleneck Proses</h2>
-                ${sortedForChart.length > 0 ? `
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400 font-bold">📈</span>
+                  <h2 class="text-lg font-bold">Analisis Pareto & Bottleneck Proses</h2>
+                </div>
+                ${sequentialData.length > 0 ? `
                   <span class="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                    ⚠️ Bottleneck Utama: ${escapeHtml(sortedForChart[0]?.processName || '-')}
+                    🚨 Top Bottleneck: ${escapeHtml(sortedForChart[0]?.name || '-')}
                   </span>
                 ` : ''}
               </div>
-              ${chronological.length === 0 ? `
-                <div class="text-center py-12 ${dark ? 'text-slate-400' : 'text-slate-500'}">Belum ada data untuk dianalisis. Silakan rekam siklus waktu pada modul Stopwatch terlebih dahulu.</div>
+
+              ${sequentialData.length === 0 ? `
+                <div class="text-center py-12 ${dark ? 'text-slate-400' : 'text-slate-500'}">
+                  Belum ada data untuk dianalisis.
+                </div>
               ` : `
-                <div class="overflow-x-auto pb-4 pt-6 custom-table-scroll">
+                <div class="overflow-x-auto pb-4 pt-6">
                   <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
-                    <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomPixelOffset}px">
-                      <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">Target Takt Time: ${state.taktTime}${unit}</span>
-                    </div>
-                    ${barsHtml}
+                    ${(() => {
+                      const maxVal = Math.max(...sequentialData.map((s) => s.totalTime), state.taktTime);
+                      const heightPx = 208;
+                      const taktRatio = Math.min(1, Math.max(0, state.taktTime / maxVal));
+                      const bottomPixelOffset = Math.round(taktRatio * heightPx) + 48;
+                      return `
+                        <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomPixelOffset}px">
+                          <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">Target Takt: ${state.taktTime}${unit}</span>
+                        </div>
+                      `;
+                    })()}
+
+                    ${sequentialData.map((item) => {
+                      const isTop3 = top3Ids.includes(item.id);
+                      const isOver = item.totalTime > state.taktTime;
+                      let barColor = 'bg-emerald-500';
+                      let textColor = 'text-emerald-500';
+                      if (isTop3) {
+                        barColor = 'bg-rose-600';
+                        textColor = 'text-rose-500';
+                      } else if (isOver) {
+                        barColor = 'bg-amber-500';
+                        textColor = 'text-amber-500';
+                      }
+
+                      const maxVal = Math.max(...sequentialData.map((s) => s.totalTime), state.taktTime);
+                      const heightPercent = Math.min(100, Math.max(8, (item.totalTime / maxVal) * 100));
+
+                      return `
+                        <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 group z-0">
+                          <span class="text-xs font-bold ${textColor}">${item.totalTime}${unit}</span>
+                          <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
+                            <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%"></div>
+                          </div>
+                          <div class="text-center w-full">
+                            <p class="text-xs font-bold truncate ${dark ? 'text-slate-200' : 'text-slate-800'}">${escapeHtml(item.name)}</p>
+                            <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${item.cycleNum}</p>
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
                   </div>
                 </div>
               `}
             </section>
 
             <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl">
-              <h2 class="text-lg font-bold mb-4">👥 Detail Analysis & Action</h2>
+              <h2 class="text-lg font-bold mb-4">Detail Analysis & Action</h2>
               <div class="overflow-x-auto custom-table-scroll border ${dark ? 'border-slate-800' : 'border-slate-200'} rounded-xl pb-1">
                 <table class="w-full min-w-[880px] text-left text-sm">
-                  <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b whitespace-nowrap">
+                  <thead class="${dark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'} border-b">
                     <tr>
                       <th class="p-3.5 w-20">Cycle #</th>
                       <th class="p-3.5">Proses</th>
@@ -687,11 +689,39 @@
                       <th class="p-3.5">CT (${unit})</th>
                       <th class="p-3.5">Vs Takt (${unit})</th>
                       <th class="p-3.5">Action</th>
-                      <th class="p-3.5">Kapasitas Maks (pcs/jam)</th>
+                      <th class="p-3.5">Kapasitas Maks</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y ${dark ? 'divide-slate-800/40' : 'divide-slate-200'}">
-                    ${detailRowsHtml}
+                    ${sequentialData.length === 0 ? `
+                      <tr><td colspan="8" class="text-center py-8">Tidak ada data.</td></tr>
+                    ` : sequentialData.map((item) => {
+                      const vsVal = parseFloat((item.totalTime - state.taktTime).toFixed(1));
+                      const isTop3 = top3Ids.includes(item.id);
+                      const isOver = item.totalTime > state.taktTime;
+                      const totalSecs = state.timeUnit === 'minutes' ? item.totalTime * 60 : item.totalTime;
+                      const cap = totalSecs > 0 ? Math.floor(3600 / totalSecs) : 0;
+
+                      let actionBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400">✅ Normal</span>';
+                      if (isTop3) {
+                        actionBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>';
+                      } else if (isOver) {
+                        actionBadge = '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400">⚠️ Bottleneck</span>';
+                      }
+
+                      return `
+                        <tr>
+                          <td class="p-3.5 font-bold">#${item.cycleNum}</td>
+                          <td class="p-3.5 font-bold">${escapeHtml(item.name)}</td>
+                          <td class="p-3.5 text-slate-400">${escapeHtml(item.operatorName)}</td>
+                          <td class="p-3.5 text-slate-400">${escapeHtml(item.machineName)}</td>
+                          <td class="p-3.5 font-mono font-bold text-emerald-400">${item.totalTime}${unit}</td>
+                          <td class="p-3.5 font-mono font-bold ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsVal > 0 ? '+' + vsVal : vsVal}${unit}</td>
+                          <td class="p-3.5">${actionBadge}</td>
+                          <td class="p-3.5 font-mono font-bold text-cyan-400">${cap} pcs/jam</td>
+                        </tr>
+                      `;
+                    }).join('')}
                   </tbody>
                 </table>
               </div>
@@ -700,103 +730,95 @@
         `;
       } else if (state.activeTab === 'settings') {
         mainContentHtml = `
-          <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
-            <h2 class="text-lg font-bold">⚙️ Setting Parameter</h2>
-            <div class="flex flex-col space-y-4">
-              <div>
-                <label class="text-xs font-bold block mb-1.5 ${dark ? 'text-slate-300' : 'text-slate-700'}">Line</label>
-                <input type="text" value="${escapeHtml(state.lineName)}" oninput="state.lineName = this.value; persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+          <div class="space-y-6">
+            <section class="${dark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-300 shadow-md'} border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+              <h2 class="text-lg font-bold flex items-center gap-2">⚙️ Setting Parameter</h2>
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs font-bold block mb-1.5">Line</label>
+                  <input type="text" value="${escapeHtml(state.lineName)}" oninput="state.lineName = this.value; persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300'} border rounded-xl p-3 text-sm" />
+                </div>
+                <div>
+                  <label class="text-xs font-bold block mb-1.5">Model / Style</label>
+                  <input type="text" value="${escapeHtml(state.styleName)}" oninput="state.styleName = this.value; persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300'} border rounded-xl p-3 text-sm" />
+                </div>
+                <div>
+                  <label class="text-xs font-bold block mb-1.5">Target Takt Time (${unit})</label>
+                  <input type="number" value="${state.taktTime}" oninput="state.taktTime = Number(this.value); persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300'} border rounded-xl p-3 text-sm" />
+                </div>
+                <div>
+                  <label class="text-xs font-bold block mb-1.5">Satuan Waktu</label>
+                  <select onchange="state.timeUnit = this.value; persistAll(); render();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300'} border rounded-xl p-3 text-sm">
+                    <option value="seconds" ${state.timeUnit === 'seconds' ? 'selected' : ''}>Detik / Seconds (s)</option>
+                    <option value="minutes" ${state.timeUnit === 'minutes' ? 'selected' : ''}>Menit / Minutes (m)</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold block mb-1.5 ${dark ? 'text-slate-300' : 'text-slate-700'}">Model / Style</label>
-                <input type="text" value="${escapeHtml(state.styleName)}" oninput="state.styleName = this.value; persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              <div class="pt-4 border-t border-slate-800/60 flex justify-end">
+                <button onclick="state.activeTab = 'tracker'; render();" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm cursor-pointer">Simpan & Kembali</button>
               </div>
-              <div>
-                <label class="text-xs font-bold block mb-1.5 ${dark ? 'text-slate-300' : 'text-slate-700'}">Target Takt Time (${unit})</label>
-                <input type="number" value="${state.taktTime}" oninput="state.taktTime = Number(this.value) || 1; persistAll();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
-              </div>
-              <div>
-                <label class="text-xs font-bold block mb-1.5 ${dark ? 'text-slate-300' : 'text-slate-700'}">Satuan Waktu</label>
-                <select onchange="state.timeUnit = this.value; persistAll(); render();" class="w-full ${dark ? 'bg-slate-950 border-slate-800 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                  <option value="seconds" ${state.timeUnit === 'seconds' ? 'selected' : ''}>Detik / Seconds (s)</option>
-                  <option value="minutes" ${state.timeUnit === 'minutes' ? 'selected' : ''}>Menit / Minutes (m)</option>
-                </select>
-              </div>
-            </div>
-            <div class="pt-4 border-t border-slate-800/60 flex justify-end">
-              <button onclick="state.activeTab = 'tracker'; render();" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg transition-all cursor-pointer">
-                ✓ Simpan & Kembali ke Stopwatch
-              </button>
-            </div>
-          </section>
+            </section>
+          </div>
         `;
       }
 
-      const appEl = document.getElementById('app');
-      appEl.innerHTML = `
-        <div class="min-h-screen ${dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} transition-colors duration-300 pb-44 text-base origin-top-left overflow-x-hidden"
-             style="transform: scale(${state.zoomLevel / 100}); width: ${100 / (state.zoomLevel / 100)}%; min-height: ${100 / (state.zoomLevel / 100)}vh;">
+      app.innerHTML = `
+        <div class="min-h-screen ${dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} font-sans transition-colors duration-300 pb-40 overflow-x-hidden" style="transform: scale(${state.zoomLevel / 100}); transform-origin: top left; width: ${100 / (state.zoomLevel / 100)}%;">
           
-          <!-- Header -->
-          <header class="${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200 shadow-xs'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2">
+          <header class="${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0">
-                <svg class="w-5 h-5 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                ⏱️
               </div>
               <div>
                 <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">Cycle Time Haryan</h1>
-                <p class="text-xs ${dark ? 'text-slate-400' : 'text-slate-500'} hidden sm:block">
-                  ${escapeHtml(state.lineName)} — ${escapeHtml(state.styleName)} (Takt: ${state.taktTime}${unit})
-                </p>
+                <p class="text-xs ${dark ? 'text-slate-400' : 'text-slate-500'} hidden sm:block">${escapeHtml(state.lineName)} — ${escapeHtml(state.styleName)}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] font-bold px-2.5 py-1.5 rounded-lg border ${state.isOnline ? (dark ? 'bg-slate-800/80 border-slate-700 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700') : 'bg-amber-500/15 border-amber-500/40 text-amber-400'}">
-                ${state.isOnline ? '● Offline Ready' : '● Offline Mode'}
-              </span>
-
-              <span class="text-xs font-bold px-3 py-1.5 rounded-lg ${dark ? 'bg-slate-800 text-emerald-400' : 'bg-slate-200 text-emerald-700'}">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xs font-bold px-3 py-1.5 rounded-lg ${dark ? 'bg-slate-800 text-emerald-400' : 'bg-slate-200 text-emerald-700'} capitalize">
                 ${state.activeTab === 'tracker' ? 'Stopwatch' : state.activeTab === 'analysis' ? 'Analisis' : 'Setting'}
               </span>
 
-              <button onclick="state.isMenuOpen = !state.isMenuOpen; render();" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'}">
-                <span>${state.isMenuOpen ? '✕' : '☰'}</span>
+              <button onclick="state.isMenuOpen = !state.isMenuOpen; render();" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-300 text-slate-800'}">
                 <span>Menu</span>
               </button>
             </div>
 
             ${state.isMenuOpen ? `
               <div class="fixed inset-0 bg-slate-950/60 z-40" onclick="state.isMenuOpen = false; render();"></div>
-              <div class="absolute top-full right-2 sm:right-4 mt-2 w-80 z-50 p-4 rounded-2xl border shadow-2xl ${dark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'}">
-                <div class="space-y-4">
-                  <div>
-                    <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 ${dark ? 'text-slate-400' : 'text-slate-500'}">Navigasi Modul</label>
-                    <div class="grid grid-cols-3 gap-1.5">
-                      <button onclick="state.activeTab='settings'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'settings' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Setting</button>
-                      <button onclick="state.activeTab='tracker'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'tracker' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Stopwatch</button>
-                      <button onclick="state.activeTab='analysis'; state.isMenuOpen=false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'analysis' ? 'bg-emerald-500 border-emerald-500 text-slate-950' : (dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700')}">Analisis</button>
-                    </div>
+              <div class="absolute top-full right-2 sm:right-4 mt-2 w-80 z-50 p-4 rounded-2xl border shadow-2xl ${dark ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'} space-y-4">
+                <div>
+                  <label class="text-xs font-extrabold uppercase tracking-wider block mb-2">Navigasi Modul</label>
+                  <div class="grid grid-cols-3 gap-1.5">
+                    <button onclick="state.activeTab = 'settings'; state.isMenuOpen = false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'settings' ? 'bg-emerald-500 text-slate-950' : ''}">Setting</button>
+                    <button onclick="state.activeTab = 'tracker'; state.isMenuOpen = false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'tracker' ? 'bg-emerald-500 text-slate-950' : ''}">Stopwatch</button>
+                    <button onclick="state.activeTab = 'analysis'; state.isMenuOpen = false; render();" class="p-2 rounded-xl text-xs font-bold border cursor-pointer ${state.activeTab === 'analysis' ? 'bg-emerald-500 text-slate-950' : ''}">Analisis</button>
                   </div>
+                </div>
 
-                  <div>
-                    <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 ${dark ? 'text-slate-400' : 'text-slate-500'}">Ekspor Laporan</label>
-                    <button onclick="exportExcel(); state.isMenuOpen=false; render();" ${state.cycles.length === 0 ? 'disabled' : ''} class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white p-2.5 rounded-xl text-xs font-bold shadow-md cursor-pointer">
-                      ⬇ Download Laporan Excel (.xls)
+                <div>
+                  <label class="text-xs font-extrabold uppercase tracking-wider block mb-2">Ekspor Laporan</label>
+                  <div class="space-y-2">
+                    <button onclick="exportExcel(); state.isMenuOpen = false; render();" ${state.cycles.length === 0 ? 'disabled' : ''} class="w-full bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-xl text-xs font-bold cursor-pointer">
+                      ⬇ Download Excel (.xls)
+                    </button>
+                    <button onclick="sendReportToWhatsApp(); state.isMenuOpen = false; render();" ${state.cycles.length === 0 ? 'disabled' : ''} class="w-full bg-green-700 hover:bg-green-600 text-white p-2 rounded-xl text-xs font-bold cursor-pointer">
+                      💬 Unduh Excel & Kirim ke WhatsApp
                     </button>
                   </div>
+                </div>
 
-                  <div class="pt-3 border-t ${dark ? 'border-slate-800' : 'border-slate-200'}">
-                    <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 ${dark ? 'text-slate-400' : 'text-slate-500'}">Tampilan & Skala</label>
-                    <div class="flex items-center justify-between gap-2">
-                      <button onclick="state.isDarkMode = !state.isDarkMode; persistAll(); render();" class="flex-1 p-2 rounded-xl text-xs font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-300 text-slate-700'}">
-                        ${dark ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                      </button>
-                      <div class="flex items-center p-1 rounded-xl border ${dark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-300'}">
-                        <button onclick="state.zoomLevel = Math.max(60, state.zoomLevel - 10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">-</button>
-                        <span class="text-xs font-bold px-1">${state.zoomLevel}%</span>
-                        <button onclick="state.zoomLevel = Math.min(140, state.zoomLevel + 10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">+</button>
-                      </div>
+                <div class="pt-3 border-t ${dark ? 'border-slate-800' : 'border-slate-200'}">
+                  <div class="flex items-center justify-between gap-2">
+                    <button onclick="state.isDarkMode = !state.isDarkMode; persistAll(); render();" class="flex-1 p-2 rounded-xl text-xs font-bold border cursor-pointer">
+                      ${dark ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                    </button>
+                    <div class="flex items-center p-1 rounded-xl border">
+                      <button onclick="state.zoomLevel = Math.max(60, state.zoomLevel - 10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">-</button>
+                      <span class="text-xs font-bold px-1">${state.zoomLevel}%</span>
+                      <button onclick="state.zoomLevel = Math.min(140, state.zoomLevel + 10); render();" class="px-2 py-1 text-xs font-bold cursor-pointer">+</button>
                     </div>
                   </div>
                 </div>
@@ -804,17 +826,14 @@
             ` : ''}
           </header>
 
-          <!-- Main Content -->
           <main class="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 space-y-6">
             ${mainContentHtml}
           </main>
 
-          <!-- Sticky Bottom Stopwatch Bar -->
           <div class="fixed bottom-0 left-0 right-0 z-50 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl">
             <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
-              
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}">
-                <div class="flex items-center justify-between sm:justify-center gap-2 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-r pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
                   <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider ${dark ? 'text-slate-400' : 'text-slate-500'}">STOPWATCH:</span>
                   <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
                     <span id="live-stopwatch-val">${formatTimeValue(state.seconds)}</span>
@@ -822,7 +841,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between sm:justify-center gap-2 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-4 border-slate-700/50">
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-r pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
                   <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider ${dark ? 'text-slate-400' : 'text-slate-500'}">TOTAL CT:</span>
                   <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
                     <span>${formatTimeValue(totalCT)}</span>
@@ -830,7 +849,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between sm:justify-center gap-2 border-r pt-1 sm:pt-0 pr-2 sm:pr-4 border-slate-700/50">
+                <div class="flex items-center justify-between sm:justify-center gap-2 border-r pr-2 sm:pr-4 border-slate-700/50">
                   <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider ${dark ? 'text-slate-400' : 'text-slate-500'}">AVG CT:</span>
                   <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
                     <span>${formatTimeValue(avgCT)}</span>
@@ -838,7 +857,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center justify-between sm:justify-center gap-2 pt-1 sm:pt-0 pl-1 sm:pl-0">
+                <div class="flex items-center justify-between sm:justify-center gap-2">
                   <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider ${dark ? 'text-slate-400' : 'text-slate-500'}">KAPASITAS:</span>
                   <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
                     <span>${capacityPcs}</span>
@@ -848,22 +867,21 @@
               </div>
 
               <div class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
-                <button onclick="startTimer()" ${state.isRunning ? 'disabled' : ''} class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg transition-all cursor-pointer active:scale-95">
+                <button onclick="startTimer()" ${state.isRunning ? 'disabled' : ''} class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">
                   <span>▶ START</span>
                 </button>
-                <button onclick="stopTimer()" ${!state.isRunning ? 'disabled' : ''} class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg transition-all cursor-pointer active:scale-95">
+                <button onclick="stopTimer()" ${!state.isRunning ? 'disabled' : ''} class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">
                   <span>■ STOP</span>
                 </button>
-                <button onclick="resetTimer()" class="flex items-center justify-center p-3 rounded-xl font-bold border transition-all cursor-pointer active:scale-95 ${dark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-200 border-slate-300 text-slate-800 hover:bg-slate-300'}" title="Reset Stopwatch">
+                <button onclick="resetTimer()" class="flex items-center justify-center p-3 rounded-xl font-bold border cursor-pointer ${dark ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-200 border-slate-300 text-slate-800'}" title="Reset">
                   <span>↺ RESET</span>
                 </button>
-                <button onclick="recordLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg transition-all cursor-pointer active:scale-95">
+                <button onclick="recordLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg cursor-pointer">
                   <span>+ LAP / CYCLE</span>
                 </button>
               </div>
             </div>
           </div>
-
         </div>
       `;
     }
@@ -872,7 +890,6 @@
     // 5. BOOTSTRAP AWAL & REGISTRASI PWA OFFLINE
     // ============================================================================
     (async function initApp() {
-      // Hilangkan Splash Screen tepat setelah 3 detik (3000 ms)
       setTimeout(() => {
         const splash = document.getElementById('splash-screen');
         if (splash) {
@@ -881,13 +898,11 @@
         }
       }, 3000);
 
-      // Langsung render tampilan utama di balik splash screen agar siap seketika
       render();
 
       window.addEventListener('online', () => { state.isOnline = true; render(); });
       window.addEventListener('offline', () => { state.isOnline = false; render(); });
 
-      // Muat data lokal tersimpan dari IndexedDB / LocalStorage
       const savedCycles = await loadFromStorage('cycles_data');
       const savedSettings = await loadFromStorage('settings_data');
 
@@ -901,28 +916,6 @@
       }
 
       render();
-
-      // Daftarkan PWA Web Manifest & Service Worker Offline Mandiri
-      try {
-        const manifestObj = {
-          name: 'Cycle Time Haryan - Offline Stopwatch',
-          short_name: 'CycleTime',
-          start_url: '.',
-          display: 'standalone',
-          background_color: '#020617',
-          theme_color: '#10b981',
-          icons: [{
-            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2310b981'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%23020617' stroke-width='8'/%3E%3Cpath d='M50 32v20l14 8' fill='none' stroke='%23020617' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E",
-            sizes: '192x192',
-            type: 'image/svg+xml'
-          }]
-        };
-        const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
-        const link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = URL.createObjectURL(manifestBlob);
-        document.head.appendChild(link);
-      } catch (e) {}
     })();
   </script>
 </body>
