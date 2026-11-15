@@ -71,30 +71,30 @@
   <div id="appRoot" class="origin-top-left transition-transform duration-150">
 
     <!-- Top Navbar Header -->
-    <header id="topHeader" class="bg-slate-900/90 border-slate-800 border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center gap-3">
+    <header id="topHeader" class="bg-slate-900/90 border-slate-800 border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-3 min-w-0">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0 text-slate-950 font-black">
           ⏱
         </div>
-        <div>
-          <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">Cycle Time Haryan</h1>
-          <p id="headerSubText" class="text-xs text-slate-400 hidden sm:block">
+        <div class="min-w-0">
+          <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight truncate">Cycle Time Haryan</h1>
+          <p id="headerSubText" class="text-xs text-slate-400 hidden sm:block truncate">
             Line A - Jahit Kemeja — Style Formal Slimfit (Takt: 45s)
           </p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2.5">
-        <span id="networkStatusBadge" class="flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg border bg-slate-800/80 border-slate-700 text-emerald-400">
+      <div class="flex items-center gap-2 ml-auto flex-shrink-0">
+        <span id="networkStatusBadge" class="hidden sm:flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg border bg-slate-800/80 border-slate-700 text-emerald-400">
           <span>📶</span>
           <span class="hidden md:inline">Offline Ready</span>
         </span>
 
-        <span id="activeModuleBadge" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-emerald-400">
+        <span id="activeModuleBadge" class="text-xs font-extrabold px-3 py-2 rounded-xl bg-slate-800 border border-slate-700/80 text-emerald-400 tracking-wide">
           Stopwatch
         </span>
 
-        <button onclick="toggleMenuModal()" id="btnMenuToggle" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-bold border bg-slate-800 border-slate-700 text-white hover:bg-slate-700 transition-all cursor-pointer">
+        <button onclick="toggleMenuModal()" id="btnMenuToggle" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold border bg-slate-800 border-slate-700 text-white hover:bg-slate-700 transition-all cursor-pointer">
           <span id="menuIcon">☰</span>
           <span>Menu</span>
         </button>
@@ -974,35 +974,60 @@
 
     async function handleShareWhatsApp() {
       if (state.cycles.length === 0) return;
-      const blob = generateExcelBlob();
-      const fileName = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
-      const file = new File([blob], fileName, { type: 'application/vnd.ms-excel' });
 
-      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgCT = (totalCT / state.cycles.length).toFixed(1);
-      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const chronological = [...state.cycles].reverse();
+      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
+      const top3 = sortedDesc.slice(0, 3);
       const unit = getUnitSymbol();
 
-      const summaryText = `📊 *LAPORAN CYCLE TIME HARYAN*\n🏢 Line: ${state.lineName}\n👗 Style: ${state.styleName}\n⏱ Takt Time: ${state.taktTime}${unit}\n📈 Avg CT: ${avgCT}${unit} | Kapasitas: ${capPcs} pcs/jam\n📋 Total Proses: ${state.cycles.length} siklus`;
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const avgCT = totalCT / state.cycles.length;
+      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
 
-      // Coba gunakan Web Share API Level 2 (Share File Langsung ke WhatsApp di HP Android)
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
+      const top3Lines = top3.map((c, idx) => 
+        `${idx + 1}. ${c.processName} (${formatTimeValue(c.lapTime)}${unit})${c.operatorName ? ' - ' + c.operatorName : ''}`
+      ).join('\n');
+
+      const detailLines = chronological.map((c, idx) => 
+        `#${idx + 1} ${c.processName}: ${formatTimeValue(c.lapTime)}${unit}`
+      ).join('\n');
+
+      const summaryText = 
+`📊 *LAPORAN CYCLE TIME HARYAN*
+🏢 Line: ${state.lineName}
+👗 Style: ${state.styleName}
+⏱ Takt Time: ${state.taktTime}${unit}
+📈 Total CT: ${formatTimeValue(totalCT)}${unit} | Avg CT: ${formatTimeValue(avgCT)}${unit}
+🚀 Kapasitas: ${capPcs} pcs/jam
+
+🚨 *TOP 3 BOTTLENECK:*
+${top3Lines}
+
+📋 *RINCIAN SIKLUS (${state.cycles.length}):*
+${detailLines}`;
+
+      // Coba Web Share API (jika browser/HP mendukung lampiran file + teks)
+      try {
+        const blob = generateExcelBlob();
+        const fileName = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
+        const file = new File([blob], fileName, { type: 'application/vnd.ms-excel' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
             title: 'Laporan Cycle Time Haryan',
             text: summaryText
           });
           return;
-        } catch (err) {
-          // Lanjut fallback download + buka WhatsApp
         }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
       }
 
-      // Fallback: Download file Excel sekaligus buka WhatsApp dengan ringkasan
+      // Download file Excel otomatis & langsung buka WhatsApp dengan pesan lengkap
       handleExportExcel();
-      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summaryText + '\n\n(File Excel laporan telah otomatis terunduh di perangkat, silakan lampirkan file ' + fileName + ')')}`;
-      window.open(waUrl, '_blank');
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(summaryText)}`;
+      window.location.href = waUrl;
     }
   </script>
 </body>
