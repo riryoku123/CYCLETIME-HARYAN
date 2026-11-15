@@ -129,7 +129,7 @@
           <span>📥 Download Laporan Excel (.xls)</span>
         </button>
         <button onclick="handleShareWhatsApp(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
-          <span>💬 Download Excel & Share WhatsApp</span>
+          <span>💬 Kirim Rangkuman ke WhatsApp</span>
         </button>
       </div>
 
@@ -416,7 +416,6 @@
 
     // 3. INITIALIZATION & SPLASH SCREEN (3 DETIK)
     window.addEventListener('DOMContentLoaded', async () => {
-      // Splash screen progress 3 detik
       const splash = document.getElementById('splashScreen');
       const progress = document.getElementById('splashProgress');
       let pct = 0;
@@ -432,7 +431,6 @@
         }
       }, 300);
 
-      // Load offline data
       const savedCycles = await loadFromDB('cycles_data');
       const savedSettings = await loadFromDB('settings_data');
 
@@ -445,20 +443,16 @@
         state.isDarkMode = savedSettings.isDarkMode ?? true;
       }
 
-      // Sync inputs
       document.getElementById('settingLineInput').value = state.lineName;
       document.getElementById('settingStyleInput').value = state.styleName;
       document.getElementById('settingTaktInput').value = state.taktTime;
       document.getElementById('settingUnitSelect').value = state.timeUnit;
 
-      // Online/Offline listener
       window.addEventListener('online', updateNetworkBadge);
       window.addEventListener('offline', updateNetworkBadge);
       updateNetworkBadge();
 
-      // PWA Manifest
       registerPWA();
-
       applyTheme();
       renderAll();
     });
@@ -571,14 +565,12 @@
       };
 
       state.cycles = [newCycle, ...state.cycles];
-      // Reset waktu ke 0 namun timer TETAP BERJALAN otomatis!
       state.seconds = 0;
       document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
 
       persistData();
       renderAll();
 
-      // Auto scroll ke baris terbaru di bawah
       const container = document.getElementById('tableScrollContainer');
       if (container) {
         setTimeout(() => {
@@ -675,7 +667,6 @@
       state.taktTime = Number(document.getElementById('settingTaktInput').value) || 45;
       state.timeUnit = document.getElementById('settingUnitSelect').value || 'seconds';
 
-      // Recalculate vsTarget
       state.cycles = state.cycles.map((c) => ({
         ...c,
         vsTarget: parseFloat((c.lapTime - state.taktTime).toFixed(1))
@@ -814,7 +805,6 @@
 
       const chronological = [...state.cycles].reverse();
       const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      // TOP 3 BOTTLENECK MASUK KATEGORI MERAH
       const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
 
       const maxVal = Math.max(...chronological.map((c) => c.lapTime), state.taktTime);
@@ -871,7 +861,6 @@
         </div>
       `;
 
-      // Render Detail Analysis Table
       analysisBody.innerHTML = chronological.map((item, idx) => {
         const isTop3 = top3Ids.includes(item.id);
         const isOver = item.lapTime > state.taktTime;
@@ -903,8 +892,10 @@
       }).join('');
     }
 
-    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP
-    function generateExcelBlob() {
+    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP (MURNI FORMAT TEKS DATA)
+    function handleExportExcel() {
+      if (state.cycles.length === 0) return;
+
       const chronological = [...state.cycles].reverse();
       const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
       const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
@@ -956,12 +947,7 @@
         </html>
       `;
 
-      return new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
-    }
-
-    function handleExportExcel() {
-      if (state.cycles.length === 0) return;
-      const blob = generateExcelBlob();
+      const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -972,7 +958,7 @@
       URL.revokeObjectURL(url);
     }
 
-    async function handleShareWhatsApp() {
+    function handleShareWhatsApp() {
       if (state.cycles.length === 0) return;
 
       const chronological = [...state.cycles].reverse();
@@ -985,47 +971,26 @@
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
 
       const top3Lines = top3.map((c, idx) => 
-        `${idx + 1}. ${c.processName} (${formatTimeValue(c.lapTime)}${unit})${c.operatorName ? ' - ' + c.operatorName : ''}`
+        `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - Operator: ${c.operatorName || '-'}`
       ).join('\n');
 
       const detailLines = chronological.map((c, idx) => 
-        `#${idx + 1} ${c.processName}: ${formatTimeValue(c.lapTime)}${unit}`
+        `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - Operator: ${c.operatorName || '-'}`
       ).join('\n');
 
       const summaryText = 
 `📊 *LAPORAN CYCLE TIME HARYAN*
-🏢 Line: ${state.lineName}
-👗 Style: ${state.styleName}
-⏱ Takt Time: ${state.taktTime}${unit}
-📈 Total CT: ${formatTimeValue(totalCT)}${unit} | Avg CT: ${formatTimeValue(avgCT)}${unit}
-🚀 Kapasitas: ${capPcs} pcs/jam
+🏢 *Line:* ${state.lineName}
+👕 *Style:* ${state.styleName}
+⏱ *Takt Time:* ${state.taktTime}${unit} | *Kapasitas:* ${capPcs} pcs/jam
+📈 *Total CT:* ${formatTimeValue(totalCT)}${unit} | *Avg CT:* ${formatTimeValue(avgCT)}${unit}
 
-🚨 *TOP 3 BOTTLENECK:*
+🚨 *Top 3 Bottleneck:*
 ${top3Lines}
 
-📋 *RINCIAN SIKLUS (${state.cycles.length}):*
+📋 *Rincian Proses (${state.cycles.length}):*
 ${detailLines}`;
 
-      // Coba Web Share API (jika browser/HP mendukung lampiran file + teks)
-      try {
-        const blob = generateExcelBlob();
-        const fileName = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
-        const file = new File([blob], fileName, { type: 'application/vnd.ms-excel' });
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'Laporan Cycle Time Haryan',
-            text: summaryText
-          });
-          return;
-        }
-      } catch (err) {
-        if (err && err.name === 'AbortError') return;
-      }
-
-      // Download file Excel otomatis & langsung buka WhatsApp dengan pesan lengkap
-      handleExportExcel();
       const waUrl = `https://wa.me/?text=${encodeURIComponent(summaryText)}`;
       window.location.href = waUrl;
     }
