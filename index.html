@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Aplikasi Stopwatch Cycle Time & Analisis Line Produksi Garmen Mandiri (100% Offline PWA)" />
+  <meta name="description" content="Aplikasi Stopwatch Cycle Time & Analisis Line Produksi Mandiri (100% Offline PWA)" />
   <title>Cycle Time Haryan — Offline PWA Stopwatch</title>
 
-  <!-- Favicon & Apple Touch Icon dengan Logo Stopwatch Huruf H Sesuai Gambar Referensi -->
+  <!-- Favicon & Apple Touch Icon Logo Stopwatch Huruf H -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23f6f1e3' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23f6f1e3' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23f6f1e3' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23f6f1e3' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23f6f1e3' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23f6f1e3' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23f6f1e3' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23f6f1e3' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23f6f1e3' /%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23f6f1e3' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23f6f1e3' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23f6f1e3' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23f6f1e3' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23f6f1e3' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23f6f1e3' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23f6f1e3' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23f6f1e3' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23f6f1e3' /%3E%3C/svg%3E" />
 
@@ -16,22 +16,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; }
-    .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
-    .custom-scroll::-webkit-scrollbar-track { background: #020617; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    .custom-table-scroll::-webkit-scrollbar { height: 10px; width: 10px; }
+    .custom-table-scroll::-webkit-scrollbar-track { background: #0f172a; border-radius: 8px; }
+    .custom-table-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; border: 2px solid #0f172a; }
+    .custom-table-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    .light-mode .custom-table-scroll::-webkit-scrollbar-track { background: #e2e8f0; }
+    .light-mode .custom-table-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-color: #e2e8f0; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300 pb-44 text-base overflow-x-hidden">
 
   <!-- ================================================================= -->
-  <!-- SPLASH SCREEN 3 DETIK (DENGAN LOGO STOPWATCH HURUF H & KUTIPAN) -->
+  <!-- SPLASH SCREEN 3 DETIK                                             -->
   <!-- ================================================================= -->
   <div id="splashScreen" class="fixed inset-0 z-50 bg-[#070706] flex flex-col items-center justify-between p-6 transition-opacity duration-700">
-    <div class="w-full"></div> <!-- Spacer atas -->
-    
+    <div class="w-full"></div>
     <div class="flex flex-col items-center text-center space-y-6">
-      <!-- Logo SVG Stopwatch Huruf H -->
       <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-[#070706] flex items-center justify-center shadow-2xl shadow-emerald-500/10 border border-slate-800 animate-pulse">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 250" fill="none" class="w-24 h-24 sm:w-32 sm:h-32">
           <rect width="220" height="250" rx="48" fill="#070706"/>
@@ -50,19 +50,14 @@
           <circle cx="110" cy="126" r="9" fill="#f6f1e3" />
         </svg>
       </div>
-
       <div class="space-y-1">
         <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#f6f1e3]">CYCLE TIME</h1>
         <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-[#f6f1e3]">HARYAN</h2>
       </div>
-
-      <!-- Indikator Loading Bar 3 Detik -->
       <div class="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
         <div id="splashProgress" class="h-full bg-[#f6f1e3] transition-all duration-300 w-0"></div>
       </div>
     </div>
-
-    <!-- Kutipan / Quote di Bawah -->
     <div class="max-w-xs text-center pb-4">
       <p class="text-xs italic text-slate-400 font-light leading-relaxed">
         “What is made with your whole heart will be received with an open heart”
@@ -71,222 +66,416 @@
   </div>
 
   <!-- ================================================================= -->
-  <!-- APLIKASI UTAMA -->
+  <!-- WRAPPER UTAMA (MENDUKUNG SKALA ZOOM)                              -->
   <!-- ================================================================= -->
-  <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-30 backdrop-blur-md px-4 py-3.5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 font-black">
-        ⏱
+  <div id="appRoot" class="origin-top-left transition-transform duration-150">
+
+    <!-- Top Navbar Header -->
+    <header id="topHeader" class="bg-slate-900/90 border-slate-800 border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0 text-slate-950 font-black">
+          ⏱
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">Cycle Time Haryan</h1>
+          <p id="headerSubText" class="text-xs text-slate-400 hidden sm:block">
+            Line A - Jahit Kemeja — Style Formal Slimfit (Takt: 45s)
+          </p>
+        </div>
       </div>
+
+      <div class="flex items-center gap-2.5">
+        <span id="networkStatusBadge" class="flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg border bg-slate-800/80 border-slate-700 text-emerald-400">
+          <span>📶</span>
+          <span class="hidden md:inline">Offline Ready</span>
+        </span>
+
+        <span id="activeModuleBadge" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-emerald-400">
+          Stopwatch
+        </span>
+
+        <button onclick="toggleMenuModal()" id="btnMenuToggle" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-bold border bg-slate-800 border-slate-700 text-white hover:bg-slate-700 transition-all cursor-pointer">
+          <span id="menuIcon">☰</span>
+          <span>Menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dropdown Menu Modal -->
+    <div id="menuOverlay" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40" onclick="toggleMenuModal()"></div>
+    <div id="menuDropdown" class="hidden fixed top-16 right-3 sm:right-6 w-80 z-50 p-4 rounded-2xl border shadow-2xl bg-slate-900 border-slate-800 text-white space-y-4">
       <div>
-        <h1 class="text-base font-extrabold tracking-tight text-white">Cycle Time Haryan</h1>
-        <p id="subHeaderInfo" class="text-xs text-slate-400">Line A | Takt: 45s</p>
+        <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">
+          Navigasi Modul Simulasi
+        </label>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button onclick="switchTab('settings')" id="navBtnSettings" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
+            Setting
+          </button>
+          <button onclick="switchTab('tracker')" id="navBtnTracker" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md">
+            Stopwatch
+          </button>
+          <button onclick="switchTab('analysis')" id="navBtnAnalysis" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
+            Analisis
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="flex items-center gap-2">
-      <span id="networkBadge" class="text-[11px] font-bold px-2.5 py-1.5 rounded-lg border bg-slate-800 border-slate-700 text-emerald-400">
-        Offline Ready
-      </span>
-      <button onclick="toggleMenu()" class="bg-slate-800 border border-slate-700 text-white px-3.5 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-slate-700">
-        Menu
-      </button>
-    </div>
-  </header>
-
-  <!-- Modal Menu Dropdown -->
-  <div id="menuModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-2xl text-white">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="font-extrabold text-base">Menu & Pengaturan</h3>
-        <button onclick="toggleMenu()" class="text-rose-400 font-bold">✕ Tutup</button>
-      </div>
-      <div class="space-y-3">
-        <div>
-          <label class="text-xs font-bold text-slate-400 block mb-1">Target Takt Time (detik):</label>
-          <input type="number" id="inputTakt" value="45" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-sm text-white font-mono" />
-        </div>
-        <div>
-          <label class="text-xs font-bold text-slate-400 block mb-1">Nama Line Produksi:</label>
-          <input type="text" id="inputLine" value="Line A - Jahit Kemeja" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-sm text-white" />
-        </div>
-        <div>
-          <label class="text-xs font-bold text-slate-400 block mb-1">Style / Model:</label>
-          <input type="text" id="inputStyle" value="Style Formal Slimfit" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-sm text-white" />
-        </div>
-        <button onclick="saveSettings()" class="w-full bg-emerald-500 text-slate-950 font-bold p-2.5 rounded-xl text-sm shadow-md">
-          Simpan Pengaturan
+      <div class="space-y-2">
+        <label class="text-xs font-extrabold uppercase tracking-wider block text-slate-400">
+          Ekspor & Bagikan Laporan
+        </label>
+        <button onclick="handleExportExcel(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
+          <span>📥 Download Laporan Excel (.xls)</span>
         </button>
-        <div class="pt-2 border-t border-slate-800 space-y-2">
-          <button onclick="exportExcel()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold p-2.5 rounded-xl text-sm flex items-center justify-center gap-2">
-            📥 Download Laporan Excel (.xls)
+        <button onclick="handleShareWhatsApp(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
+          <span>💬 Download Excel & Share WhatsApp</span>
+        </button>
+      </div>
+
+      <div class="pt-3 border-t border-slate-800">
+        <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">
+          Tampilan & Skala
+        </label>
+        <div class="flex items-center justify-between gap-2">
+          <button onclick="toggleTheme()" id="btnThemeToggle" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold border bg-slate-800 border-slate-700 text-amber-400 cursor-pointer">
+            ☀️ Light Mode
           </button>
-          <button onclick="shareWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-2.5 rounded-xl text-sm flex items-center justify-center gap-2">
-            💬 Kirim Rangkuman ke WhatsApp
-          </button>
+
+          <div class="flex items-center p-1 rounded-xl border bg-slate-800 border-slate-700">
+            <button onclick="changeZoom(-10)" class="px-2 py-1 text-slate-300 hover:text-white font-bold cursor-pointer">-</button>
+            <span id="zoomLabel" class="text-xs font-bold px-1.5">100%</span>
+            <button onclick="changeZoom(10)" class="px-2 py-1 text-slate-300 hover:text-white font-bold cursor-pointer">+</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 space-y-6">
+
+      <!-- TAB 1: TRACKER / STOPWATCH -->
+      <div id="viewTracker" class="space-y-6">
+        <section id="cardLogSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-500 font-bold">📊</span>
+              <h2 class="text-base font-bold">
+                Log (<span id="logCountLabel">5</span>)
+              </h2>
+            </div>
+            <button onclick="handleClearLog()" id="btnClearLog" class="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors flex items-center gap-1">
+              <span>🗑️ Hapus Semua Log</span>
+            </button>
+          </div>
+
+          <div id="tableScrollContainer" class="overflow-x-auto overflow-y-auto custom-table-scroll border border-slate-800 rounded-xl max-h-[52vh] pb-1">
+            <table class="w-full min-w-[920px] text-left text-sm">
+              <thead id="trackerTableHead" class="bg-slate-950 border-slate-800 text-slate-300 border-b sticky top-0 z-10 shadow-sm whitespace-nowrap">
+                <tr>
+                  <th class="p-3.5 w-24">Cycle #</th>
+                  <th class="p-3.5">Lap Time (<span class="unit-symbol">s</span>)</th>
+                  <th class="p-3.5">Vs Target (<span class="unit-symbol">s</span>)</th>
+                  <th class="p-3.5 min-w-[210px]">Proses</th>
+                  <th class="p-3.5 min-w-[180px]">Nama Operator</th>
+                  <th class="p-3.5 min-w-[190px]">Machine</th>
+                  <th class="p-3.5 w-28 text-center">Edit Time</th>
+                </tr>
+              </thead>
+              <tbody id="trackerTableBody" class="divide-y divide-slate-800/40">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 2: ANALYSIS & PARETO -->
+      <div id="viewAnalysis" class="hidden space-y-6">
+        <section id="cardParetoSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold">📈</span>
+              <h2 class="text-lg font-bold">Analisis Pareto & Bottleneck Proses</h2>
+            </div>
+            <span id="paretoMainBottleneckBadge" class="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+              🚨 Top 3 Bottleneck (Merah)
+            </span>
+          </div>
+
+          <div id="paretoChartContainer">
+            <!-- Rendered via JS -->
+          </div>
+        </section>
+
+        <section id="cardDetailAnalysisSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold">👥</span>
+              <h2 class="text-lg font-bold">Detail Analysis & Action</h2>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto custom-table-scroll border border-slate-800 rounded-xl pb-1">
+            <table class="w-full min-w-[880px] text-left text-sm">
+              <thead id="analysisTableHead" class="bg-slate-950 border-slate-800 text-slate-300 border-b whitespace-nowrap">
+                <tr>
+                  <th class="p-3.5 w-20">Cycle #</th>
+                  <th class="p-3.5">Proses</th>
+                  <th class="p-3.5">Operator</th>
+                  <th class="p-3.5">Machine</th>
+                  <th class="p-3.5">CT (<span class="unit-symbol">s</span>)</th>
+                  <th class="p-3.5">Vs Takt (<span class="unit-symbol">s</span>)</th>
+                  <th class="p-3.5">Action</th>
+                  <th class="p-3.5">Kapasitas Maks (pcs/jam)</th>
+                </tr>
+              </thead>
+              <tbody id="analysisTableBody" class="divide-y divide-slate-800/40">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 3: SETTINGS & PARAMETERS -->
+      <div id="viewSettings" class="hidden space-y-6">
+        <section id="cardSettingsSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+          <h2 class="text-lg font-bold flex items-center gap-2">
+            <span class="text-emerald-400">⚙️</span>
+            <span>Setting Parameter</span>
+          </h2>
+
+          <div class="flex flex-col space-y-4">
+            <div>
+              <label class="text-xs font-bold block mb-1.5 text-slate-300">Line</label>
+              <input type="text" id="settingLineInput" value="Line A - Jahit Kemeja" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="text-xs font-bold block mb-1.5 text-slate-300">Model / Style</label>
+              <input type="text" id="settingStyleInput" value="Style Formal Slimfit" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="text-xs font-bold block mb-1.5 text-slate-300">Target Takt Time (<span class="unit-symbol">s</span>)</label>
+              <input type="number" id="settingTaktInput" value="45" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="text-xs font-bold block mb-1.5 text-slate-300">Satuan Waktu</label>
+              <select id="settingUnitSelect" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                <option value="seconds">Detik / Seconds (s)</option>
+                <option value="minutes">Menit / Minutes (m)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800/60 flex justify-end">
+            <button onclick="saveSettingsAndReturn()" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
+              <span>✅ Simpan & Kembali ke Stopwatch</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+    </main>
   </div>
 
-  <!-- Tab Navigasi Utama -->
-  <nav class="max-w-7xl mx-auto px-4 py-3 flex gap-2 w-full">
-    <button onclick="switchTab('tracker')" id="btnTracker" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-emerald-500 border-emerald-500 text-slate-950 shadow-md">
-      Stopwatch Tracker
-    </button>
-    <button onclick="switchTab('analysis')" id="btnAnalysis" class="flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-slate-900 border-slate-800 text-slate-300">
-      Analisis & Bottleneck
-    </button>
-  </nav>
-
-  <!-- Konten Utama -->
-  <main class="max-w-7xl mx-auto px-4 py-2 space-y-4 flex-1 w-full pb-44">
-    
-    <!-- TAB 1: TRACKER -->
-    <section id="tabTrackerContent" class="space-y-4">
-      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 shadow-xl">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-bold text-white flex items-center gap-2">
-            <span>Daftar Log Siklus Waktu</span>
-            <span id="badgeCount" class="px-2 py-0.5 bg-slate-800 text-emerald-400 rounded-full text-xs">5</span>
-          </h2>
-          <button onclick="clearCycles()" class="text-xs text-rose-400 font-semibold">Hapus Semua</button>
+  <!-- Sticky Bottom Stopwatch Controller Bar -->
+  <div id="bottomControllerBar" class="fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl">
+    <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
+      
+      <!-- Real-time Metric Indicators -->
+      <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
+        <div class="flex items-center justify-between sm:justify-center gap-2 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
+          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">STOPWATCH:</span>
+          <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
+            <span id="metricStopwatch">0.0</span>
+            <span class="text-[10px] font-normal text-amber-500 unit-symbol">s</span>
+          </div>
         </div>
 
-        <div class="overflow-x-auto custom-scroll border border-slate-800 rounded-xl max-h-[50vh]">
-          <table class="w-full min-w-[750px] text-left text-sm">
-            <thead class="bg-slate-950 text-slate-300 border-b border-slate-800 sticky top-0 z-10">
-              <tr>
-                <th class="p-3 w-16">Cycle</th>
-                <th class="p-3 w-28">Lap Time</th>
-                <th class="p-3 w-28">Vs Takt</th>
-                <th class="p-3">Nama Proses</th>
-                <th class="p-3">Operator</th>
-                <th class="p-3 w-20 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="cycleTableBody" class="divide-y divide-slate-800/50">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: ANALYSIS -->
-    <section id="tabAnalysisContent" class="hidden space-y-4">
-      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm font-bold text-white">Analisis Pareto & Top 3 Bottleneck (Merah)</h2>
-          <span id="topBottleneckBadge" class="text-xs px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold">
-            Max: -
-          </span>
+        <div class="flex items-center justify-between sm:justify-center gap-2 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-4 border-slate-700/50">
+          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">TOTAL CT:</span>
+          <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
+            <span id="metricTotalCT">0.0</span>
+            <span class="text-[10px] font-normal text-emerald-500 unit-symbol">s</span>
+          </div>
         </div>
 
-        <div id="analysisCardContainer" class="space-y-3">
-          <!-- Rendered via JS -->
+        <div class="flex items-center justify-between sm:justify-center gap-2 border-r pt-1 sm:pt-0 pr-2 sm:pr-4 border-slate-700/50">
+          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">AVG CT:</span>
+          <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
+            <span id="metricAvgCT">0.0</span>
+            <span class="text-[10px] font-normal text-cyan-500 unit-symbol">s</span>
+          </div>
         </div>
-      </div>
-    </section>
 
-  </main>
-
-  <!-- Sticky Bottom Controller Bar -->
-  <div class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800 p-3 backdrop-blur-md shadow-2xl">
-    <div class="max-w-7xl mx-auto space-y-2">
-      <!-- Live Metrics -->
-      <div class="grid grid-cols-4 gap-2 bg-slate-900 border border-slate-800 px-3 py-2 rounded-xl text-center">
-        <div>
-          <div class="text-[10px] text-slate-400 font-bold uppercase">Timer</div>
-          <div id="displayTimer" class="font-mono text-base sm:text-lg font-black text-amber-400">0.0s</div>
-        </div>
-        <div>
-          <div class="text-[10px] text-slate-400 font-bold uppercase">Total CT</div>
-          <div id="displayTotal" class="font-mono text-base sm:text-lg font-black text-emerald-400">0.0s</div>
-        </div>
-        <div>
-          <div class="text-[10px] text-slate-400 font-bold uppercase">Avg CT</div>
-          <div id="displayAvg" class="font-mono text-base sm:text-lg font-black text-cyan-400">0.0s</div>
-        </div>
-        <div>
-          <div class="text-[10px] text-slate-400 font-bold uppercase">Kapasitas</div>
-          <div id="displayCap" class="font-mono text-base sm:text-lg font-black text-purple-400">0 pcs/h</div>
+        <div class="flex items-center justify-between sm:justify-center gap-2 pt-1 sm:pt-0 pl-1 sm:pl-0">
+          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">KAPASITAS:</span>
+          <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
+            <span id="metricCapacity">0</span>
+            <span class="text-[10px] font-normal text-purple-400">pcs/h</span>
+          </div>
         </div>
       </div>
 
-      <!-- Buttons -->
-      <div class="grid grid-cols-4 gap-2">
-        <button onclick="startTimer()" id="btnStart" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-lg shadow-emerald-500/20 active:scale-95">
-          START
+      <!-- Interactive Stopwatch Action Buttons -->
+      <div class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
+        <button id="btnStart" onclick="handleStart()" class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
+          <span>▶ START</span>
         </button>
-        <button onclick="stopTimer()" id="btnStop" disabled class="bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-lg shadow-rose-600/20 active:scale-95">
-          STOP
+
+        <button id="btnStop" onclick="handleStop()" disabled class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-600/20 transition-all cursor-pointer active:scale-95">
+          <span>⏹ STOP</span>
         </button>
-        <button onclick="resetTimer()" class="bg-slate-800 border border-slate-700 text-slate-300 font-bold py-3 rounded-xl text-xs sm:text-sm active:scale-95">
-          RESET
+
+        <button id="btnReset" onclick="handleReset()" class="flex items-center justify-center p-3 rounded-xl font-bold border transition-all cursor-pointer active:scale-95 bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700" title="Reset Stopwatch">
+          <span>↺ RESET</span>
         </button>
-        <button onclick="lapTimer()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 rounded-xl text-xs sm:text-sm shadow-lg shadow-indigo-600/20 active:scale-95">
-          LAP / CYCLE
+
+        <button id="btnLap" onclick="handleLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition-all cursor-pointer active:scale-95">
+          <span>+ LAP / CYCLE</span>
         </button>
       </div>
+
     </div>
   </div>
 
   <!-- ================================================================= -->
-  <!-- JAVASCRIPT LOGIC & PWA SERVICE WORKER -->
+  <!-- JAVASCRIPT ENGINE (INDEXEDDB OFFLINE + STOPWATCH + PARETO + WA)    -->
   <!-- ================================================================= -->
   <script>
-    // Inisialisasi Data Default
-    let cycles = [
-      { id: 1, lapTime: 42.0, vsTarget: -3.0, processName: 'Persiapan Kerah', operatorName: 'Siti Rahma', machineName: 'Lockstitch' },
-      { id: 2, lapTime: 58.5, vsTarget: 13.5, processName: 'Jahit Bahu & Lengan', operatorName: 'Budi Santoso', machineName: 'Single Needle' },
-      { id: 3, lapTime: 39.0, vsTarget: -6.0, processName: 'Pasang Kancing', operatorName: 'Dewi Lestari', machineName: 'Buttonhole' },
-      { id: 4, lapTime: 65.2, vsTarget: 20.2, processName: 'Obras Samping', operatorName: 'Joko Widodo', machineName: 'Obras 4B' },
-      { id: 5, lapTime: 44.8, vsTarget: -0.2, processName: 'Inspeksi & Trimming', operatorName: 'Ani Yulianti', machineName: 'Manual' }
+    // 1. INDEXED-DB OFFLINE STORAGE HELPER
+    const DB_NAME = 'CycleTimeHaryanOfflineDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'appStateStore';
+
+    function openOfflineDB() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+          reject(new Error('IndexedDB tidak didukung'));
+          return;
+        }
+        const request = window.indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME);
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveToDB(key, data) {
+      try {
+        const db = await openOfflineDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(data, key);
+      } catch (e) {}
+    }
+
+    async function loadFromDB(key) {
+      try {
+        const db = await openOfflineDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const req = tx.objectStore(STORE_NAME).get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // 2. APPLICATION STATE
+    const DEFAULT_CYCLES = [
+      { id: 101, lapTime: 42.0, vsTarget: -3.0, processName: 'Persiapan Kerah', operatorName: 'Siti Rahma', machineName: 'Single Needle Lockstitch', timestamp: new Date(Date.now() - 300000).toISOString() },
+      { id: 102, lapTime: 58.5, vsTarget: 13.5, processName: 'Jahit Bahu & Lengan', operatorName: 'Budi Santoso', machineName: 'Single Needle', timestamp: new Date(Date.now() - 240000).toISOString() },
+      { id: 103, lapTime: 39.0, vsTarget: -6.0, processName: 'Pasang Kancing', operatorName: 'Dewi Lestari', machineName: 'Buttonhole Machine', timestamp: new Date(Date.now() - 180000).toISOString() },
+      { id: 104, lapTime: 65.2, vsTarget: 20.2, processName: 'Obras Samping', operatorName: 'Joko Widodo', machineName: 'Obras 4 Benang', timestamp: new Date(Date.now() - 120000).toISOString() },
+      { id: 105, lapTime: 44.8, vsTarget: -0.2, processName: 'Inspeksi & Trimming', operatorName: 'Ani Yulianti', machineName: 'Manual Table', timestamp: new Date(Date.now() - 60000).toISOString() }
     ];
 
-    let taktTime = 45;
-    let lineName = "Line A - Jahit Kemeja";
-    let styleName = "Style Formal Slimfit";
+    let state = {
+      activeTab: 'tracker',
+      isDarkMode: true,
+      zoomLevel: 100,
+      taktTime: 45,
+      timeUnit: 'seconds',
+      lineName: 'Line A - Jahit Kemeja',
+      styleName: 'Style Formal Slimfit',
+      isRunning: false,
+      seconds: 0,
+      cycles: [...DEFAULT_CYCLES],
+      editingCycleId: null
+    };
 
     let timerInterval = null;
-    let secondsElapsed = 0.0;
-    let isRunning = false;
 
-    // Splash Screen Handler (3 Detik)
-    window.addEventListener('DOMContentLoaded', () => {
+    // 3. INITIALIZATION & SPLASH SCREEN (3 DETIK)
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Splash screen progress 3 detik
       const splash = document.getElementById('splashScreen');
       const progress = document.getElementById('splashProgress');
-      
-      let p = 0;
-      const interval = setInterval(() => {
-        p += 10;
-        progress.style.width = p + '%';
-        if (p >= 100) {
-          clearInterval(interval);
-          splash.style.opacity = '0';
-          setTimeout(() => splash.remove(), 700);
+      let pct = 0;
+      const splashTimer = setInterval(() => {
+        pct += 10;
+        if (progress) progress.style.width = pct + '%';
+        if (pct >= 100) {
+          clearInterval(splashTimer);
+          if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => splash.remove(), 700);
+          }
         }
       }, 300);
 
-      renderAll();
+      // Load offline data
+      const savedCycles = await loadFromDB('cycles_data');
+      const savedSettings = await loadFromDB('settings_data');
+
+      if (Array.isArray(savedCycles)) state.cycles = savedCycles;
+      if (savedSettings) {
+        state.taktTime = savedSettings.taktTime ?? 45;
+        state.timeUnit = savedSettings.timeUnit ?? 'seconds';
+        state.lineName = savedSettings.lineName ?? 'Line A - Jahit Kemeja';
+        state.styleName = savedSettings.styleName ?? 'Style Formal Slimfit';
+        state.isDarkMode = savedSettings.isDarkMode ?? true;
+      }
+
+      // Sync inputs
+      document.getElementById('settingLineInput').value = state.lineName;
+      document.getElementById('settingStyleInput').value = state.styleName;
+      document.getElementById('settingTaktInput').value = state.taktTime;
+      document.getElementById('settingUnitSelect').value = state.timeUnit;
+
+      // Online/Offline listener
+      window.addEventListener('online', updateNetworkBadge);
+      window.addEventListener('offline', updateNetworkBadge);
+      updateNetworkBadge();
+
+      // PWA Manifest
       registerPWA();
+
+      applyTheme();
+      renderAll();
     });
 
-    // PWA Manifest & Service Worker Injection
     function registerPWA() {
       try {
         const manifest = {
-          name: "Cycle Time Haryan",
-          short_name: "CycleTime",
-          start_url: ".",
-          display: "standalone",
-          background_color: "#070706",
-          theme_color: "#070706",
+          name: 'Cycle Time Haryan - Offline Stopwatch',
+          short_name: 'CycleTime',
+          start_url: '.',
+          display: 'standalone',
+          background_color: '#070706',
+          theme_color: '#070706',
           icons: [{
             src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23f6f1e3' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23f6f1e3' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23f6f1e3' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23f6f1e3' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23f6f1e3' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23f6f1e3' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23f6f1e3' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23f6f1e3' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23f6f1e3' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23f6f1e3' /%3E%3C/svg%3E",
-            sizes: "512x512",
-            type: "image/svg+xml"
+            sizes: '512x512',
+            type: 'image/svg+xml'
           }]
         };
         const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
@@ -294,213 +483,526 @@
         link.rel = 'manifest';
         link.href = URL.createObjectURL(blob);
         document.head.appendChild(link);
-      } catch(e) {}
+      } catch (e) {}
     }
 
-    // Stopwatch Controls
-    function startTimer() {
-      if (isRunning) return;
-      isRunning = true;
+    function updateNetworkBadge() {
+      const badge = document.getElementById('networkStatusBadge');
+      if (navigator.onLine) {
+        badge.innerHTML = `<span>📶</span><span class="hidden md:inline">Offline Ready</span>`;
+      } else {
+        badge.innerHTML = `<span>📴</span><span class="hidden md:inline">Offline Mode</span>`;
+      }
+    }
+
+    function persistData() {
+      saveToDB('cycles_data', state.cycles);
+      saveToDB('settings_data', {
+        taktTime: state.taktTime,
+        timeUnit: state.timeUnit,
+        lineName: state.lineName,
+        styleName: state.styleName,
+        isDarkMode: state.isDarkMode
+      });
+    }
+
+    // 4. FORMATTERS
+    function formatTimeValue(valInSeconds) {
+      if (state.timeUnit === 'minutes') {
+        return (valInSeconds / 60).toFixed(2);
+      }
+      return valInSeconds.toFixed(1);
+    }
+
+    function getUnitSymbol() {
+      return state.timeUnit === 'minutes' ? 'm' : 's';
+    }
+
+    // 5. STOPWATCH CONTROLS (LAP TETAP BERJALAN OTOMATIS)
+    function handleStart() {
+      if (state.isRunning) return;
+      state.isRunning = true;
       document.getElementById('btnStart').disabled = true;
       document.getElementById('btnStop').disabled = false;
+
       timerInterval = setInterval(() => {
-        secondsElapsed = parseFloat((secondsElapsed + 0.1).toFixed(1));
-        document.getElementById('displayTimer').innerText = secondsElapsed.toFixed(1) + 's';
+        state.seconds = parseFloat((state.seconds + 0.1).toFixed(1));
+        document.getElementById('metricStopwatch').innerText = formatTimeValue(state.seconds);
+        if (state.editingCycleId) {
+          const liveEl = document.getElementById(`liveEdit_${state.editingCycleId}`);
+          if (liveEl) liveEl.innerText = formatTimeValue(state.seconds) + getUnitSymbol();
+        }
       }, 100);
     }
 
-    function stopTimer() {
-      isRunning = false;
+    function handleStop() {
+      state.isRunning = false;
       clearInterval(timerInterval);
       document.getElementById('btnStart').disabled = false;
       document.getElementById('btnStop').disabled = true;
     }
 
-    function resetTimer() {
-      stopTimer();
-      secondsElapsed = 0.0;
-      document.getElementById('displayTimer').innerText = '0.0s';
+    function handleReset() {
+      handleStop();
+      state.seconds = 0;
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
     }
 
-    function lapTimer() {
-      if (secondsElapsed <= 0) return;
-      const lapT = secondsElapsed;
-      const vsT = parseFloat((lapT - taktTime).toFixed(1));
+    function handleLap() {
+      if (state.seconds <= 0) return;
+
+      if (state.editingCycleId) {
+        handleConfirmReTime();
+        return;
+      }
+
+      const currentLap = parseFloat(state.seconds.toFixed(1));
+      const vsTargetVal = parseFloat((currentLap - state.taktTime).toFixed(1));
+      const nextCycleNumber = state.cycles.length + 1;
+
       const newCycle = {
         id: Date.now(),
-        lapTime: lapT,
-        vsTarget: vsT,
-        processName: `Proses #${cycles.length + 1}`,
+        lapTime: currentLap,
+        vsTarget: vsTargetVal,
+        processName: `Proses #${nextCycleNumber}`,
         operatorName: '',
-        machineName: 'Lockstitch'
+        machineName: '',
+        timestamp: new Date().toISOString()
       };
-      cycles.unshift(newCycle);
-      resetTimer();
+
+      state.cycles = [newCycle, ...state.cycles];
+      // Reset waktu ke 0 namun timer TETAP BERJALAN otomatis!
+      state.seconds = 0;
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
+
+      persistData();
+      renderAll();
+
+      // Auto scroll ke baris terbaru di bawah
+      const container = document.getElementById('tableScrollContainer');
+      if (container) {
+        setTimeout(() => {
+          container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        }, 50);
+      }
+    }
+
+    // 6. ROW ACTIONS & RE-TIME
+    function handleDeleteCycle(id) {
+      if (state.editingCycleId === id) state.editingCycleId = null;
+      state.cycles = state.cycles.filter((c) => c.id !== id);
+      persistData();
       renderAll();
     }
 
-    function clearCycles() {
-      cycles = [];
+    function handleClearLog() {
+      state.cycles = [];
+      state.editingCycleId = null;
+      persistData();
       renderAll();
     }
 
-    // Tab Switching
+    function updateField(id, field, val) {
+      state.cycles = state.cycles.map((c) => (c.id === id ? { ...c, [field]: val } : c));
+      persistData();
+      if (state.activeTab === 'analysis') renderAnalysis();
+    }
+
+    function handleStartReTime(id) {
+      state.editingCycleId = id;
+      state.seconds = 0;
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
+      if (!state.isRunning) handleStart();
+      renderAll();
+    }
+
+    function handleConfirmReTime() {
+      if (!state.editingCycleId) return;
+      const newLapTime = parseFloat(state.seconds.toFixed(1));
+      const vsTargetVal = parseFloat((newLapTime - state.taktTime).toFixed(1));
+
+      state.cycles = state.cycles.map((c) =>
+        c.id === state.editingCycleId ? { ...c, lapTime: newLapTime, vsTarget: vsTargetVal } : c
+      );
+
+      handleStop();
+      state.seconds = 0;
+      state.editingCycleId = null;
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
+      persistData();
+      renderAll();
+    }
+
+    function handleCancelReTime() {
+      handleStop();
+      state.seconds = 0;
+      state.editingCycleId = null;
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
+      renderAll();
+    }
+
+    // 7. NAVIGATION, THEME & ZOOM
+    function toggleMenuModal() {
+      document.getElementById('menuOverlay').classList.toggle('hidden');
+      document.getElementById('menuDropdown').classList.toggle('hidden');
+    }
+
     function switchTab(tab) {
-      const btnT = document.getElementById('btnTracker');
-      const btnA = document.getElementById('btnAnalysis');
-      const contentT = document.getElementById('tabTrackerContent');
-      const contentA = document.getElementById('tabAnalysisContent');
+      state.activeTab = tab;
+      document.getElementById('viewTracker').classList.toggle('hidden', tab !== 'tracker');
+      document.getElementById('viewAnalysis').classList.toggle('hidden', tab !== 'analysis');
+      document.getElementById('viewSettings').classList.toggle('hidden', tab !== 'settings');
 
-      if (tab === 'tracker') {
-        btnT.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-emerald-500 border-emerald-500 text-slate-950 shadow-md";
-        btnA.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-slate-900 border-slate-800 text-slate-300";
-        contentT.classList.remove('hidden');
-        contentA.classList.add('hidden');
-      } else {
-        btnA.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-emerald-500 border-emerald-500 text-slate-950 shadow-md";
-        btnT.className = "flex-1 py-2.5 rounded-xl text-xs font-extrabold border bg-slate-900 border-slate-800 text-slate-300";
-        contentA.classList.remove('hidden');
-        contentT.classList.add('hidden');
-      }
-    }
+      const labelMap = { tracker: 'Stopwatch', analysis: 'Analisis', settings: 'Setting' };
+      document.getElementById('activeModuleBadge').innerText = labelMap[tab];
 
-    function toggleMenu() {
-      const m = document.getElementById('menuModal');
-      m.classList.toggle('hidden');
-    }
+      ['tracker', 'analysis', 'settings'].forEach((t) => {
+        const btn = document.getElementById(`navBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (t === tab) {
+          btn.className = 'p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md';
+        } else {
+          btn.className = `p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${state.isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700'}`;
+        }
+      });
 
-    function saveSettings() {
-      taktTime = parseFloat(document.getElementById('inputTakt').value) || 45;
-      lineName = document.getElementById('inputLine').value || 'Line A';
-      styleName = document.getElementById('inputStyle').value || 'Style';
-      document.getElementById('subHeaderInfo').innerText = `${lineName} | Takt: ${taktTime}s`;
-      toggleMenu();
+      toggleMenuModal();
       renderAll();
     }
 
-    // Render Data Utama & Analisis
+    function saveSettingsAndReturn() {
+      state.lineName = document.getElementById('settingLineInput').value || 'Line A';
+      state.styleName = document.getElementById('settingStyleInput').value || 'Style';
+      state.taktTime = Number(document.getElementById('settingTaktInput').value) || 45;
+      state.timeUnit = document.getElementById('settingUnitSelect').value || 'seconds';
+
+      // Recalculate vsTarget
+      state.cycles = state.cycles.map((c) => ({
+        ...c,
+        vsTarget: parseFloat((c.lapTime - state.taktTime).toFixed(1))
+      }));
+
+      persistData();
+      state.activeTab = 'tracker';
+      document.getElementById('viewTracker').classList.remove('hidden');
+      document.getElementById('viewAnalysis').classList.add('hidden');
+      document.getElementById('viewSettings').classList.add('hidden');
+      document.getElementById('activeModuleBadge').innerText = 'Stopwatch';
+      renderAll();
+    }
+
+    function toggleTheme() {
+      state.isDarkMode = !state.isDarkMode;
+      persistData();
+      applyTheme();
+      renderAll();
+    }
+
+    function applyTheme() {
+      const dark = state.isDarkMode;
+      document.body.className = `${dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900 light-mode'} min-h-screen transition-colors duration-300 pb-44 text-base overflow-x-hidden`;
+      document.getElementById('topHeader').className = `${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200 shadow-xs'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2`;
+      document.getElementById('bottomControllerBar').className = `fixed bottom-0 left-0 right-0 z-50 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl`;
+      document.getElementById('metricsStrip').className = `grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}`;
+      document.getElementById('btnThemeToggle').innerHTML = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
+    }
+
+    function changeZoom(delta) {
+      state.zoomLevel = Math.min(150, Math.max(50, state.zoomLevel + delta));
+      const root = document.getElementById('appRoot');
+      root.style.transform = `scale(${state.zoomLevel / 100})`;
+      root.style.width = `${100 / (state.zoomLevel / 100)}%`;
+      document.getElementById('zoomLabel').innerText = `${state.zoomLevel}%`;
+    }
+
+    // 8. RENDERING ENGINE (TRACKER + PARETO + TOP 3 BOTTLENECK MERAH)
     function renderAll() {
-      const totalT = cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgT = cycles.length > 0 ? totalT / cycles.length : 0;
-      const capPcs = avgT > 0 ? Math.floor(3600 / avgT) : 0;
+      const unit = getUnitSymbol();
+      document.querySelectorAll('.unit-symbol').forEach((el) => (el.innerText = unit));
+      document.getElementById('headerSubText').innerText = `${state.lineName} — ${state.styleName} (Takt: ${state.taktTime}${unit})`;
 
-      document.getElementById('displayTotal').innerText = totalT.toFixed(1) + 's';
-      document.getElementById('displayAvg').innerText = avgT.toFixed(1) + 's';
-      document.getElementById('displayCap').innerText = capPcs + ' pcs/h';
-      document.getElementById('badgeCount').innerText = cycles.length;
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
+      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
 
-      // Urutkan untuk mencari Top 3 Bottleneck (waktu siklus tertinggi)
-      const sortedByTime = [...cycles].sort((a, b) => b.lapTime - a.lapTime);
-      const top3Ids = sortedByTime.slice(0, 3).map(c => c.id);
+      document.getElementById('metricStopwatch').innerText = formatTimeValue(state.seconds);
+      document.getElementById('metricTotalCT').innerText = formatTimeValue(totalCT);
+      document.getElementById('metricAvgCT').innerText = formatTimeValue(avgCT);
+      document.getElementById('metricCapacity').innerText = capPcs;
+      document.getElementById('logCountLabel').innerText = state.cycles.length;
+      document.getElementById('btnClearLog').classList.toggle('hidden', state.cycles.length === 0);
 
-      // Render Tabel Tracker
-      const tbody = document.getElementById('cycleTableBody');
-      tbody.innerHTML = '';
-      if (cycles.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500">Belum ada data siklus.</td></tr>`;
-      } else {
-        cycles.forEach((c, idx) => {
-          const num = cycles.length - idx;
-          const vsStr = c.vsTarget > 0 ? `+${c.vsTarget}` : c.vsTarget;
-          const isTop3 = top3Ids.includes(c.id);
+      renderTrackerTable();
+      renderAnalysis();
+    }
 
-          const tr = document.createElement('tr');
-          tr.className = isTop3 ? "bg-rose-500/10 border-l-4 border-rose-500" : "hover:bg-slate-800/30";
-          tr.innerHTML = `
-            <td class="p-3 font-bold text-slate-300">#${num}</td>
-            <td class="p-3 font-mono font-bold text-emerald-400">${c.lapTime}s</td>
-            <td class="p-3 font-mono font-semibold ${c.lapTime > taktTime ? 'text-rose-400' : 'text-emerald-400'}">${vsStr}s</td>
-            <td class="p-3"><input type="text" value="${c.processName}" onchange="updateCycleName(${c.id}, this.value)" class="bg-slate-950 border border-slate-700 text-white rounded px-2 py-1 text-xs w-full" /></td>
-            <td class="p-3"><input type="text" value="${c.operatorName || ''}" placeholder="Operator..." onchange="updateOperator(${c.id}, this.value)" class="bg-slate-950 border border-slate-700 text-white rounded px-2 py-1 text-xs w-full" /></td>
-            <td class="p-3 text-center"><button onclick="deleteCycle(${c.id})" class="text-rose-400 font-bold">Hapus</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
+    function renderTrackerTable() {
+      const tbody = document.getElementById('trackerTableBody');
+      const unit = getUnitSymbol();
+      const dark = state.isDarkMode;
+
+      if (state.cycles.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-12 text-slate-400 text-sm">
+              Belum ada data siklus. Tekan tombol <strong class="text-emerald-400">START</strong> lalu <strong class="text-emerald-400">LAP / CYCLE</strong> di bilah kontrol bawah untuk mencatat durasi proses.
+            </td>
+          </tr>`;
+        return;
       }
 
-      // Render Analisis & Top 3 Bottleneck Merah
-      const analysisContainer = document.getElementById('analysisCardContainer');
-      analysisContainer.innerHTML = '';
-      if (cycles.length === 0) {
-        analysisContainer.innerHTML = `<div class="text-center text-slate-500 py-6">Tidak ada data analisis.</div>`;
-      } else {
-        sortedByTime.forEach((c, index) => {
-          const isTop3 = index < 3;
-          const isOver = c.lapTime > taktTime;
-          const badgeClass = isTop3 ? "bg-rose-500/20 text-rose-400 border-rose-500/40" : (isOver ? "bg-amber-500/20 text-amber-400 border-amber-500/40" : "bg-emerald-500/20 text-emerald-400 border-emerald-500/40");
-          const statusText = isTop3 ? "🚨 Improve Immediately (Top 3 Bottleneck)" : (isOver ? "⚠️ Bottleneck" : "✅ Normal Balance");
+      const chronological = [...state.cycles].reverse();
+      tbody.innerHTML = chronological.map((cycle, index) => {
+        const cycleNumber = index + 1;
+        const isEditing = state.editingCycleId === cycle.id;
+        const dispLap = isEditing ? state.seconds : cycle.lapTime;
+        const dispVs = isEditing ? (state.seconds - state.taktTime) : cycle.vsTarget;
+        const isOver = dispLap > state.taktTime;
+        const vsStr = dispVs > 0 ? `+${formatTimeValue(dispVs)}` : formatTimeValue(dispVs);
 
-          const div = document.createElement('div');
-          div.className = "bg-slate-950 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between gap-3";
-          div.innerHTML = `
-            <div>
-              <div class="font-bold text-sm text-white">${c.processName} <span class="text-xs text-slate-400 font-normal">(${c.operatorName || 'Tanpa Operator'})</span></div>
-              <div class="text-xs font-mono text-emerald-400 mt-0.5">Waktu Siklus: ${c.lapTime}s | Takt: ${taktTime}s</div>
+        return `
+          <tr class="${isEditing ? 'bg-amber-500/10 border-l-4 border-amber-500' : (dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all">
+            <td class="p-3.5 font-bold whitespace-nowrap">#${cycleNumber}</td>
+            <td class="p-3.5 font-mono font-bold text-base whitespace-nowrap">
+              ${isEditing 
+                ? `<span id="liveEdit_${cycle.id}" class="text-amber-400 animate-pulse">${formatTimeValue(state.seconds)}${unit}</span>` 
+                : `<span class="text-emerald-400">${formatTimeValue(cycle.lapTime)}${unit}</span>`}
+            </td>
+            <td class="p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">
+              ${vsStr}${unit}
+            </td>
+            <td class="p-3.5">
+              <input type="text" value="${cycle.processName}" onchange="updateField(${cycle.id}, 'processName', this.value)"
+                class="w-full min-w-[200px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+            </td>
+            <td class="p-3.5">
+              <input type="text" value="${cycle.operatorName || ''}" placeholder="Nama operator..." onchange="updateField(${cycle.id}, 'operatorName', this.value)"
+                class="w-full min-w-[170px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+            </td>
+            <td class="p-3.5">
+              <input type="text" value="${cycle.machineName || ''}" placeholder="Jenis mesin..." onchange="updateField(${cycle.id}, 'machineName', this.value)"
+                class="w-full min-w-[180px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+            </td>
+            <td class="p-3.5 text-center whitespace-nowrap">
+              ${isEditing ? `
+                <div class="flex items-center justify-center gap-1.5">
+                  <button onclick="handleConfirmReTime()" class="bg-emerald-500 text-slate-950 px-2 py-1 rounded-lg font-extrabold cursor-pointer">✓</button>
+                  <button onclick="handleCancelReTime()" class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded-lg font-bold cursor-pointer">✕</button>
+                </div>
+              ` : `
+                <div class="flex items-center justify-center gap-2">
+                  <button onclick="handleStartReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 cursor-pointer" title="Ambil Ulang Stopwatch">✏️</button>
+                  <button onclick="handleDeleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 cursor-pointer" title="Hapus Baris">🗑️</button>
+                </div>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAnalysis() {
+      const chartContainer = document.getElementById('paretoChartContainer');
+      const analysisBody = document.getElementById('analysisTableBody');
+      const unit = getUnitSymbol();
+      const dark = state.isDarkMode;
+
+      if (state.cycles.length === 0) {
+        chartContainer.innerHTML = `<div class="text-center py-12 text-slate-400">Belum ada data untuk dianalisis.</div>`;
+        analysisBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data rincian proses.</td></tr>`;
+        return;
+      }
+
+      const chronological = [...state.cycles].reverse();
+      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
+      // TOP 3 BOTTLENECK MASUK KATEGORI MERAH
+      const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
+
+      const maxVal = Math.max(...chronological.map((c) => c.lapTime), state.taktTime);
+      const heightPx = 208;
+      const taktRatio = Math.min(1, Math.max(0, state.taktTime / maxVal));
+      const bottomOffset = Math.round(taktRatio * heightPx) + 48;
+
+      const barsHtml = chronological.map((item, idx) => {
+        const isTop3 = top3Ids.includes(item.id);
+        const isOver = item.lapTime > state.taktTime;
+        const isCombine = item.lapTime <= state.taktTime / 2;
+
+        let barColor = 'bg-emerald-500';
+        let textColor = 'text-emerald-500';
+        if (isTop3) {
+          barColor = 'bg-rose-600';
+          textColor = 'text-rose-500';
+        } else if (isOver) {
+          barColor = 'bg-amber-500';
+          textColor = 'text-amber-500';
+        } else if (isCombine) {
+          barColor = 'bg-blue-500';
+          textColor = 'text-blue-400';
+        }
+
+        const heightPercent = Math.min(100, Math.max(8, (item.lapTime / maxVal) * 100));
+        return `
+          <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
+            <span class="text-xs font-bold ${textColor}">${formatTimeValue(item.lapTime)}${unit}</span>
+            <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
+              <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
+                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">TOP 3</span></div>` : ''}
+              </div>
             </div>
-            <div>
-              <span class="px-2.5 py-1 rounded-full text-xs font-extrabold border ${badgeClass}">
-                ${statusText}
+            <div class="text-center w-full">
+              <p class="text-xs font-bold truncate" title="${item.processName}">${item.processName}</p>
+              <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${idx + 1}</p>
+              <p class="text-[10px] text-slate-400 truncate">${item.operatorName || '-'}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      chartContainer.innerHTML = `
+        <div class="overflow-x-auto pb-4 pt-6">
+          <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
+            <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomOffset}px">
+              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">
+                Target Takt Time: ${state.taktTime}${unit}
               </span>
             </div>
-          `;
-          analysisContainer.appendChild(div);
-        });
-      }
+            ${barsHtml}
+          </div>
+        </div>
+      `;
+
+      // Render Detail Analysis Table
+      analysisBody.innerHTML = chronological.map((item, idx) => {
+        const isTop3 = top3Ids.includes(item.id);
+        const isOver = item.lapTime > state.taktTime;
+        const isCombine = item.lapTime <= state.taktTime / 2;
+        const vsVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
+        const capacityPcs = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
+
+        let badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
+        if (isTop3) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40">🚨 Improve Immediately</span>`;
+        } else if (isOver) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40">⚠️ Bottleneck</span>`;
+        } else if (isCombine) {
+          badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40">💡 Potential Combine</span>`;
+        }
+
+        return `
+          <tr class="${dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}">
+            <td class="p-3.5 font-bold whitespace-nowrap">#${idx + 1}</td>
+            <td class="p-3.5 font-bold whitespace-nowrap">${item.processName}</td>
+            <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.operatorName || '-'}</td>
+            <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.machineName || '-'}</td>
+            <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${formatTimeValue(item.lapTime)}${unit}</td>
+            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsVal > 0 ? '+' + formatTimeValue(vsVal) : formatTimeValue(vsVal)}${unit}</td>
+            <td class="p-3.5 whitespace-nowrap">${badgeHtml}</td>
+            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capacityPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function updateCycleName(id, val) {
-      const target = cycles.find(c => c.id === id);
-      if (target) target.processName = val;
-      renderAll();
+    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP
+    function generateExcelBlob() {
+      const chronological = [...state.cycles].reverse();
+      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
+      const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
+      const unit = getUnitSymbol();
+
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
+      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+
+      const rowsHtml = chronological.map((c, idx) => {
+        const isTop3 = top3Ids.includes(c.id);
+        const isOver = c.lapTime > state.taktTime;
+        const isCombine = c.lapTime <= state.taktTime / 2;
+        let statusText = 'Normal Balance';
+        if (isTop3) statusText = 'Improve Immediately (Top 3 Bottleneck)';
+        else if (isOver) statusText = 'Bottleneck';
+        else if (isCombine) statusText = 'Potential Combine';
+
+        const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
+        return `
+          <tr>
+            <td style="border:1px solid #cbd5e1;padding:6px;text-align:center;">${idx + 1}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;font-weight:bold;">${formatTimeValue(c.lapTime)}${unit}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;">${c.vsTarget > 0 ? '+' : ''}${formatTimeValue(c.vsTarget)}${unit}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;">${c.processName}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;">${c.operatorName || '-'}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;">${c.machineName || '-'}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;text-align:center;">${statusText}</td>
+            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;">${cap} pcs/jam</td>
+          </tr>
+        `;
+      }).join('');
+
+      const excelHtml = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8" /></head>
+        <body>
+          <h3>REPORT CYCLE TIME HARYAN</h3>
+          <p><b>Line:</b> ${state.lineName} | <b>Style:</b> ${state.styleName} | <b>Takt Time:</b> ${state.taktTime}${unit} | <b>Total CT:</b> ${formatTimeValue(totalCT)}${unit} | <b>Avg CT:</b> ${formatTimeValue(avgCT)}${unit} | <b>Kapasitas:</b> ${capPcs} pcs/jam</p>
+          <table>
+            <thead>
+              <tr style="background:#0f172a;color:#ffffff;">
+                <th>Cycle #</th><th>Lap Time</th><th>Vs Target</th><th>Proses</th><th>Operator</th><th>Machine</th><th>Action</th><th>Kapasitas</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </body>
+        </html>
+      `;
+
+      return new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
     }
 
-    function updateOperator(id, val) {
-      const target = cycles.find(c => c.id === id);
-      if (target) target.operatorName = val;
-    }
-
-    function deleteCycle(id) {
-      cycles = cycles.filter(c => c.id !== id);
-      renderAll();
-    }
-
-    // Export Excel (.xls)
-    function exportExcel() {
-      if (cycles.length === 0) return;
-      const rowsHtml = cycles.map((c, idx) => `
-        <tr>
-          <td>${idx + 1}</td>
-          <td>${c.processName}</td>
-          <td>${c.operatorName || '-'}</td>
-          <td>${c.lapTime}s</td>
-          <td>${c.vsTarget}s</td>
-          <td>${c.lapTime > taktTime ? 'Bottleneck' : 'Normal'}</td>
-        </tr>
-      `).join('');
-
-      const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8" /></head><body>
-        <h3>Laporan Cycle Time Haryan</h3>
-        <p>Line: ${lineName} | Style: ${styleName} | Takt Time: ${taktTime}s</p>
-        <table border="1"><thead><tr><th>No</th><th>Proses</th><th>Operator</th><th>Lap Time</th><th>Vs Takt</th><th>Status</th></tr></thead><tbody>${rowsHtml}</tbody></table>
-      </body></html>`;
-
-      const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+    function handleExportExcel() {
+      if (state.cycles.length === 0) return;
+      const blob = generateExcelBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `report_cycletime_${lineName.replace(/\s+/g, '_')}.xls`;
+      a.download = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
-    // Share WhatsApp
-    function shareWhatsApp() {
-      const totalT = cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgT = cycles.length > 0 ? (totalT / cycles.length).toFixed(1) : 0;
-      const text = `📊 *LAPORAN CYCLE TIME HARYAN*\n🏢 Line: ${lineName}\n👗 Style: ${styleName}\n⏱ Takt Time: ${taktTime}s\n📈 Rata-rata CT: ${avgT}s\n\nTotal Proses Tercatat: ${cycles.length} proses.`;
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+    async function handleShareWhatsApp() {
+      if (state.cycles.length === 0) return;
+      const blob = generateExcelBlob();
+      const fileName = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
+      const file = new File([blob], fileName, { type: 'application/vnd.ms-excel' });
+
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const avgCT = (totalCT / state.cycles.length).toFixed(1);
+      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const unit = getUnitSymbol();
+
+      const summaryText = `📊 *LAPORAN CYCLE TIME HARYAN*\n🏢 Line: ${state.lineName}\n👗 Style: ${state.styleName}\n⏱ Takt Time: ${state.taktTime}${unit}\n📈 Avg CT: ${avgCT}${unit} | Kapasitas: ${capPcs} pcs/jam\n📋 Total Proses: ${state.cycles.length} siklus`;
+
+      // Coba gunakan Web Share API Level 2 (Share File Langsung ke WhatsApp di HP Android)
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'Laporan Cycle Time Haryan',
+            text: summaryText
+          });
+          return;
+        } catch (err) {
+          // Lanjut fallback download + buka WhatsApp
+        }
+      }
+
+      // Fallback: Download file Excel sekaligus buka WhatsApp dengan ringkasan
+      handleExportExcel();
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(summaryText + '\n\n(File Excel laporan telah otomatis terunduh di perangkat, silakan lampirkan file ' + fileName + ')')}`;
+      window.open(waUrl, '_blank');
     }
   </script>
 </body>
