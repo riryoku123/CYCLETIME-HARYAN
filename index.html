@@ -280,38 +280,46 @@
   </div>
 
   <!-- Sticky Bottom Stopwatch Controller Bar -->
-  <div id="bottomControllerBar" class="fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl">
+  <div id="bottomControllerBar" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500 opacity-0 pointer-events-none">
     <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
       
       <!-- Real-time Metric Indicators -->
-      <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
-        <div class="flex items-center justify-between sm:justify-center gap-2 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-4 border-slate-700/50">
+      <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
+        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-3 border-slate-700/50">
           <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">STOPWATCH:</span>
-          <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
+          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
             <span id="metricStopwatch">0.0</span>
             <span class="text-[10px] font-normal text-amber-500 unit-symbol">s</span>
           </div>
         </div>
 
-        <div class="flex items-center justify-between sm:justify-center gap-2 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-4 border-slate-700/50">
+        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-3 border-slate-700/50">
           <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">TOTAL CT:</span>
-          <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
+          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
             <span id="metricTotalCT">0.0</span>
             <span class="text-[10px] font-normal text-emerald-500 unit-symbol">s</span>
           </div>
         </div>
 
-        <div class="flex items-center justify-between sm:justify-center gap-2 border-r pt-1 sm:pt-0 pr-2 sm:pr-4 border-slate-700/50">
+        <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pt-1 sm:pt-0 sm:pr-3 border-slate-700/50">
+          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">EFISIENSI:</span>
+          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-rose-400 flex items-baseline gap-0.5">
+            <span id="metricEfficiency">0.0</span>
+            <span class="text-[10px] font-normal text-rose-400">%</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r pt-1 sm:pt-0 pr-2 sm:pr-3 border-slate-700/50">
           <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">AVG CT:</span>
-          <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
+          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
             <span id="metricAvgCT">0.0</span>
             <span class="text-[10px] font-normal text-cyan-500 unit-symbol">s</span>
           </div>
         </div>
 
-        <div class="flex items-center justify-between sm:justify-center gap-2 pt-1 sm:pt-0 pl-1 sm:pl-0">
+        <div class="flex items-center justify-between sm:justify-center gap-1.5 pt-1 sm:pt-0 pl-1 sm:pl-0">
           <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">KAPASITAS:</span>
-          <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
+          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
             <span id="metricCapacity">0</span>
             <span class="text-[10px] font-normal text-purple-400">pcs/h</span>
           </div>
@@ -390,13 +398,7 @@
     }
 
     // 2. APPLICATION STATE
-    const DEFAULT_CYCLES = [
-      { id: 101, lapTime: 42.0, vsTarget: -3.0, processName: 'Persiapan Kerah', operatorName: 'Siti Rahma', machineName: 'Single Needle Lockstitch', timestamp: new Date(Date.now() - 300000).toISOString() },
-      { id: 102, lapTime: 58.5, vsTarget: 13.5, processName: 'Jahit Bahu & Lengan', operatorName: 'Budi Santoso', machineName: 'Single Needle', timestamp: new Date(Date.now() - 240000).toISOString() },
-      { id: 103, lapTime: 39.0, vsTarget: -6.0, processName: 'Pasang Kancing', operatorName: 'Dewi Lestari', machineName: 'Buttonhole Machine', timestamp: new Date(Date.now() - 180000).toISOString() },
-      { id: 104, lapTime: 65.2, vsTarget: 20.2, processName: 'Obras Samping', operatorName: 'Joko Widodo', machineName: 'Obras 4 Benang', timestamp: new Date(Date.now() - 120000).toISOString() },
-      { id: 105, lapTime: 44.8, vsTarget: -0.2, processName: 'Inspeksi & Trimming', operatorName: 'Ani Yulianti', machineName: 'Manual Table', timestamp: new Date(Date.now() - 60000).toISOString() }
-    ];
+    const DEFAULT_CYCLES = [];
 
     let state = {
       activeTab: 'tracker',
@@ -408,7 +410,7 @@
       styleName: 'Style Formal Slimfit',
       isRunning: false,
       seconds: 0,
-      cycles: [...DEFAULT_CYCLES],
+      cycles: [],
       editingCycleId: null
     };
 
@@ -418,6 +420,7 @@
     window.addEventListener('DOMContentLoaded', async () => {
       const splash = document.getElementById('splashScreen');
       const progress = document.getElementById('splashProgress');
+      const bottomBar = document.getElementById('bottomControllerBar');
       let pct = 0;
       const splashTimer = setInterval(() => {
         pct += 10;
@@ -426,7 +429,15 @@
           clearInterval(splashTimer);
           if (splash) {
             splash.style.opacity = '0';
-            setTimeout(() => splash.remove(), 700);
+            setTimeout(() => {
+              splash.remove();
+              if (bottomBar) {
+                bottomBar.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                  bottomBar.classList.remove('opacity-0', 'pointer-events-none');
+                });
+              }
+            }, 700);
           }
         }
       }, 300);
@@ -690,10 +701,11 @@
 
     function applyTheme() {
       const dark = state.isDarkMode;
+      const isSplashActive = !!document.getElementById('splashScreen');
       document.body.className = `${dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900 light-mode'} min-h-screen transition-colors duration-300 pb-44 text-base overflow-x-hidden`;
       document.getElementById('topHeader').className = `${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200 shadow-xs'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2`;
-      document.getElementById('bottomControllerBar').className = `fixed bottom-0 left-0 right-0 z-50 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl`;
-      document.getElementById('metricsStrip').className = `grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}`;
+      document.getElementById('bottomControllerBar').className = `${isSplashActive ? 'hidden opacity-0 pointer-events-none ' : ''}fixed bottom-0 left-0 right-0 z-40 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500`;
+      document.getElementById('metricsStrip').className = `grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}`;
       document.getElementById('btnThemeToggle').innerHTML = dark ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
 
@@ -706,6 +718,14 @@
     }
 
     // 8. RENDERING ENGINE (TRACKER + PARETO + TOP 3 BOTTLENECK MERAH)
+    function calculateLineEfficiency() {
+      if (state.cycles.length === 0) return 0;
+      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
+      const maxCT = Math.max(...state.cycles.map((c) => c.lapTime));
+      if (maxCT <= 0) return 0;
+      return (totalCT / (state.cycles.length * maxCT)) * 100;
+    }
+
     function renderAll() {
       const unit = getUnitSymbol();
       document.querySelectorAll('.unit-symbol').forEach((el) => (el.innerText = unit));
@@ -714,9 +734,11 @@
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
       const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const efficiencyPct = calculateLineEfficiency();
 
       document.getElementById('metricStopwatch').innerText = formatTimeValue(state.seconds);
       document.getElementById('metricTotalCT').innerText = formatTimeValue(totalCT);
+      document.getElementById('metricEfficiency').innerText = efficiencyPct.toFixed(1);
       document.getElementById('metricAvgCT').innerText = formatTimeValue(avgCT);
       document.getElementById('metricCapacity').innerText = capPcs;
       document.getElementById('logCountLabel').innerText = state.cycles.length;
@@ -892,7 +914,7 @@
       }).join('');
     }
 
-    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP (MURNI FORMAT TEKS DATA)
+    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP LANGSUNG KE APLIKASI
     function handleExportExcel() {
       if (state.cycles.length === 0) return;
 
@@ -904,6 +926,7 @@
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
       const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const efficiencyPct = calculateLineEfficiency().toFixed(1);
 
       const rowsHtml = chronological.map((c, idx) => {
         const isTop3 = top3Ids.includes(c.id);
@@ -934,7 +957,7 @@
         <head><meta charset="utf-8" /></head>
         <body>
           <h3>REPORT CYCLE TIME HARYAN</h3>
-          <p><b>Line:</b> ${state.lineName} | <b>Style:</b> ${state.styleName} | <b>Takt Time:</b> ${state.taktTime}${unit} | <b>Total CT:</b> ${formatTimeValue(totalCT)}${unit} | <b>Avg CT:</b> ${formatTimeValue(avgCT)}${unit} | <b>Kapasitas:</b> ${capPcs} pcs/jam</p>
+          <p><b>Line:</b> ${state.lineName} | <b>Style:</b> ${state.styleName} | <b>Takt Time:</b> ${state.taktTime}${unit} | <b>Total CT:</b> ${formatTimeValue(totalCT)}${unit} | <b>Efisiensi Total:</b> ${efficiencyPct}% | <b>Avg CT Total:</b> ${formatTimeValue(avgCT)}${unit} | <b>Kapasitas:</b> ${capPcs} pcs/jam</p>
           <table>
             <thead>
               <tr style="background:#0f172a;color:#ffffff;">
@@ -969,6 +992,7 @@
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
       const avgCT = totalCT / state.cycles.length;
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const efficiencyPct = calculateLineEfficiency().toFixed(1);
 
       const top3Lines = top3.map((c, idx) => 
         `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - Operator: ${c.operatorName || '-'}`
@@ -979,20 +1003,21 @@
       ).join('\n');
 
       const summaryText = 
-`📊 *LAPORAN CYCLE TIME HARYAN*
-🏢 *Line:* ${state.lineName}
-👕 *Style:* ${state.styleName}
-⏱ *Takt Time:* ${state.taktTime}${unit} | *Kapasitas:* ${capPcs} pcs/jam
-📈 *Total CT:* ${formatTimeValue(totalCT)}${unit} | *Avg CT:* ${formatTimeValue(avgCT)}${unit}
+`*LAPORAN CYCLE TIME HARYAN*
+*Line:* ${state.lineName}
+*Style:* ${state.styleName}
+*Takt Time:* ${state.taktTime}${unit} | *Kapasitas:* ${capPcs} pcs/jam
+*Total CT:* ${formatTimeValue(totalCT)}${unit} | *Efisiensi:* ${efficiencyPct}% | *Avg CT:* ${formatTimeValue(avgCT)}${unit}
 
-🚨 *Top 3 Bottleneck:*
+*Top 3 Bottleneck:*
 ${top3Lines}
 
-📋 *Rincian Proses (${state.cycles.length}):*
+*Rincian Proses (${state.cycles.length}):*
 ${detailLines}`;
 
-      const waUrl = `https://wa.me/?text=${encodeURIComponent(summaryText)}`;
-      window.location.href = waUrl;
+      // Gunakan protokol langsung whatsapp://send agar langsung membuka aplikasi WhatsApp tanpa halaman perantara web
+      const directWaUri = `whatsapp://send?text=${encodeURIComponent(summaryText)}`;
+      window.location.href = directWaUri;
     }
   </script>
 </body>
