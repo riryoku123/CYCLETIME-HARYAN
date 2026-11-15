@@ -818,8 +818,8 @@
                 </div>
               ` : `
                 <div class="flex items-center justify-center gap-2">
-                  <button onclick="handleStartReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 cursor-pointer" title="Ambil Ulang Stopwatch">✏️</button>
-                  <button onclick="handleDeleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 cursor-pointer" title="Hapus Baris">🗑️</button>
+                  <button onclick="handleStartReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 p-1 rounded cursor-pointer" title="Ambil Ulang">✏️</button>
+                  <button onclick="handleDeleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 p-1 rounded cursor-pointer" title="Hapus">🗑️</button>
                 </div>
               `}
             </td>
@@ -829,13 +829,13 @@
     }
 
     function renderAnalysis() {
-      const chartContainer = document.getElementById('paretoChartContainer');
+      const paretoContainer = document.getElementById('paretoChartContainer');
       const analysisBody = document.getElementById('analysisTableBody');
       const unit = getUnitSymbol();
       const dark = state.isDarkMode;
 
       if (state.cycles.length === 0) {
-        chartContainer.innerHTML = `<div class="text-center py-12 text-slate-400">Belum ada data untuk dianalisis.</div>`;
+        paretoContainer.innerHTML = `<div class="text-center py-10 text-slate-400">Belum ada data untuk dianalisis.</div>`;
         analysisBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data rincian proses.</td></tr>`;
         return;
       }
@@ -843,55 +843,56 @@
       const chronological = [...state.cycles].reverse();
       const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
       const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
+      const maxVal = Math.max(...chronological.map((s) => s.lapTime), state.taktTime);
 
-      const maxVal = Math.max(...chronological.map((c) => c.lapTime), state.taktTime);
       const heightPx = 208;
       const taktRatio = Math.min(1, Math.max(0, state.taktTime / maxVal));
       const bottomOffset = Math.round(taktRatio * heightPx) + 48;
 
       const barsHtml = chronological.map((item, idx) => {
+        const cycleNum = idx + 1;
         const isTop3 = top3Ids.includes(item.id);
         const isOver = item.lapTime > state.taktTime;
         const isCombine = item.lapTime <= state.taktTime / 2;
 
         let barColor = 'bg-emerald-500';
-        let textColor = 'text-emerald-500';
+        let textColor = 'text-emerald-400';
         if (isTop3) {
           barColor = 'bg-rose-600';
-          textColor = 'text-rose-500';
+          textColor = 'text-rose-400';
         } else if (isOver) {
           barColor = 'bg-amber-500';
-          textColor = 'text-amber-500';
+          textColor = 'text-amber-400';
         } else if (isCombine) {
           barColor = 'bg-blue-500';
           textColor = 'text-blue-400';
         }
 
         const heightPercent = Math.min(100, Math.max(8, (item.lapTime / maxVal) * 100));
+        const rankIdx = top3Ids.indexOf(item.id);
+
         return `
           <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
             <span class="text-xs font-bold ${textColor}">${formatTimeValue(item.lapTime)}${unit}</span>
             <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
               <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
-                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">TOP 3</span></div>` : ''}
+                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/60 px-1 py-0.5 rounded">TOP ${rankIdx + 1}</span></div>` : ''}
               </div>
             </div>
             <div class="text-center w-full">
               <p class="text-xs font-bold truncate" title="${item.processName}">${item.processName}</p>
-              <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${idx + 1}</p>
+              <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${cycleNum}</p>
               <p class="text-[10px] text-slate-400 truncate">${item.operatorName || '-'}</p>
             </div>
           </div>
         `;
       }).join('');
 
-      chartContainer.innerHTML = `
-        <div class="overflow-x-auto pb-4 pt-6">
+      paretoContainer.innerHTML = `
+        <div class="overflow-x-auto pb-4 pt-6 custom-table-scroll">
           <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
             <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomOffset}px">
-              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">
-                Target Takt Time: ${state.taktTime}${unit}
-              </span>
+              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">Target Takt Time: ${state.taktTime}${unit}</span>
             </div>
             ${barsHtml}
           </div>
@@ -899,11 +900,12 @@
       `;
 
       analysisBody.innerHTML = chronological.map((item, idx) => {
+        const cycleNum = idx + 1;
+        const vsVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
         const isTop3 = top3Ids.includes(item.id);
         const isOver = item.lapTime > state.taktTime;
         const isCombine = item.lapTime <= state.taktTime / 2;
-        const vsVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
-        const capacityPcs = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
+        const capPcs = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
 
         let badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
         if (isTop3) {
@@ -916,20 +918,29 @@
 
         return `
           <tr class="${dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}">
-            <td class="p-3.5 font-bold whitespace-nowrap">#${idx + 1}</td>
+            <td class="p-3.5 font-bold whitespace-nowrap">#${cycleNum}</td>
             <td class="p-3.5 font-bold whitespace-nowrap">${item.processName}</td>
             <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.operatorName || '-'}</td>
             <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.machineName || '-'}</td>
             <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${formatTimeValue(item.lapTime)}${unit}</td>
-            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsVal > 0 ? '+' + formatTimeValue(vsVal) : formatTimeValue(vsVal)}${unit}</td>
+            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsVal > 0 ? '+' : ''}${formatTimeValue(vsVal)}${unit}</td>
             <td class="p-3.5 whitespace-nowrap">${badgeHtml}</td>
-            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capacityPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
+            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
           </tr>
         `;
       }).join('');
     }
 
-    // 9. EXPORT EXCEL (.XLS) & SHARE WHATSAPP LANGSUNG KE APLIKASI
+    // 9. EXPORT EXCEL (.XLS NATIVE XML SPREADSHEET UNTUK WPS / MS OFFICE HP) & SHARE WHATSAPP
+    function escapeXml(unsafe) {
+      return String(unsafe)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
     function handleExportExcel() {
       if (state.cycles.length === 0) return;
 
@@ -943,49 +954,151 @@
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
       const efficiencyPct = calculateLineEfficiency().toFixed(1);
 
-      const rowsHtml = chronological.map((c, idx) => {
+      const dataRowsXml = chronological.map((c, idx) => {
         const isTop3 = top3Ids.includes(c.id);
         const isOver = c.lapTime > state.taktTime;
         const isCombine = c.lapTime <= state.taktTime / 2;
         let statusText = 'Normal Balance';
-        if (isTop3) statusText = 'Improve Immediately (Top 3 Bottleneck)';
-        else if (isOver) statusText = 'Bottleneck';
-        else if (isCombine) statusText = 'Potential Combine';
+        let styleId = 'sCell';
+        if (isTop3) {
+          statusText = 'Improve Immediately (Top 3 Bottleneck)';
+          styleId = 'sRed';
+        } else if (isOver) {
+          statusText = 'Bottleneck';
+          styleId = 'sWarn';
+        } else if (isCombine) {
+          statusText = 'Potential Combine';
+        }
 
         const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
+        const vsStr = `${c.vsTarget > 0 ? '+' : ''}${formatTimeValue(c.vsTarget)}${unit}`;
+
         return `
-          <tr>
-            <td style="border:1px solid #cbd5e1;padding:6px;text-align:center;">${idx + 1}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;font-weight:bold;">${formatTimeValue(c.lapTime)}${unit}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;">${c.vsTarget > 0 ? '+' : ''}${formatTimeValue(c.vsTarget)}${unit}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;">${c.processName}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;">${c.operatorName || '-'}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;">${c.machineName || '-'}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;text-align:center;">${statusText}</td>
-            <td style="border:1px solid #cbd5e1;padding:6px;text-align:right;">${cap} pcs/jam</td>
-          </tr>
-        `;
+      <Row ss:Height="22">
+        <Cell ss:StyleID="sCenter"><Data ss:Type="Number">${idx + 1}</Data></Cell>
+        <Cell ss:StyleID="sNum"><Data ss:Type="String">${escapeXml(formatTimeValue(c.lapTime) + unit)}</Data></Cell>
+        <Cell ss:StyleID="sNum"><Data ss:Type="String">${escapeXml(vsStr)}</Data></Cell>
+        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.processName)}</Data></Cell>
+        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.operatorName || '-')}</Data></Cell>
+        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.machineName || '-')}</Data></Cell>
+        <Cell ss:StyleID="${styleId}"><Data ss:Type="String">${escapeXml(statusText)}</Data></Cell>
+        <Cell ss:StyleID="sNum"><Data ss:Type="Number">${cap}</Data></Cell>
+      </Row>`;
       }).join('');
 
-      const excelHtml = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head><meta charset="utf-8" /></head>
-        <body>
-          <h3>REPORT CYCLE TIME HARYAN</h3>
-          <p><b>Line:</b> ${state.lineName} | <b>Style:</b> ${state.styleName} | <b>Takt Time:</b> ${state.taktTime}${unit} | <b>Total CT:</b> ${formatTimeValue(totalCT)}${unit} | <b>Efisiensi Total:</b> ${efficiencyPct}% | <b>Avg CT Total:</b> ${formatTimeValue(avgCT)}${unit} | <b>Kapasitas:</b> ${capPcs} pcs/jam</p>
-          <table>
-            <thead>
-              <tr style="background:#0f172a;color:#ffffff;">
-                <th>Cycle #</th><th>Lap Time</th><th>Vs Target</th><th>Proses</th><th>Operator</th><th>Machine</th><th>Action</th><th>Kapasitas</th>
-              </tr>
-            </thead>
-            <tbody>${rowsHtml}</tbody>
-          </table>
-        </body>
-        </html>
-      `;
+      const xmlSpreadsheet = `<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" ss:Size="11"/>
+  </Style>
+  <Style ss:ID="sTitle">
+   <Font ss:FontName="Calibri" ss:Size="14" ss:Bold="1" ss:Color="#0F172A"/>
+  </Style>
+  <Style ss:ID="sMeta">
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#334155"/>
+  </Style>
+  <Style ss:ID="sHeader">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#0F172A" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="sCell">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="sCenter">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="sNum">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="sRed">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#B91C1C"/>
+   <Interior ss:Color="#FEE2E2" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="sWarn">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
+   </Borders>
+   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#B45309"/>
+   <Interior ss:Color="#FEF3C7" ss:Pattern="Solid"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Cycle Time Report">
+  <Table>
+   <Column ss:Width="55"/>
+   <Column ss:Width="80"/>
+   <Column ss:Width="80"/>
+   <Column ss:Width="170"/>
+   <Column ss:Width="135"/>
+   <Column ss:Width="135"/>
+   <Column ss:Width="185"/>
+   <Column ss:Width="110"/>
+   <Row ss:Height="24">
+    <Cell ss:StyleID="sTitle"><Data ss:Type="String">REPORT CYCLE TIME HARYAN</Data></Cell>
+   </Row>
+   <Row ss:Height="20">
+    <Cell ss:StyleID="sMeta"><Data ss:Type="String">${escapeXml(`Line: ${state.lineName} | Style: ${state.styleName} | Takt Time: ${state.taktTime}${unit}`)}</Data></Cell>
+   </Row>
+   <Row ss:Height="20">
+    <Cell ss:StyleID="sMeta"><Data ss:Type="String">${escapeXml(`Total CT: ${formatTimeValue(totalCT)}${unit} | Efisiensi: ${efficiencyPct}% | Avg CT: ${formatTimeValue(avgCT)}${unit} | Kapasitas: ${capPcs} pcs/jam`)}</Data></Cell>
+   </Row>
+   <Row ss:Height="10"/>
+   <Row ss:Height="24">
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Cycle #</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Lap Time</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Vs Target</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Proses</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Operator</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Machine</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Action</Data></Cell>
+    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Kapasitas (pcs/jam)</Data></Cell>
+   </Row>${dataRowsXml}
+  </Table>
+ </Worksheet>
+</Workbook>`;
 
-      const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      const blob = new Blob(['\uFEFF' + xmlSpreadsheet], { type: 'application/vnd.ms-excel;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
