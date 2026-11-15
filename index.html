@@ -1007,6 +1007,8 @@
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
       const avgCT = totalCT / state.cycles.length;
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
+      const efficiencyPct = calculateLineEfficiency().toFixed(1);
+
       const top3Lines = top3.map((c, idx) => {
         const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
         return `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - ${c.operatorName || '-'} | ${c.machineName || '-'} | ${cap} pcs/jam`;
