@@ -141,7 +141,7 @@
           Ekspor & Bagikan Laporan
         </label>
         <button onclick="handleExportExcel(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
-          <span>📥 Download Laporan Excel (.xls)</span>
+          <span>📥 Download Laporan Excel (.xlsx)</span>
         </button>
         <button onclick="handleShareWhatsApp(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
           <span>💬 Kirim Rangkuman ke WhatsApp</span>
@@ -869,14 +869,13 @@
         }
 
         const heightPercent = Math.min(100, Math.max(8, (item.lapTime / maxVal) * 100));
-        const rankIdx = top3Ids.indexOf(item.id);
 
         return `
           <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
             <span class="text-xs font-bold ${textColor}">${formatTimeValue(item.lapTime)}${unit}</span>
             <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
               <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
-                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/60 px-1 py-0.5 rounded">TOP ${rankIdx + 1}</span></div>` : ''}
+                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">TOP 3</span></div>` : ''}
               </div>
             </div>
             <div class="text-center w-full">
@@ -889,10 +888,12 @@
       }).join('');
 
       paretoContainer.innerHTML = `
-        <div class="overflow-x-auto pb-4 pt-6 custom-table-scroll">
+        <div class="overflow-x-auto pb-4 pt-6">
           <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
             <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomOffset}px">
-              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">Target Takt Time: ${state.taktTime}${unit}</span>
+              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">
+                Target Takt Time: ${state.taktTime}${unit}
+              </span>
             </div>
             ${barsHtml}
           </div>
@@ -901,11 +902,11 @@
 
       analysisBody.innerHTML = chronological.map((item, idx) => {
         const cycleNum = idx + 1;
-        const vsVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
-        const isTop3 = top3Ids.includes(item.id);
+        const vsTargetVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
         const isOver = item.lapTime > state.taktTime;
+        const isTop3 = top3Ids.includes(item.id);
         const isCombine = item.lapTime <= state.taktTime / 2;
-        const capPcs = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
+        const cap = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
 
         let badgeHtml = `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">✅ Normal Balance</span>`;
         if (isTop3) {
@@ -923,15 +924,15 @@
             <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.operatorName || '-'}</td>
             <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.machineName || '-'}</td>
             <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${formatTimeValue(item.lapTime)}${unit}</td>
-            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsVal > 0 ? '+' : ''}${formatTimeValue(vsVal)}${unit}</td>
+            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsTargetVal > 0 ? `+${formatTimeValue(vsTargetVal)}` : formatTimeValue(vsTargetVal)}${unit}</td>
             <td class="p-3.5 whitespace-nowrap">${badgeHtml}</td>
-            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${capPcs} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
+            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${cap} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
           </tr>
         `;
       }).join('');
     }
 
-    // 9. EXPORT EXCEL (.XLS NATIVE XML SPREADSHEET UNTUK WPS / MS OFFICE HP) & SHARE WHATSAPP
+    // 9. EXPORT EXCEL (.XLSX ASLI / OFFICE OPEN XML ZIP UNTUK WPS & MS OFFICE HP) & SHARE WHATSAPP
     function escapeXml(unsafe) {
       return String(unsafe)
         .replace(/&/g, '&amp;')
@@ -939,6 +940,88 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
+    }
+
+    function createZipBlob(files) {
+      const crcTable = new Uint32Array(256);
+      for (let i = 0; i < 256; i++) {
+        let c = i;
+        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+        crcTable[i] = c;
+      }
+      const crc32 = (buf) => {
+        let crc = 0xFFFFFFFF;
+        for (let i = 0; i < buf.length; i++) crc = crcTable[(crc ^ buf[i]) & 0xFF] ^ (crc >>> 8);
+        return (crc ^ 0xFFFFFFFF) >>> 0;
+      };
+
+      const encoder = new TextEncoder();
+      const parts = [];
+      const centralDir = [];
+      let offset = 0;
+
+      for (const file of files) {
+        const nameBytes = encoder.encode(file.name);
+        const dataBytes = encoder.encode(file.content);
+        const crc = crc32(dataBytes);
+
+        const localHeader = new Uint8Array(30 + nameBytes.length);
+        const lv = new DataView(localHeader.buffer);
+        lv.setUint32(0, 0x04034b50, true);
+        lv.setUint16(4, 20, true);
+        lv.setUint16(6, 0x0800, true);
+        lv.setUint16(8, 0, true);
+        lv.setUint16(10, 0, true);
+        lv.setUint16(12, 0, true);
+        lv.setUint32(14, crc, true);
+        lv.setUint32(18, dataBytes.length, true);
+        lv.setUint32(22, dataBytes.length, true);
+        lv.setUint16(26, nameBytes.length, true);
+        lv.setUint16(28, 0, true);
+        localHeader.set(nameBytes, 30);
+
+        parts.push(localHeader, dataBytes);
+
+        const cdHeader = new Uint8Array(46 + nameBytes.length);
+        const cv = new DataView(cdHeader.buffer);
+        cv.setUint32(0, 0x02014b50, true);
+        cv.setUint16(4, 20, true);
+        cv.setUint16(6, 20, true);
+        cv.setUint16(8, 0x0800, true);
+        cv.setUint16(10, 0, true);
+        cv.setUint16(12, 0, true);
+        cv.setUint16(14, 0, true);
+        cv.setUint32(16, crc, true);
+        cv.setUint32(20, dataBytes.length, true);
+        cv.setUint32(24, dataBytes.length, true);
+        cv.setUint16(28, nameBytes.length, true);
+        cv.setUint16(30, 0, true);
+        cv.setUint16(32, 0, true);
+        cv.setUint16(34, 0, true);
+        cv.setUint16(36, 0, true);
+        cv.setUint32(38, 0, true);
+        cv.setUint32(42, offset, true);
+        cdHeader.set(nameBytes, 46);
+
+        centralDir.push(cdHeader);
+        offset += localHeader.length + dataBytes.length;
+      }
+
+      const cdSize = centralDir.reduce((sum, item) => sum + item.length, 0);
+      const eocd = new Uint8Array(22);
+      const ev = new DataView(eocd.buffer);
+      ev.setUint32(0, 0x06054b50, true);
+      ev.setUint16(4, 0, true);
+      ev.setUint16(6, 0, true);
+      ev.setUint16(8, files.length, true);
+      ev.setUint16(10, files.length, true);
+      ev.setUint32(12, cdSize, true);
+      ev.setUint32(16, offset, true);
+      ev.setUint16(20, 0, true);
+
+      return new Blob([...parts, ...centralDir, eocd], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
     }
 
     function handleExportExcel() {
@@ -954,155 +1037,155 @@
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
       const efficiencyPct = calculateLineEfficiency().toFixed(1);
 
-      const dataRowsXml = chronological.map((c, idx) => {
+      const inlineStrCell = (ref, val, style = 0) =>
+        `<c r="${ref}" t="inlineStr" s="${style}"><is><t>${escapeXml(val)}</t></is></c>`;
+      const numCell = (ref, val, style = 0) =>
+        `<c r="${ref}" s="${style}"><v>${val}</v></c>`;
+
+      let rowsXml = `
+        <row r="1" ht="24" customHeight="1">${inlineStrCell('A1', 'REPORT CYCLE TIME HARYAN', 1)}</row>
+        <row r="2" ht="19" customHeight="1">${inlineStrCell('A2', `Line: ${state.lineName} | Style: ${state.styleName} | Takt Time: ${state.taktTime}${unit}`, 2)}</row>
+        <row r="3" ht="19" customHeight="1">${inlineStrCell('A3', `Total CT: ${formatTimeValue(totalCT)}${unit} | Efisiensi: ${efficiencyPct}% | Avg CT: ${formatTimeValue(avgCT)}${unit} | Kapasitas: ${capPcs} pcs/jam`, 2)}</row>
+        <row r="5" ht="22" customHeight="1">
+          ${inlineStrCell('A5', 'Cycle #', 3)}
+          ${inlineStrCell('B5', `Lap Time (${unit})`, 3)}
+          ${inlineStrCell('C5', `Vs Target (${unit})`, 3)}
+          ${inlineStrCell('D5', 'Proses', 3)}
+          ${inlineStrCell('E5', 'Operator', 3)}
+          ${inlineStrCell('F5', 'Machine', 3)}
+          ${inlineStrCell('G5', 'Action', 3)}
+          ${inlineStrCell('H5', 'Kapasitas (pcs/jam)', 3)}
+        </row>`;
+
+      chronological.forEach((c, idx) => {
+        const r = idx + 6;
         const isTop3 = top3Ids.includes(c.id);
         const isOver = c.lapTime > state.taktTime;
         const isCombine = c.lapTime <= state.taktTime / 2;
+
         let statusText = 'Normal Balance';
-        let styleId = 'sCell';
+        let statusStyle = 4;
         if (isTop3) {
           statusText = 'Improve Immediately (Top 3 Bottleneck)';
-          styleId = 'sRed';
+          statusStyle = 5;
         } else if (isOver) {
           statusText = 'Bottleneck';
-          styleId = 'sWarn';
+          statusStyle = 6;
         } else if (isCombine) {
           statusText = 'Potential Combine';
         }
 
+        const lapVal = parseFloat(formatTimeValue(c.lapTime));
+        const vsVal = parseFloat(formatTimeValue(c.vsTarget));
         const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
-        const vsStr = `${c.vsTarget > 0 ? '+' : ''}${formatTimeValue(c.vsTarget)}${unit}`;
 
-        return `
-      <Row ss:Height="22">
-        <Cell ss:StyleID="sCenter"><Data ss:Type="Number">${idx + 1}</Data></Cell>
-        <Cell ss:StyleID="sNum"><Data ss:Type="String">${escapeXml(formatTimeValue(c.lapTime) + unit)}</Data></Cell>
-        <Cell ss:StyleID="sNum"><Data ss:Type="String">${escapeXml(vsStr)}</Data></Cell>
-        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.processName)}</Data></Cell>
-        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.operatorName || '-')}</Data></Cell>
-        <Cell ss:StyleID="sCell"><Data ss:Type="String">${escapeXml(c.machineName || '-')}</Data></Cell>
-        <Cell ss:StyleID="${styleId}"><Data ss:Type="String">${escapeXml(statusText)}</Data></Cell>
-        <Cell ss:StyleID="sNum"><Data ss:Type="Number">${cap}</Data></Cell>
-      </Row>`;
-      }).join('');
+        rowsXml += `
+        <row r="${r}" ht="20" customHeight="1">
+          ${numCell(`A${r}`, idx + 1, 4)}
+          ${numCell(`B${r}`, lapVal, 4)}
+          ${numCell(`C${r}`, vsVal, 4)}
+          ${inlineStrCell(`D${r}`, c.processName || '-', 4)}
+          ${inlineStrCell(`E${r}`, c.operatorName || '-', 4)}
+          ${inlineStrCell(`F${r}`, c.machineName || '-', 4)}
+          ${inlineStrCell(`G${r}`, statusText, statusStyle)}
+          ${numCell(`H${r}`, cap, 4)}
+        </row>`;
+      });
 
-      const xmlSpreadsheet = `<?xml version="1.0" encoding="UTF-8"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
- <Styles>
-  <Style ss:ID="Default" ss:Name="Normal">
-   <Alignment ss:Vertical="Center"/>
-   <Font ss:FontName="Calibri" ss:Size="11"/>
-  </Style>
-  <Style ss:ID="sTitle">
-   <Font ss:FontName="Calibri" ss:Size="14" ss:Bold="1" ss:Color="#0F172A"/>
-  </Style>
-  <Style ss:ID="sMeta">
-   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#334155"/>
-  </Style>
-  <Style ss:ID="sHeader">
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
-   </Borders>
-   <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
-   <Interior ss:Color="#0F172A" ss:Pattern="Solid"/>
-  </Style>
-  <Style ss:ID="sCell">
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-   </Borders>
-  </Style>
-  <Style ss:ID="sCenter">
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-   </Borders>
-  </Style>
-  <Style ss:ID="sNum">
-   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-   </Borders>
-   <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1"/>
-  </Style>
-  <Style ss:ID="sRed">
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-   </Borders>
-   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#B91C1C"/>
-   <Interior ss:Color="#FEE2E2" ss:Pattern="Solid"/>
-  </Style>
-  <Style ss:ID="sWarn">
-   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
-   <Borders>
-    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#CBD5E1"/>
-   </Borders>
-   <Font ss:FontName="Calibri" ss:Size="10" ss:Bold="1" ss:Color="#B45309"/>
-   <Interior ss:Color="#FEF3C7" ss:Pattern="Solid"/>
-  </Style>
- </Styles>
- <Worksheet ss:Name="Cycle Time Report">
-  <Table>
-   <Column ss:Width="55"/>
-   <Column ss:Width="80"/>
-   <Column ss:Width="80"/>
-   <Column ss:Width="170"/>
-   <Column ss:Width="135"/>
-   <Column ss:Width="135"/>
-   <Column ss:Width="185"/>
-   <Column ss:Width="110"/>
-   <Row ss:Height="24">
-    <Cell ss:StyleID="sTitle"><Data ss:Type="String">REPORT CYCLE TIME HARYAN</Data></Cell>
-   </Row>
-   <Row ss:Height="20">
-    <Cell ss:StyleID="sMeta"><Data ss:Type="String">${escapeXml(`Line: ${state.lineName} | Style: ${state.styleName} | Takt Time: ${state.taktTime}${unit}`)}</Data></Cell>
-   </Row>
-   <Row ss:Height="20">
-    <Cell ss:StyleID="sMeta"><Data ss:Type="String">${escapeXml(`Total CT: ${formatTimeValue(totalCT)}${unit} | Efisiensi: ${efficiencyPct}% | Avg CT: ${formatTimeValue(avgCT)}${unit} | Kapasitas: ${capPcs} pcs/jam`)}</Data></Cell>
-   </Row>
-   <Row ss:Height="10"/>
-   <Row ss:Height="24">
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Cycle #</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Lap Time</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Vs Target</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Proses</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Operator</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Machine</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Action</Data></Cell>
-    <Cell ss:StyleID="sHeader"><Data ss:Type="String">Kapasitas (pcs/jam)</Data></Cell>
-   </Row>${dataRowsXml}
-  </Table>
- </Worksheet>
-</Workbook>`;
+      const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+  <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
+  <Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+</Types>`;
 
-      const blob = new Blob(['\uFEFF' + xmlSpreadsheet], { type: 'application/vnd.ms-excel;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
+      const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>`;
+
+      const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <sheets>
+    <sheet name="Cycle Time Report" sheetId="1" r:id="rId1"/>
+  </sheets>
+</workbook>`;
+
+      const workbookRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>`;
+
+      const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <fonts count="6">
+    <font><sz val="11"/><name val="Calibri"/></font>
+    <font><b/><sz val="14"/><color rgb="FF0F172A"/><name val="Calibri"/></font>
+    <font><b/><sz val="10"/><color rgb="FF334155"/><name val="Calibri"/></font>
+    <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
+    <font><b/><sz val="10"/><color rgb="FFB91C1C"/><name val="Calibri"/></font>
+    <font><b/><sz val="10"/><color rgb="FFB45309"/><name val="Calibri"/></font>
+  </fonts>
+  <fills count="5">
+    <fill><patternFill patternType="none"/></fill>
+    <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FF0F172A"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFFEE2E2"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFFEF3C7"/></patternFill></fill>
+  </fills>
+  <borders count="2">
+    <border><left/><right/><top/><bottom/><diagonal/></border>
+    <border>
+      <left style="thin"><color rgb="FFCBD5E1"/></left>
+      <right style="thin"><color rgb="FFCBD5E1"/></right>
+      <top style="thin"><color rgb="FFCBD5E1"/></top>
+      <bottom style="thin"><color rgb="FFCBD5E1"/></bottom>
+      <diagonal/>
+    </border>
+  </borders>
+  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+  <cellXfs count="7">
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+    <xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+    <xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+    <xf numFmtId="0" fontId="4" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+    <xf numFmtId="0" fontId="5" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+  </cellXfs>
+</styleSheet>`;
+
+      const sheet1Xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <cols>
+    <col min="1" max="1" width="10" customWidth="1"/>
+    <col min="2" max="2" width="14" customWidth="1"/>
+    <col min="3" max="3" width="14" customWidth="1"/>
+    <col min="4" max="4" width="26" customWidth="1"/>
+    <col min="5" max="5" width="20" customWidth="1"/>
+    <col min="6" max="6" width="20" customWidth="1"/>
+    <col min="7" max="7" width="32" customWidth="1"/>
+    <col min="8" max="8" width="20" customWidth="1"/>
+  </cols>
+  <sheetData>${rowsXml}</sheetData>
+</worksheet>`;
+
+      const xlsxBlob = createZipBlob([
+        { name: '[Content_Types].xml', content: contentTypesXml },
+        { name: '_rels/.rels', content: relsXml },
+        { name: 'xl/workbook.xml', content: workbookXml },
+        { name: 'xl/_rels/workbook.xml.rels', content: workbookRelsXml },
+        { name: 'xl/styles.xml', content: stylesXml },
+        { name: 'xl/worksheets/sheet1.xml', content: sheet1Xml }
+      ]);
+
+      const url = URL.createObjectURL(xlsxBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xls`;
+      a.download = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xlsx`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
