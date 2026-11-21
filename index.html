@@ -4,52 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Aplikasi Stopwatch Cycle Time & Analisis Line Produksi Mandiri (100% Offline PWA)" />
+  <meta name="theme-color" content="#070706" />
   <title>Cycle Time Haryan — Offline PWA Stopwatch</title>
 
-  <!-- Favicon & Apple Touch Icon Logo Stopwatch Huruf H (Glowing Backlit White) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Cdefs%3E%3Cfilter id='g' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeGaussianBlur stdDeviation='6' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Cg filter='url(%23g)'%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23ffffff' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23ffffff' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23ffffff' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23ffffff' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23ffffff' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23ffffff' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23ffffff' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23ffffff' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23ffffff' /%3E%3C/g%3E%3C/svg%3E" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Cdefs%3E%3Cfilter id='g' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeGaussianBlur stdDeviation='6' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Cg filter='url(%23g)'%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23ffffff' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23ffffff' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23ffffff' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23ffffff' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23ffffff' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23ffffff' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23ffffff' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23ffffff' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23ffffff' /%3E%3C/g%3E%3C/svg%3E" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23ffffff' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23ffffff' /%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23ffffff' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23ffffff' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23ffffff' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23ffffff' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23ffffff' /%3E%3C/svg%3E" />
 
-  <!-- Preconnect & Non-Blocking Font Loading agar Instan saat Dibuka di HP -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
 
-  <!-- Critical Inline CSS agar Splash Screen langsung tampil 0ms tanpa menunggu Tailwind CDN -->
   <style>
     html, body { background-color: #070706; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     #splashScreen {
-      position: fixed; inset: 0; z-index: 50; background-color: #070706;
+      position: fixed; inset: 0; z-index: 60; background-color: #070706;
       display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      padding: 1.5rem; transition: opacity 0.4s ease;
+      padding: 1.5rem; transition: opacity 0.35s ease;
     }
-  </style>
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     @keyframes macbookGlow {
-      0%, 100% {
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 26px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 48px rgba(226, 232, 240, 0.25));
-      }
-      50% {
-        filter: drop-shadow(0 0 14px rgba(255, 255, 255, 1)) drop-shadow(0 0 36px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 64px rgba(255, 255, 255, 0.35));
-      }
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85)) drop-shadow(0 0 26px rgba(255, 255, 255, 0.5)); }
+      50% { filter: drop-shadow(0 0 14px rgba(255, 255, 255, 1)) drop-shadow(0 0 36px rgba(255, 255, 255, 0.7)); }
     }
-    .logo-macbook-glow {
-      animation: macbookGlow 3s ease-in-out infinite;
-    }
-    .text-macbook-glow {
-      text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 28px rgba(255, 255, 255, 0.4);
-    }
+    .logo-macbook-glow { animation: macbookGlow 3s ease-in-out infinite; }
+    .text-macbook-glow { text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 28px rgba(255, 255, 255, 0.4); }
     .custom-table-scroll::-webkit-scrollbar { height: 10px; width: 10px; }
     .custom-table-scroll::-webkit-scrollbar-track { background: #0f172a; border-radius: 8px; }
     .custom-table-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; border: 2px solid #0f172a; }
     .custom-table-scroll::-webkit-scrollbar-thumb:hover { background: #10b981; }
-    .light-mode .custom-table-scroll::-webkit-scrollbar-track { background: #e2e8f0; }
-    .light-mode .custom-table-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-color: #e2e8f0; }
     @keyframes tutorialRingPulse {
       0%, 100% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.85), 0 0 24px rgba(16, 185, 129, 0.55); }
       50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.35), 0 0 32px rgba(16, 185, 129, 0.85); }
@@ -61,14 +42,13 @@
       animation: tutorialRingPulse 1.5s infinite ease-in-out;
     }
   </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen transition-colors duration-300 pb-44 text-base overflow-x-hidden">
 
-  <!-- ================================================================= -->
-  <!-- POPUP BANNER TUTORIAL ATAS (MUNCUL SETELAH SPLASH SCREEN)         -->
-  <!-- ================================================================= -->
+  <!-- POPUP BANNER TUTORIAL ATAS -->
   <div id="tutorialPromptBanner" class="hidden fixed top-3 left-3 right-3 sm:left-auto sm:right-6 sm:w-96 z-50 transition-all duration-300 -translate-y-28 opacity-0 touch-pan-y select-none">
-    <div id="tutorialPromptCard" class="bg-slate-900/95 border-2 border-emerald-500/80 text-white rounded-2xl p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.65)] backdrop-blur-md cursor-pointer active:scale-[0.98] transition-transform">
+    <div id="tutorialPromptCard" onclick="startTutorial(true)" class="bg-slate-900 border-2 border-emerald-500/80 text-white rounded-2xl p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.65)] cursor-pointer active:scale-[0.98] transition-transform">
       <div class="w-10 h-1 bg-slate-600 rounded-full mx-auto mb-2.5" title="Geser ke atas atau samping untuk menutup"></div>
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 flex-shrink-0">
@@ -83,28 +63,26 @@
             Butuh tutorial singkat cara pakai?
           </p>
           <p class="text-[11px] text-slate-300 mt-0.5">
-            Ketuk di sini untuk mulai panduan, atau geser untuk melewati.
+            Ketuk di sini untuk mulai panduan suara, atau geser untuk melewati.
           </p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- OVERLAY & KARTU INTERAKTIF TUTORIAL STEP-BY-STEP                  -->
-  <!-- ================================================================= -->
+  <!-- OVERLAY (TANPA BLUR) & KARTU TUTORIAL ADAPTIF -->
   <div id="tutorialBackdrop" class="hidden fixed inset-0 bg-transparent pointer-events-none z-[55]"></div>
-  <div id="tutorialGuideCard" class="hidden fixed w-[calc(100vw-24px)] max-w-[380px] z-[70] bg-slate-900/95 border-2 border-emerald-500 text-white rounded-2xl p-4 shadow-[0_12px_36px_rgba(0,0,0,0.65)] transition-all duration-300 space-y-2.5">
+  <div id="tutorialGuideCard" class="hidden fixed w-[calc(100vw-24px)] max-w-[380px] z-[70] bg-slate-900 border-2 border-emerald-500 text-white rounded-2xl p-4 shadow-[0_12px_36px_rgba(0,0,0,0.65)] transition-all duration-300 space-y-2.5">
     <div id="tutorialPointerArrow" class="hidden sm:block absolute w-3.5 h-3.5 bg-slate-900 border-emerald-500 rotate-45"></div>
     <div class="flex items-center justify-between gap-1.5">
       <span id="tutorialStepBadge" class="text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
         Langkah 1 / 11
       </span>
       <div class="flex items-center gap-1">
-        <button id="btnTutVoiceToggle" onclick="toggleTutorialVoice()" class="text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 cursor-pointer" title="Aktifkan/Matikan Suara Panduan">
+        <button id="btnTutVoiceToggle" onclick="toggleTutorialVoice()" class="text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 cursor-pointer">
           Suara: ON
         </button>
-        <button id="btnTutAutoPlay" onclick="toggleTutorialAutoPlay()" class="text-xs font-bold px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 cursor-pointer" title="Putar Otomatis Seperti Video">
+        <button id="btnTutAutoPlay" onclick="toggleTutorialAutoPlay()" class="text-xs font-bold px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 cursor-pointer">
           ▶ Auto
         </button>
         <button onclick="endTutorial()" class="text-xs font-bold text-slate-400 hover:text-rose-400 px-1.5 py-1 rounded-lg cursor-pointer">
@@ -127,22 +105,15 @@
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- SPLASH SCREEN 3 DETIK                                             -->
-  <!-- ================================================================= -->
-  <div id="splashScreen" class="fixed inset-0 z-50 bg-[#070706] flex flex-col items-center justify-between p-6 transition-opacity duration-700">
+  <!-- SPLASH SCREEN -->
+  <div id="splashScreen" class="fixed inset-0 z-60 bg-[#070706] flex flex-col items-center justify-between p-6 transition-opacity duration-500">
     <div class="w-full"></div>
     <div class="flex flex-col items-center text-center space-y-6">
       <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-[#070706] flex items-center justify-center relative">
         <div class="absolute inset-0 bg-white/15 blur-2xl rounded-full scale-110 pointer-events-none"></div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 250" fill="none" class="w-24 h-24 sm:w-32 sm:h-32 logo-macbook-glow relative z-10">
-          <rect width="220" height="250" rx="48" fill="transparent"/>
           <rect x="92" y="12" width="36" height="16" rx="4" fill="#ffffff" />
           <rect x="103" y="26" width="14" height="14" fill="#ffffff" />
-          <g transform="translate(166, 46) rotate(42)">
-            <rect x="-12" y="-7" width="24" height="11" rx="3" fill="#ffffff" />
-            <rect x="-5" y="3" width="10" height="11" fill="#ffffff" />
-          </g>
           <path d="M 90 218 A 84 84 0 1 1 130 218" stroke="#ffffff" stroke-width="15" stroke-linecap="butt" />
           <path d="M 74 102 L 92 102 L 92 224 L 74 224 Z" fill="#ffffff" />
           <rect x="86" y="148" width="48" height="16" fill="#ffffff" />
@@ -167,12 +138,8 @@
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- WRAPPER UTAMA (MENDUKUNG SKALA ZOOM)                              -->
-  <!-- ================================================================= -->
+  <!-- WRAPPER UTAMA -->
   <div id="appRoot" class="origin-top-left transition-transform duration-150">
-
-    <!-- Top Navbar Header -->
     <header id="topHeader" class="bg-slate-900/90 border-slate-800 border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between gap-2">
       <div class="flex items-center gap-3 min-w-0">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 flex-shrink-0 text-slate-950 font-black">
@@ -191,99 +158,82 @@
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
           <span class="hidden md:inline">Offline Ready</span>
         </span>
-
         <span id="activeModuleBadge" class="text-xs font-extrabold px-3 py-2 rounded-xl bg-slate-800 border border-slate-700/80 text-emerald-400 tracking-wide">
           Stopwatch
         </span>
-
-        <button onclick="toggleMenuModal()" id="btnMenuToggle" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold border bg-slate-800 border-slate-700 text-white hover:bg-slate-700 transition-all cursor-pointer">
-          <svg id="menuIcon" class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <button onclick="toggleMenuModal()" id="btnOpenMenu" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-bold border bg-slate-800 border-slate-700 text-white hover:bg-slate-700 transition-all cursor-pointer">
+          <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
           <span>Menu</span>
         </button>
       </div>
     </header>
 
-    <!-- Dropdown Menu Modal -->
-    <div id="menuOverlay" class="hidden fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40" onclick="toggleMenuModal()"></div>
+    <!-- Dropdown Menu (Tanpa overlay gelap/blur saat tutorial) -->
+    <div id="menuOverlay" class="hidden fixed inset-0 z-40" onclick="toggleMenuModal()"></div>
     <div id="menuDropdown" class="hidden fixed top-16 right-3 sm:right-6 w-80 z-50 p-4 rounded-2xl border shadow-2xl bg-slate-900 border-slate-800 text-white space-y-4">
       <div>
-        <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">
-          Navigasi Modul Simulasi
-        </label>
+        <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">Navigasi Modul Simulasi</label>
         <div class="grid grid-cols-3 gap-1.5">
-          <button onclick="switchTab('settings')" id="navBtnSettings" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
+          <button onclick="switchTab('settings'); toggleMenuModal();" id="menuBtnSetting" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
             Setting
           </button>
-          <button onclick="switchTab('tracker')" id="navBtnTracker" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md">
+          <button onclick="switchTab('tracker'); toggleMenuModal();" id="menuBtnStopwatch" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md">
             Stopwatch
           </button>
-          <button onclick="switchTab('analysis')" id="navBtnAnalysis" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
+          <button onclick="switchTab('analysis'); toggleMenuModal();" id="menuBtnAnalisis" class="p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300">
             Analisis
           </button>
         </div>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs font-extrabold uppercase tracking-wider block text-slate-400">
-          Ekspor & Bagikan Laporan
-        </label>
-        <div id="menuExportGroup" class="space-y-2 rounded-xl">
-          <button id="btnExportExcel" onclick="handleExportExcel(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            <span>Download Laporan Excel (.xlsx)</span>
-          </button>
-          <button id="btnShareWa" onclick="handleShareWhatsApp(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            <span>Kirim Rangkuman ke WhatsApp</span>
-          </button>
-        </div>
+        <label class="text-xs font-extrabold uppercase tracking-wider block text-slate-400">Ekspor & Bagikan Laporan</label>
+        <button id="btnExportExcel" onclick="handleExportExcel(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          <span>Download Laporan Excel (.xlsx)</span>
+        </button>
+        <button id="btnShareWhatsApp" onclick="handleShareWhatsApp(); toggleMenuModal();" class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white p-2.5 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>Kirim Rangkuman ke WhatsApp</span>
+        </button>
       </div>
 
-      <div class="pt-3 border-t border-slate-800">
-        <label class="text-xs font-extrabold uppercase tracking-wider block mb-2 text-slate-400">
-          Tampilan & Skala
-        </label>
-        <div class="flex items-center justify-between gap-2 mb-2.5">
+      <div class="pt-3 border-t border-slate-800 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
           <button onclick="toggleTheme()" id="btnThemeToggle" class="flex-1 flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold border bg-slate-800 border-slate-700 text-amber-400 cursor-pointer">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
             <span>Light Mode</span>
           </button>
-
           <div class="flex items-center p-1 rounded-xl border bg-slate-800 border-slate-700">
             <button onclick="changeZoom(-10)" class="px-2 py-1 text-slate-300 hover:text-white font-bold cursor-pointer">-</button>
             <span id="zoomLabel" class="text-xs font-bold px-1.5">100%</span>
             <button onclick="changeZoom(10)" class="px-2 py-1 text-slate-300 hover:text-white font-bold cursor-pointer">+</button>
           </div>
         </div>
-        <button onclick="toggleMenuModal(); startTutorial();" class="w-full flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold border bg-slate-800/80 border-emerald-500/40 text-emerald-400 hover:bg-slate-800 transition-all cursor-pointer">
+        <button onclick="toggleMenuModal(); startTutorial(true);" class="w-full flex items-center justify-center gap-2 p-2 rounded-xl text-xs font-bold border bg-slate-800/80 border-emerald-500/40 text-emerald-400 hover:bg-slate-800 transition-all cursor-pointer">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
           <span>Buka Panduan Tutorial</span>
         </button>
       </div>
     </div>
 
-    <!-- Main Container -->
     <main class="max-w-7xl mx-auto px-3 sm:px-8 py-4 sm:py-6 space-y-6">
-
-      <!-- TAB 1: TRACKER / STOPWATCH -->
+      <!-- TAB 1: STOPWATCH -->
       <div id="viewTracker" class="space-y-6">
-        <section id="cardLogSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+        <section class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
               <svg class="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
-              <h2 class="text-base font-bold">
-                Log (<span id="logCountLabel">5</span>)
-              </h2>
+              <h2 class="text-base font-bold">Log (<span id="logCountLabel">0</span>)</h2>
             </div>
-            <button onclick="handleClearLog()" id="btnClearLog" class="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors flex items-center gap-1.5">
+            <button onclick="handleClearLog()" class="text-sm text-rose-400 hover:text-rose-300 font-semibold cursor-pointer transition-colors flex items-center gap-1.5">
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
               <span>Hapus Semua Log</span>
             </button>
           </div>
-
-          <div id="tableScrollContainer" class="overflow-x-auto overflow-y-auto custom-table-scroll border border-slate-800 rounded-xl max-h-[52vh] pb-1">
+          <div id="logTableContainer" class="overflow-x-auto overflow-y-auto custom-table-scroll border border-slate-800 rounded-xl max-h-[52vh] pb-1">
             <table class="w-full min-w-[920px] text-left text-sm">
-              <thead id="trackerTableHead" class="bg-slate-950 border-slate-800 text-slate-300 border-b sticky top-0 z-10 shadow-sm whitespace-nowrap">
+              <thead class="bg-slate-950 border-slate-800 text-slate-300 border-b sticky top-0 z-10 whitespace-nowrap">
                 <tr>
                   <th class="p-3.5 w-24">Cycle #</th>
                   <th class="p-3.5">Lap Time (<span class="unit-symbol">s</span>)</th>
@@ -294,44 +244,33 @@
                   <th class="p-3.5 w-28 text-center">Edit Time</th>
                 </tr>
               </thead>
-              <tbody id="trackerTableBody" class="divide-y divide-slate-800/40">
-                <!-- Rendered via JS -->
-              </tbody>
+              <tbody id="trackerTableBody" class="divide-y divide-slate-800/40"></tbody>
             </table>
           </div>
         </section>
       </div>
 
-      <!-- TAB 2: ANALYSIS & PARETO -->
+      <!-- TAB 2: ANALISIS -->
       <div id="viewAnalysis" class="hidden space-y-6">
-        <section id="cardParetoSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+        <section id="analisisSummarySection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
           <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
             <div class="flex items-center gap-2">
               <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
               <h2 class="text-lg font-bold">Analisis Pareto & Bottleneck Proses</h2>
             </div>
-            <span id="paretoMainBottleneckBadge" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
               <span>Top 3 Bottleneck (Merah)</span>
             </span>
           </div>
-
-          <div id="paretoChartContainer">
-            <!-- Rendered via JS -->
-          </div>
+          <div id="paretoChartContainer"></div>
         </section>
 
-        <section id="cardDetailAnalysisSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-2">
-              <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <h2 class="text-lg font-bold">Detail Analysis & Action</h2>
-            </div>
-          </div>
-
+        <section class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl">
+          <h2 class="text-lg font-bold mb-4">Detail Analysis, Action & Kapasitas</h2>
           <div class="overflow-x-auto custom-table-scroll border border-slate-800 rounded-xl pb-1">
             <table class="w-full min-w-[880px] text-left text-sm">
-              <thead id="analysisTableHead" class="bg-slate-950 border-slate-800 text-slate-300 border-b whitespace-nowrap">
+              <thead class="bg-slate-950 border-slate-800 text-slate-300 border-b whitespace-nowrap">
                 <tr>
                   <th class="p-3.5 w-20">Cycle #</th>
                   <th class="p-3.5">Proses</th>
@@ -343,41 +282,43 @@
                   <th class="p-3.5">Kapasitas Maks (pcs/jam)</th>
                 </tr>
               </thead>
-              <tbody id="analysisTableBody" class="divide-y divide-slate-800/40">
-                <!-- Rendered via JS -->
-              </tbody>
+              <tbody id="analysisTableBody" class="divide-y divide-slate-800/40"></tbody>
             </table>
           </div>
         </section>
       </div>
 
-      <!-- TAB 3: SETTINGS & PARAMETERS -->
+      <!-- TAB 3: SETTING -->
       <div id="viewSettings" class="hidden space-y-6">
-        <section id="cardSettingsSection" class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+        <section class="bg-slate-900/60 border-slate-800 border rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
           <h2 class="text-lg font-bold flex items-center gap-2">
             <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>Setting Parameter</span>
           </h2>
 
           <div class="flex flex-col space-y-4">
-            <div>
-              <label class="text-xs font-bold block mb-1.5 text-slate-300">Line</label>
-              <input type="text" id="settingLineInput" value="Line A - Jahit Kemeja" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+            <div id="settingLineGroup" class="space-y-4 p-2 rounded-xl">
+              <div>
+                <label class="text-xs font-bold block mb-1.5 text-slate-300">Line</label>
+                <input type="text" id="settingLineInput" value="Line A - Jahit Kemeja" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="text-xs font-bold block mb-1.5 text-slate-300">Model / Style</label>
+                <input type="text" id="settingStyleInput" value="Style Formal Slimfit" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              </div>
             </div>
-            <div>
-              <label class="text-xs font-bold block mb-1.5 text-slate-300">Model / Style</label>
-              <input type="text" id="settingStyleInput" value="Style Formal Slimfit" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
-            </div>
-            <div>
-              <label class="text-xs font-bold block mb-1.5 text-slate-300">Target Takt Time (<span class="unit-symbol">s</span>)</label>
-              <input type="number" id="settingTaktInput" value="45" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
-            </div>
-            <div>
-              <label class="text-xs font-bold block mb-1.5 text-slate-300">Satuan Waktu</label>
-              <select id="settingUnitSelect" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                <option value="seconds">Detik / Seconds (s)</option>
-                <option value="minutes">Menit / Minutes (m)</option>
-              </select>
+            <div id="settingTaktGroup" class="space-y-4 p-2 rounded-xl">
+              <div>
+                <label class="text-xs font-bold block mb-1.5 text-slate-300">Target Takt Time (<span class="unit-symbol">s</span>)</label>
+                <input type="number" id="settingTaktInput" value="45" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="text-xs font-bold block mb-1.5 text-slate-300">Satuan Waktu</label>
+                <select id="settingUnitSelect" class="w-full bg-slate-950 border-slate-800 text-white border rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                  <option value="seconds">Detik / Seconds (s)</option>
+                  <option value="minutes">Menit / Minutes (m)</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -389,46 +330,38 @@
           </div>
         </section>
       </div>
-
     </main>
 
-    <!-- Sticky Bottom Stopwatch Controller Bar (Disembunyikan saat Splash Screen) -->
+    <!-- STICKY BOTTOM STOPWATCH CONTROLLER BAR -->
     <div id="bottomControllerBar" class="hidden opacity-0 pointer-events-none fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500">
       <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
-        <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
-          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 border-slate-700/50">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-slate-700/50 pr-2">
             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">STOPWATCH:</span>
             <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
               <span id="metricStopwatch">0.0</span>
               <span class="text-[10px] font-normal text-amber-500 unit-symbol">s</span>
             </div>
           </div>
-
-          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-2 border-slate-700/50">
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 sm:border-r border-slate-700/50 sm:pr-2">
             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">TOTAL CT:</span>
             <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
-              <span id="metricTotalCT">0.0</span>
+              <span id="metricTotalCt">0.0</span>
               <span class="text-[10px] font-normal text-emerald-500 unit-symbol">s</span>
             </div>
           </div>
-
-          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 border-slate-700/50">
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-slate-700/50 pr-2">
             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">EFISIENSI:</span>
-            <div class="font-mono text-base sm:text-lg font-black text-rose-400 flex items-baseline gap-0.5">
-              <span id="metricEfficiency">0.0</span>
-              <span class="text-[10px] font-normal text-rose-400">%</span>
-            </div>
+            <span id="metricEfficiency" class="font-mono text-base sm:text-lg font-black text-sky-400">0.0%</span>
           </div>
-
-          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-2 border-slate-700/50">
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 sm:border-r border-slate-700/50 sm:pr-2">
             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">AVG CT:</span>
             <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
-              <span id="metricAvgCT">0.0</span>
+              <span id="metricAvgCt">0.0</span>
               <span class="text-[10px] font-normal text-cyan-500 unit-symbol">s</span>
             </div>
           </div>
-
-          <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center gap-1.5 pt-1 sm:pt-0">
+          <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center gap-1.5">
             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">KAPASITAS:</span>
             <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
               <span id="metricCapacity">0</span>
@@ -437,1815 +370,527 @@
           </div>
         </div>
 
-        <div id="stopwatchButtonsGroup" class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
-          <button id="btnStart" onclick="handleStart()" class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-            <span>START</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 w-full">
+          <button id="btnStart" onclick="handleStart()" class="flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-extrabold text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 cursor-pointer active:scale-95 transition-all">
+            <span>▶ START</span>
           </button>
-
-          <button id="btnStop" onclick="handleStop()" disabled class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-600/20 transition-all cursor-pointer active:scale-95">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
-            <span>STOP</span>
+          <button id="btnStop" onclick="handleStop()" disabled class="flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-extrabold text-xs sm:text-sm bg-rose-600 hover:bg-rose-500 disabled:bg-rose-950/40 disabled:text-rose-700 text-white cursor-pointer active:scale-95 transition-all">
+            <span>❚❚ STOP</span>
           </button>
-
-          <button id="btnReset" onclick="handleReset()" class="flex items-center justify-center gap-1.5 p-3 rounded-xl font-bold border bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 text-xs sm:text-sm transition-all cursor-pointer active:scale-95" title="Reset Stopwatch">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            <span class="hidden sm:inline">RESET</span>
+          <button id="btnReset" onclick="handleReset()" class="flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-extrabold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer active:scale-95 transition-all">
+            <span>↺ RESET</span>
           </button>
-
-          <button id="btnLap" onclick="handleLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition-all cursor-pointer active:scale-95">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-            <span>LAP / CYCLE</span>
+          <button id="btnLap" onclick="handleLap()" disabled class="flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-2 sm:px-3 rounded-xl font-extrabold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-950/40 disabled:text-indigo-700 text-white cursor-pointer active:scale-95 transition-all">
+            <span>+ LAP / CYCLE</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================================================================= -->
-  <!-- PURE VANILLA JAVASCRIPT ENGINE (100% OFFLINE & ANTI-BLANK)         -->
-  <!-- ================================================================= -->
+  <!-- MODAL EDIT WAKTU -->
+  <div id="editTimeModal" class="hidden fixed inset-0 bg-slate-950/75 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 w-full max-w-sm space-y-4 shadow-2xl">
+      <h3 class="text-base font-bold text-white">Edit Waktu Cycle #<span id="editModalCycleNum">1</span></h3>
+      <input type="number" step="0.1" id="editModalTimeInput" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-3 text-sm font-mono focus:outline-none focus:border-emerald-500" />
+      <div class="flex justify-end gap-2">
+        <button onclick="closeEditTimeModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 cursor-pointer">Batal</button>
+        <button onclick="confirmEditTime()" class="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 cursor-pointer">Simpan</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 1. OFFLINE INDEXED-DB STORAGE
-    const DB_NAME = 'CycleTimeHaryanOfflineDB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'appStateStore';
-
-    function openOfflineDB() {
-      return new Promise((resolve, reject) => {
-        if (!window.indexedDB) return reject(new Error('IndexedDB tidak didukung'));
-        const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME);
-          }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+    // Service Worker Offline Cache
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swCode = `
+          const CACHE_NAME = 'haryan-ct-v1';
+          self.addEventListener('install', e => {
+            e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(['./'])));
+            self.skipWaiting();
+          });
+          self.addEventListener('fetch', e => {
+            if (e.request.method !== 'GET') return;
+            e.respondWith(
+              caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
+                const clone = res.clone();
+                caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+                return res;
+              }).catch(() => cached))
+            );
+          });
+        `;
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
       });
     }
 
-    async function saveToDB(key, data) {
-      try {
-        const db = await openOfflineDB();
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        tx.objectStore(STORE_NAME).put(data, key);
-      } catch (e) {}
-    }
-
-    async function loadFromDB(key) {
-      try {
-        const db = await openOfflineDB();
-        return new Promise((resolve) => {
-          const tx = db.transaction(STORE_NAME, 'readonly');
-          const req = tx.objectStore(STORE_NAME).get(key);
-          req.onsuccess = () => resolve(req.result);
-          req.onerror = () => resolve(null);
-        });
-      } catch (e) {
-        return null;
-      }
-    }
-
-    // 2. APPLICATION STATE
-    const DEFAULT_CYCLES = [];
-
-    let state = {
-      activeTab: 'tracker',
-      isDarkMode: true,
-      zoomLevel: 100,
+    // State Aplikasi
+    const state = {
+      line: 'Line A - Jahit Kemeja',
+      style: 'Style Formal Slimfit',
       taktTime: 45,
-      timeUnit: 'seconds',
-      lineName: 'Line A - Jahit Kemeja',
-      styleName: 'Style Formal Slimfit',
+      unit: 'seconds',
+      zoom: 100,
       isRunning: false,
-      seconds: 0,
-      cycles: [],
-      editingCycleId: null
+      elapsedMs: 0,
+      lastTick: 0,
+      laps: [],
+      editingIndex: null
     };
+    let rafId = null;
 
-    let timerInterval = null;
-
-    // 3. INITIALIZATION & SPLASH SCREEN (CEPAT 1.5 DETIK)
-    window.addEventListener('DOMContentLoaded', async () => {
-      const splash = document.getElementById('splashScreen');
-      const progress = document.getElementById('splashProgress');
-      const bottomBar = document.getElementById('bottomControllerBar');
-      let pct = 0;
-      const splashTimer = setInterval(() => {
-        pct += 20;
-        if (progress) progress.style.width = pct + '%';
-        if (pct >= 100) {
-          clearInterval(splashTimer);
-          if (splash) {
-            splash.style.opacity = '0';
-            setTimeout(() => {
-              splash.remove();
-              if (bottomBar) {
-                bottomBar.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                  bottomBar.classList.remove('opacity-0', 'pointer-events-none');
-                });
-              }
-              showTutorialPromptBanner();
-            }, 400);
-          }
-        }
-      }, 280);
-
-      initTutorialSwipeGestures();
-
-      const savedCycles = await loadFromDB('cycles_data');
-      const savedSettings = await loadFromDB('settings_data');
-
-      if (Array.isArray(savedCycles)) state.cycles = savedCycles;
-      if (savedSettings) {
-        state.taktTime = savedSettings.taktTime ?? 45;
-        state.timeUnit = savedSettings.timeUnit ?? 'seconds';
-        state.lineName = savedSettings.lineName ?? 'Line A - Jahit Kemeja';
-        state.styleName = savedSettings.styleName ?? 'Style Formal Slimfit';
-        state.isDarkMode = savedSettings.isDarkMode ?? true;
-      }
-
-      document.getElementById('settingLineInput').value = state.lineName;
-      document.getElementById('settingStyleInput').value = state.styleName;
-      document.getElementById('settingTaktInput').value = state.taktTime;
-      document.getElementById('settingUnitSelect').value = state.timeUnit;
-
-      window.addEventListener('online', updateNetworkBadge);
-      window.addEventListener('offline', updateNetworkBadge);
-      updateNetworkBadge();
-
-      registerPWA();
-      applyTheme();
-      renderAll();
-    });
-
-    function registerPWA() {
-      try {
-        const manifest = {
-          name: 'Cycle Time Haryan - Offline Stopwatch',
-          short_name: 'CycleTime',
-          start_url: '.',
-          display: 'standalone',
-          background_color: '#070706',
-          theme_color: '#070706',
-          icons: [{
-            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 250' fill='none'%3E%3Cdefs%3E%3Cfilter id='g' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeGaussianBlur stdDeviation='6' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect width='220' height='250' rx='48' fill='%23070706'/%3E%3Cg filter='url(%23g)'%3E%3Crect x='92' y='12' width='36' height='16' rx='4' fill='%23ffffff' /%3E%3Crect x='103' y='26' width='14' height='14' fill='%23ffffff' /%3E%3Cg transform='translate(166, 46) rotate(42)'%3E%3Crect x='-12' y='-7' width='24' height='11' rx='3' fill='%23ffffff' /%3E%3Crect x='-5' y='3' width='10' height='11' fill='%23ffffff' /%3E%3C/g%3E%3Cpath d='M 90 218 A 84 84 0 1 1 130 218' stroke='%23ffffff' stroke-width='15' stroke-linecap='butt' /%3E%3Cpath d='M 74 102 L 92 102 L 92 224 L 74 224 Z' fill='%23ffffff' /%3E%3Crect x='86' y='148' width='48' height='16' fill='%23ffffff' /%3E%3Cpath d='M 128 126 L 146 126 L 146 218 L 128 224 Z' fill='%23ffffff' /%3E%3Cline x1='110' y1='126' x2='110' y2='74' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Cline x1='110' y1='126' x2='147' y2='89' stroke='%23ffffff' stroke-width='7' stroke-linecap='round' /%3E%3Ccircle cx='110' cy='126' r='9' fill='%23ffffff' /%3E%3C/g%3E%3C/svg%3E",
-            sizes: '512x512',
-            type: 'image/svg+xml'
-          }]
-        };
-        const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-        const link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = URL.createObjectURL(blob);
-        document.head.appendChild(link);
-
-        // Service Worker Offline Cache agar aplikasi terbuka instan tanpa jeda jaringan di HP
-        if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-          const swCode = `
-            const CACHE_NAME = 'ct-haryan-fast-v1';
-            self.addEventListener('install', (e) => {
-              self.skipWaiting();
-              e.waitUntil(
-                caches.open(CACHE_NAME).then((cache) => cache.addAll(['./', 'https://cdn.tailwindcss.com']).catch(() => {}))
-              );
-            });
-            self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-            self.addEventListener('fetch', (e) => {
-              if (e.request.method !== 'GET') return;
-              e.respondWith(
-                caches.match(e.request).then((cached) => {
-                  const networkFetch = fetch(e.request).then((res) => {
-                    const clone = res.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
-                    return res;
-                  }).catch(() => cached);
-                  return cached || networkFetch;
-                })
-              );
-            });
-          `;
-          const swBlob = new Blob([swCode], { type: 'application/javascript' });
-          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
-        }
-      } catch (e) {}
+    function getUnitSymbol() { return state.unit === 'minutes' ? 'm' : 's'; }
+    function formatDuration(secondsVal) {
+      const val = state.unit === 'minutes' ? secondsVal / 60 : secondsVal;
+      return Number(val || 0).toFixed(1);
     }
 
-    function updateNetworkBadge() {
-      const badge = document.getElementById('networkStatusBadge');
-      if (navigator.onLine) {
-        badge.innerHTML = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg><span class="hidden md:inline">Offline Ready</span>`;
-      } else {
-        badge.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="22" y1="2" y2="22"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M3.27 6.96c4.29-4.02 10.75-4.38 15.46-1.08"/><path d="M12 20h.01"/></svg><span class="hidden md:inline">Offline Mode</span>`;
-      }
+    function updateHeaderAndUnits() {
+      document.getElementById('headerSubText').textContent =
+        `${state.line} — ${state.style} (Takt: ${state.taktTime}${getUnitSymbol()})`;
+      document.querySelectorAll('.unit-symbol').forEach(el => el.textContent = getUnitSymbol());
     }
 
-    function persistData() {
-      saveToDB('cycles_data', state.cycles);
-      saveToDB('settings_data', {
-        taktTime: state.taktTime,
-        timeUnit: state.timeUnit,
-        lineName: state.lineName,
-        styleName: state.styleName,
-        isDarkMode: state.isDarkMode
+    function switchTab(tab) {
+      ['viewTracker', 'viewAnalysis', 'viewSettings'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      ['menuBtnStopwatch', 'menuBtnAnalisis', 'menuBtnSetting'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-slate-800 border-slate-700 text-slate-300';
       });
-    }
-
-    // 4. FORMATTERS
-    function formatTimeValue(valInSeconds) {
-      if (state.timeUnit === 'minutes') {
-        return (valInSeconds / 60).toFixed(2);
+      const badge = document.getElementById('activeModuleBadge');
+      if (tab === 'tracker') {
+        document.getElementById('viewTracker').classList.remove('hidden');
+        badge.textContent = 'Stopwatch';
+      } else if (tab === 'analysis') {
+        document.getElementById('viewAnalysis').classList.remove('hidden');
+        badge.textContent = 'Analisis';
+        renderAnalysis();
+      } else if (tab === 'settings') {
+        document.getElementById('viewSettings').classList.remove('hidden');
+        badge.textContent = 'Setting';
       }
-      return valInSeconds.toFixed(1);
     }
 
-    function getUnitSymbol() {
-      return state.timeUnit === 'minutes' ? 'm' : 's';
+    function toggleMenuModal() {
+      const d = document.getElementById('menuDropdown');
+      const o = document.getElementById('menuOverlay');
+      d.classList.toggle('hidden');
+      o.classList.toggle('hidden');
     }
 
-    // 5. STOPWATCH CONTROLS (LAP TETAP BERJALAN OTOMATIS)
+    function changeZoom(delta) {
+      state.zoom = Math.min(130, Math.max(80, state.zoom + delta));
+      document.getElementById('zoomLabel').textContent = `${state.zoom}%`;
+      document.getElementById('appRoot').style.transform = `scale(${state.zoom / 100})`;
+    }
+
+    function saveSettingsAndReturn() {
+      state.line = document.getElementById('settingLineInput').value.trim() || 'Line A';
+      state.style = document.getElementById('settingStyleInput').value.trim() || 'Style Umum';
+      state.taktTime = Math.max(0.1, parseFloat(document.getElementById('settingTaktInput').value) || 45);
+      state.unit = document.getElementById('settingUnitSelect').value;
+      updateHeaderAndUnits();
+      renderTable();
+      updateMetrics();
+      switchTab('tracker');
+    }
+
+    function tickLoop(now) {
+      if (!state.isRunning) return;
+      state.elapsedMs += now - state.lastTick;
+      state.lastTick = now;
+      document.getElementById('metricStopwatch').textContent = formatDuration(state.elapsedMs / 1000);
+      rafId = requestAnimationFrame(tickLoop);
+    }
+
     function handleStart() {
       if (state.isRunning) return;
       state.isRunning = true;
+      state.lastTick = performance.now();
       document.getElementById('btnStart').disabled = true;
       document.getElementById('btnStop').disabled = false;
-
-      timerInterval = setInterval(() => {
-        state.seconds = parseFloat((state.seconds + 0.1).toFixed(1));
-        document.getElementById('metricStopwatch').innerText = formatTimeValue(state.seconds);
-        if (state.editingCycleId) {
-          const liveEl = document.getElementById(`liveEdit_${state.editingCycleId}`);
-          if (liveEl) liveEl.innerText = formatTimeValue(state.seconds) + getUnitSymbol();
-        }
-      }, 100);
+      document.getElementById('btnLap').disabled = false;
+      rafId = requestAnimationFrame(tickLoop);
     }
 
     function handleStop() {
       state.isRunning = false;
-      clearInterval(timerInterval);
+      cancelAnimationFrame(rafId);
       document.getElementById('btnStart').disabled = false;
       document.getElementById('btnStop').disabled = true;
+      document.getElementById('btnLap').disabled = true;
     }
 
     function handleReset() {
       handleStop();
-      state.seconds = 0;
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
+      state.elapsedMs = 0;
+      document.getElementById('metricStopwatch').textContent = formatDuration(0);
     }
 
     function handleLap() {
-      if (state.seconds <= 0) return;
-
-      if (state.editingCycleId) {
-        handleConfirmReTime();
-        return;
-      }
-
-      const currentLap = parseFloat(state.seconds.toFixed(1));
-      const vsTargetVal = parseFloat((currentLap - state.taktTime).toFixed(1));
-      const nextCycleNumber = state.cycles.length + 1;
-
-      const newCycle = {
-        id: Date.now(),
-        lapTime: currentLap,
-        vsTarget: vsTargetVal,
-        processName: `Proses #${nextCycleNumber}`,
-        operatorName: '',
-        machineName: '',
-        timestamp: new Date().toISOString()
-      };
-
-      state.cycles = [newCycle, ...state.cycles];
-      state.seconds = 0;
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
-
-      persistData();
-      renderAll();
-
-      const container = document.getElementById('tableScrollContainer');
-      if (container) {
-        setTimeout(() => {
-          container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-        }, 50);
-      }
-    }
-
-    // 6. ROW ACTIONS & RE-TIME
-    function handleDeleteCycle(id) {
-      if (state.editingCycleId === id) state.editingCycleId = null;
-      state.cycles = state.cycles.filter((c) => c.id !== id);
-      persistData();
-      renderAll();
+      const prevTotalSec = state.laps.reduce((acc, l) => acc + l.durationSec, 0);
+      const currentTotalSec = state.elapsedMs / 1000;
+      const lapSec = Math.max(0.1, Number((currentTotalSec - prevTotalSec).toFixed(1)));
+      const idx = state.laps.length + 1;
+      state.laps.push({
+        cycle: idx,
+        durationSec: lapSec,
+        process: `Proses #${idx}`,
+        operator: '',
+        machine: ''
+      });
+      renderTable();
+      updateMetrics();
     }
 
     function handleClearLog() {
-      state.cycles = [];
-      state.editingCycleId = null;
-      persistData();
-      renderAll();
+      state.laps = [];
+      renderTable();
+      updateMetrics();
     }
 
-    function updateField(id, field, val) {
-      state.cycles = state.cycles.map((c) => (c.id === id ? { ...c, [field]: val } : c));
-      persistData();
-      if (state.activeTab === 'analysis') renderAnalysis();
+    function openEditTimeModal(index) {
+      state.editingIndex = index;
+      const lap = state.laps[index];
+      document.getElementById('editModalCycleNum').textContent = lap.cycle;
+      document.getElementById('editModalTimeInput').value = formatDuration(lap.durationSec);
+      document.getElementById('editTimeModal').classList.remove('hidden');
     }
 
-    function handleStartReTime(id) {
-      state.editingCycleId = id;
-      state.seconds = 0;
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
-      if (!state.isRunning) handleStart();
-      renderAll();
+    function closeEditTimeModal() {
+      state.editingIndex = null;
+      document.getElementById('editTimeModal').classList.add('hidden');
     }
 
-    function handleConfirmReTime() {
-      if (!state.editingCycleId) return;
-      const newLapTime = parseFloat(state.seconds.toFixed(1));
-      const vsTargetVal = parseFloat((newLapTime - state.taktTime).toFixed(1));
-
-      state.cycles = state.cycles.map((c) =>
-        c.id === state.editingCycleId ? { ...c, lapTime: newLapTime, vsTarget: vsTargetVal } : c
-      );
-
-      handleStop();
-      state.seconds = 0;
-      state.editingCycleId = null;
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
-      persistData();
-      renderAll();
+    function confirmEditTime() {
+      if (state.editingIndex === null) return;
+      let val = Math.max(0.1, parseFloat(document.getElementById('editModalTimeInput').value) || 0.1);
+      if (state.unit === 'minutes') val = val * 60;
+      state.laps[state.editingIndex].durationSec = Number(val.toFixed(1));
+      closeEditTimeModal();
+      renderTable();
+      updateMetrics();
     }
 
-    function handleCancelReTime() {
-      handleStop();
-      state.seconds = 0;
-      state.editingCycleId = null;
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(0);
-      renderAll();
-    }
-
-    // 7. NAVIGATION, THEME & ZOOM
-    function toggleMenuModal() {
-      const overlay = document.getElementById('menuOverlay');
-      const dropdown = document.getElementById('menuDropdown');
-      const isTutorialActive = !document.getElementById('tutorialGuideCard').classList.contains('hidden');
-      dropdown.classList.toggle('hidden');
-      if (dropdown.classList.contains('hidden') || isTutorialActive) {
-        overlay.classList.add('hidden');
-      } else {
-        overlay.classList.remove('hidden');
-      }
-    }
-
-    function switchTab(tab) {
-      state.activeTab = tab;
-      document.getElementById('viewTracker').classList.toggle('hidden', tab !== 'tracker');
-      document.getElementById('viewAnalysis').classList.toggle('hidden', tab !== 'analysis');
-      document.getElementById('viewSettings').classList.toggle('hidden', tab !== 'settings');
-
-      const labelMap = { tracker: 'Stopwatch', analysis: 'Analisis', settings: 'Setting' };
-      document.getElementById('activeModuleBadge').innerText = labelMap[tab];
-
-      ['tracker', 'analysis', 'settings'].forEach((t) => {
-        const btn = document.getElementById(`navBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-        if (t === tab) {
-          btn.className = 'p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md';
-        } else {
-          btn.className = `p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${state.isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700'}`;
-        }
-      });
-
-      toggleMenuModal();
-      renderAll();
-    }
-
-    function saveSettingsAndReturn() {
-      state.lineName = document.getElementById('settingLineInput').value || 'Line A';
-      state.styleName = document.getElementById('settingStyleInput').value || 'Style';
-      state.taktTime = Number(document.getElementById('settingTaktInput').value) || 45;
-      state.timeUnit = document.getElementById('settingUnitSelect').value || 'seconds';
-
-      state.cycles = state.cycles.map((c) => ({
-        ...c,
-        vsTarget: parseFloat((c.lapTime - state.taktTime).toFixed(1))
-      }));
-
-      persistData();
-      state.activeTab = 'tracker';
-      document.getElementById('viewTracker').classList.remove('hidden');
-      document.getElementById('viewAnalysis').classList.add('hidden');
-      document.getElementById('viewSettings').classList.add('hidden');
-      document.getElementById('activeModuleBadge').innerText = 'Stopwatch';
-      renderAll();
-    }
-
-    function toggleTheme() {
-      state.isDarkMode = !state.isDarkMode;
-      persistData();
-      applyTheme();
-      renderAll();
-    }
-
-    function applyTheme() {
-      const dark = state.isDarkMode;
-      const isSplashActive = !!document.getElementById('splashScreen');
-      document.body.className = `${dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900 light-mode'} min-h-screen transition-colors duration-300 pb-44 text-base overflow-x-hidden`;
-      document.getElementById('topHeader').className = `${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200 shadow-xs'} border-b sticky top-0 z-30 backdrop-blur-md px-3 sm:px-8 py-3.5 flex items-center justify-between flex-wrap gap-2`;
-      document.getElementById('bottomControllerBar').className = `${isSplashActive ? 'hidden opacity-0 pointer-events-none ' : ''}fixed bottom-0 left-0 right-0 z-40 ${dark ? 'bg-slate-950/95 border-slate-800' : 'bg-white/95 border-slate-300'} border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500`;
-      document.getElementById('metricsStrip').className = `grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full ${dark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-200'}`;
-      document.getElementById('btnThemeToggle').innerHTML = dark
-        ? `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><span>Light Mode</span>`
-        : `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><span>Dark Mode</span>`;
-    }
-
-    function changeZoom(delta) {
-      state.zoomLevel = Math.min(150, Math.max(50, state.zoomLevel + delta));
-      const root = document.getElementById('appRoot');
-      root.style.transform = `scale(${state.zoomLevel / 100})`;
-      root.style.width = `${100 / (state.zoomLevel / 100)}%`;
-      document.getElementById('zoomLabel').innerText = `${state.zoomLevel}%`;
-    }
-
-    // 8. RENDERING ENGINE (TRACKER + PARETO + TOP 3 BOTTLENECK MERAH)
-    function calculateLineEfficiency() {
-      if (state.cycles.length === 0) return 0;
-      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const maxCT = Math.max(...state.cycles.map((c) => c.lapTime));
-      if (maxCT <= 0) return 0;
-      return (totalCT / (state.cycles.length * maxCT)) * 100;
-    }
-
-    function renderAll() {
-      const unit = getUnitSymbol();
-      document.querySelectorAll('.unit-symbol').forEach((el) => (el.innerText = unit));
-      document.getElementById('headerSubText').innerText = `${state.lineName} — ${state.styleName} (Takt: ${state.taktTime}${unit})`;
-
-      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
-      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
-      const efficiencyPct = calculateLineEfficiency();
-
-      document.getElementById('metricStopwatch').innerText = formatTimeValue(state.seconds);
-      document.getElementById('metricTotalCT').innerText = formatTimeValue(totalCT);
-      document.getElementById('metricEfficiency').innerText = efficiencyPct.toFixed(1);
-      document.getElementById('metricAvgCT').innerText = formatTimeValue(avgCT);
-      document.getElementById('metricCapacity').innerText = capPcs;
-      document.getElementById('logCountLabel').innerText = state.cycles.length;
-      document.getElementById('btnClearLog').classList.toggle('hidden', state.cycles.length === 0);
-
-      renderTrackerTable();
-      renderAnalysis();
-    }
-
-    function renderTrackerTable() {
+    function renderTable() {
       const tbody = document.getElementById('trackerTableBody');
-      const unit = getUnitSymbol();
-      const dark = state.isDarkMode;
-
-      if (state.cycles.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="text-center py-12 text-slate-400 text-sm">
-              Belum ada data siklus. Tekan tombol <strong class="text-emerald-400">START</strong> lalu <strong class="text-emerald-400">LAP / CYCLE</strong> di bilah kontrol bawah untuk mencatat durasi proses.
-            </td>
-          </tr>`;
+      document.getElementById('logCountLabel').textContent = state.laps.length;
+      if (!state.laps.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 text-xs">Belum ada data siklus. Tekan <b>START</b> lalu <b>+ LAP / CYCLE</b> di bawah.</td></tr>`;
         return;
       }
-
-      const chronological = [...state.cycles].reverse();
-      tbody.innerHTML = chronological.map((cycle, index) => {
-        const cycleNumber = index + 1;
-        const isEditing = state.editingCycleId === cycle.id;
-        const dispLap = isEditing ? state.seconds : cycle.lapTime;
-        const dispVs = isEditing ? (state.seconds - state.taktTime) : cycle.vsTarget;
-        const isOver = dispLap > state.taktTime;
-        const vsStr = dispVs > 0 ? `+${formatTimeValue(dispVs)}` : formatTimeValue(dispVs);
-
+      tbody.innerHTML = state.laps.map((l, i) => {
+        const diff = (l.durationSec - state.taktTime).toFixed(1);
+        const diffColor = parseFloat(diff) > 0 ? 'text-rose-400' : 'text-emerald-400';
         return `
-          <tr class="${isEditing ? 'bg-amber-500/10 border-l-4 border-amber-500' : (dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50')} transition-all">
-            <td class="p-3.5 font-bold whitespace-nowrap">#${cycleNumber}</td>
-            <td class="p-3.5 font-mono font-bold text-base whitespace-nowrap">
-              ${isEditing 
-                ? `<span id="liveEdit_${cycle.id}" class="text-amber-400 animate-pulse">${formatTimeValue(state.seconds)}${unit}</span>` 
-                : `<span class="text-emerald-400">${formatTimeValue(cycle.lapTime)}${unit}</span>`}
+          <tr class="hover:bg-slate-800/30">
+            <td class="p-3 font-mono font-bold text-slate-300">#${l.cycle}</td>
+            <td class="p-3 font-mono font-bold text-amber-400">${formatDuration(l.durationSec)}</td>
+            <td class="p-3 font-mono font-bold ${diffColor}">${diff > 0 ? '+' : ''}${formatDuration(parseFloat(diff))}</td>
+            <td class="p-3"><input type="text" value="${l.process}" onchange="state.laps[${i}].process=this.value" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" /></td>
+            <td class="p-3"><input type="text" value="${l.operator}" placeholder="Nama operator..." onchange="state.laps[${i}].operator=this.value" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" /></td>
+            <td class="p-3"><input type="text" value="${l.machine}" placeholder="Jenis mesin..." onchange="state.laps[${i}].machine=this.value" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" /></td>
+            <td class="p-3 text-center">
+              <button onclick="openEditTimeModal(${i})" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-xs font-bold cursor-pointer">Edit</button>
             </td>
-            <td class="p-3.5 font-mono font-semibold text-base whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">
-              ${vsStr}${unit}
-            </td>
-            <td class="p-3.5">
-              <input type="text" value="${cycle.processName}" onchange="updateField(${cycle.id}, 'processName', this.value)"
-                class="w-full min-w-[200px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
-            </td>
-            <td class="p-3.5">
-              <input type="text" value="${cycle.operatorName || ''}" placeholder="Nama operator..." onchange="updateField(${cycle.id}, 'operatorName', this.value)"
-                class="w-full min-w-[170px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
-            </td>
-            <td class="p-3.5">
-              <input type="text" value="${cycle.machineName || ''}" placeholder="Jenis mesin..." onchange="updateField(${cycle.id}, 'machineName', this.value)"
-                class="w-full min-w-[180px] ${dark ? 'bg-slate-950 border-slate-700/80 text-white' : 'bg-slate-50 border-slate-300 text-slate-900'} border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
-            </td>
-            <td class="p-3.5 text-center whitespace-nowrap">
-              ${isEditing ? `
-                <div class="flex items-center justify-center gap-1.5">
-                  <button onclick="handleConfirmReTime()" class="bg-emerald-500 text-slate-950 p-1.5 rounded-lg font-extrabold cursor-pointer" title="Simpan">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  </button>
-                  <button onclick="handleCancelReTime()" class="bg-rose-500/20 text-rose-400 p-1.5 rounded-lg font-bold cursor-pointer" title="Batal">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
-                  </button>
-                </div>
-              ` : `
-                <div class="flex items-center justify-center gap-1.5">
-                  <button onclick="handleStartReTime(${cycle.id})" class="text-amber-400 hover:text-amber-300 p-1.5 rounded-lg hover:bg-amber-500/10 transition-colors cursor-pointer" title="Ambil Ulang">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                  </button>
-                  <button onclick="handleDeleteCycle(${cycle.id})" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors cursor-pointer" title="Hapus">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                  </button>
-                </div>
-              `}
-            </td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
+    }
+
+    function updateMetrics() {
+      const count = state.laps.length;
+      const totalSec = state.laps.reduce((a, b) => a + b.durationSec, 0);
+      const avgSec = count ? totalSec / count : 0;
+      const eff = avgSec > 0 ? Math.min(100, (state.taktTime / avgSec) * 100) : 0;
+      const cap = avgSec > 0 ? Math.round(3600 / avgSec) : 0;
+      document.getElementById('metricTotalCt').textContent = formatDuration(totalSec);
+      document.getElementById('metricAvgCt').textContent = formatDuration(avgSec);
+      document.getElementById('metricEfficiency').textContent = `${eff.toFixed(1)}%`;
+      document.getElementById('metricCapacity').textContent = cap;
     }
 
     function renderAnalysis() {
-      const paretoContainer = document.getElementById('paretoChartContainer');
-      const analysisBody = document.getElementById('analysisTableBody');
-      const unit = getUnitSymbol();
-      const dark = state.isDarkMode;
-
-      if (state.cycles.length === 0) {
-        paretoContainer.innerHTML = `<div class="text-center py-10 text-slate-400">Belum ada data untuk dianalisis.</div>`;
-        analysisBody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data rincian proses.</td></tr>`;
+      const sorted = [...state.laps].sort((a, b) => b.durationSec - a.durationSec);
+      const maxVal = sorted[0]?.durationSec || 1;
+      const chart = document.getElementById('paretoChartContainer');
+      if (!sorted.length) {
+        chart.innerHTML = `<p class="text-xs text-slate-400">Belum ada data untuk dianalisis.</p>`;
+        document.getElementById('analysisTableBody').innerHTML = '';
         return;
       }
+      chart.innerHTML = `
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 items-end pt-4">
+          ${sorted.map((item, idx) => {
+            const pct = Math.max(12, Math.round((item.durationSec / maxVal) * 100));
+            const color = idx < 3 ? 'bg-rose-500' : 'bg-sky-500';
+            return `
+              <div class="flex flex-col items-center gap-1.5">
+                <span class="text-xs font-mono font-bold text-slate-200">${formatDuration(item.durationSec)}${getUnitSymbol()}</span>
+                <div class="w-full h-36 bg-slate-950 rounded-xl flex items-end p-1 border border-slate-800">
+                  <div class="w-full ${color} rounded-lg transition-all" style="height:${pct}%"></div>
+                </div>
+                <span class="text-xs font-semibold text-slate-300 truncate max-w-full">${item.process}</span>
+              </div>`;
+          }).join('')}
+        </div>`;
 
-      const chronological = [...state.cycles].reverse();
-      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
-      const maxVal = Math.max(...chronological.map((s) => s.lapTime), state.taktTime);
-
-      const heightPx = 208;
-      const taktRatio = Math.min(1, Math.max(0, state.taktTime / maxVal));
-      const bottomOffset = Math.round(taktRatio * heightPx) + 48;
-
-      const barsHtml = chronological.map((item, idx) => {
-        const cycleNum = idx + 1;
-        const isTop3 = top3Ids.includes(item.id);
-        const isOver = item.lapTime > state.taktTime;
-        const isCombine = item.lapTime <= state.taktTime / 2;
-
-        let barColor = 'bg-emerald-500';
-        let textColor = 'text-emerald-400';
-        if (isTop3) {
-          barColor = 'bg-rose-600';
-          textColor = 'text-rose-400';
-        } else if (isOver) {
-          barColor = 'bg-amber-500';
-          textColor = 'text-amber-400';
-        } else if (isCombine) {
-          barColor = 'bg-blue-500';
-          textColor = 'text-blue-400';
-        }
-
-        const heightPercent = Math.min(100, Math.max(8, (item.lapTime / maxVal) * 100));
-
+      document.getElementById('analysisTableBody').innerHTML = state.laps.map(l => {
+        const diff = (l.durationSec - state.taktTime).toFixed(1);
+        const cap = l.durationSec > 0 ? Math.round(3600 / l.durationSec) : 0;
+        const action = parseFloat(diff) > 0 ? 'Balance / Motion Study' : 'Pertahankan Standar';
         return `
-          <div class="flex flex-col items-center gap-2 w-24 flex-shrink-0 z-0">
-            <span class="text-xs font-bold ${textColor}">${formatTimeValue(item.lapTime)}${unit}</span>
-            <div class="w-full h-52 rounded-t-xl ${dark ? 'bg-slate-950' : 'bg-slate-200'} flex items-end justify-center p-1 relative overflow-hidden">
-              <div class="w-full rounded-t-lg transition-all duration-500 relative ${barColor}" style="height: ${heightPercent}%">
-                ${isTop3 ? `<div class="absolute top-1 left-0 right-0 text-center"><span class="text-[8px] font-black uppercase text-white bg-black/50 px-1 py-0.5 rounded">TOP 3</span></div>` : ''}
-              </div>
-            </div>
-            <div class="text-center w-full">
-              <p class="text-xs font-bold truncate" title="${item.processName}">${item.processName}</p>
-              <p class="text-[11px] font-extrabold text-emerald-400 mt-0.5">#${cycleNum}</p>
-              <p class="text-[10px] text-slate-400 truncate">${item.operatorName || '-'}</p>
-            </div>
-          </div>
-        `;
+          <tr>
+            <td class="p-3 font-mono font-bold">#${l.cycle}</td>
+            <td class="p-3 font-semibold">${l.process}</td>
+            <td class="p-3 text-slate-300">${l.operator || '-'}</td>
+            <td class="p-3 text-slate-300">${l.machine || '-'}</td>
+            <td class="p-3 font-mono font-bold text-amber-400">${formatDuration(l.durationSec)}</td>
+            <td class="p-3 font-mono font-bold ${parseFloat(diff) > 0 ? 'text-rose-400' : 'text-emerald-400'}">${diff > 0 ? '+' : ''}${formatDuration(parseFloat(diff))}</td>
+            <td class="p-3 text-xs font-bold text-sky-400">${action}</td>
+            <td class="p-3 font-mono font-bold text-purple-400">${cap} pcs/jam</td>
+          </tr>`;
       }).join('');
-
-      paretoContainer.innerHTML = `
-        <div class="overflow-x-auto pb-4 pt-6">
-          <div class="relative flex items-end gap-6 min-w-max h-80 px-4 border-b border-slate-800">
-            <div class="absolute left-0 right-0 border-b-2 border-dashed border-rose-500 z-20 pointer-events-none flex items-center justify-end pr-4" style="bottom: ${bottomOffset}px">
-              <span class="text-[10px] font-extrabold bg-rose-600 text-white px-2 py-0.5 rounded shadow">
-                Target Takt Time: ${state.taktTime}${unit}
-              </span>
-            </div>
-            ${barsHtml}
-          </div>
-        </div>
-      `;
-
-      analysisBody.innerHTML = chronological.map((item, idx) => {
-        const cycleNum = idx + 1;
-        const vsTargetVal = parseFloat((item.lapTime - state.taktTime).toFixed(1));
-        const isOver = item.lapTime > state.taktTime;
-        const isTop3 = top3Ids.includes(item.id);
-        const isCombine = item.lapTime <= state.taktTime / 2;
-        const cap = item.lapTime > 0 ? Math.floor(3600 / item.lapTime) : 0;
-
-        let badgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Normal Balance</span></span>`;
-        if (isTop3) {
-          badgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-400 border border-rose-500/40"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg><span>Improve Immediately</span></span>`;
-        } else if (isOver) {
-          badgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>Bottleneck</span></span>`;
-        } else if (isCombine) {
-          badgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/40"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg><span>Potential Combine</span></span>`;
-        }
-
-        return `
-          <tr class="${dark ? 'hover:bg-slate-800/30' : 'hover:bg-slate-50'}">
-            <td class="p-3.5 font-bold whitespace-nowrap">#${cycleNum}</td>
-            <td class="p-3.5 font-bold whitespace-nowrap">${item.processName}</td>
-            <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.operatorName || '-'}</td>
-            <td class="p-3.5 text-slate-400 whitespace-nowrap">${item.machineName || '-'}</td>
-            <td class="p-3.5 font-mono font-bold text-emerald-400 whitespace-nowrap">${formatTimeValue(item.lapTime)}${unit}</td>
-            <td class="p-3.5 font-mono font-bold whitespace-nowrap ${isOver ? 'text-rose-400' : 'text-emerald-400'}">${vsTargetVal > 0 ? `+${formatTimeValue(vsTargetVal)}` : formatTimeValue(vsTargetVal)}${unit}</td>
-            <td class="p-3.5 whitespace-nowrap">${badgeHtml}</td>
-            <td class="p-3.5 font-mono font-bold text-cyan-400 whitespace-nowrap">${cap} <span class="text-xs font-normal text-slate-400">pcs/jam</span></td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // 9. EXPORT EXCEL (.XLSX ASLI / OFFICE OPEN XML ZIP UNTUK WPS & MS OFFICE HP) & SHARE WHATSAPP
-    function escapeXml(unsafe) {
-      return String(unsafe)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
-    }
-
-    function createZipBlob(files) {
-      const crcTable = new Uint32Array(256);
-      for (let i = 0; i < 256; i++) {
-        let c = i;
-        for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-        crcTable[i] = c;
-      }
-      const crc32 = (buf) => {
-        let crc = 0xFFFFFFFF;
-        for (let i = 0; i < buf.length; i++) crc = crcTable[(crc ^ buf[i]) & 0xFF] ^ (crc >>> 8);
-        return (crc ^ 0xFFFFFFFF) >>> 0;
-      };
-
-      const encoder = new TextEncoder();
-      const parts = [];
-      const centralDir = [];
-      let offset = 0;
-
-      for (const file of files) {
-        const nameBytes = encoder.encode(file.name);
-        const dataBytes = encoder.encode(file.content);
-        const crc = crc32(dataBytes);
-
-        const localHeader = new Uint8Array(30 + nameBytes.length);
-        const lv = new DataView(localHeader.buffer);
-        lv.setUint32(0, 0x04034b50, true);
-        lv.setUint16(4, 20, true);
-        lv.setUint16(6, 0x0800, true);
-        lv.setUint16(8, 0, true);
-        lv.setUint16(10, 0, true);
-        lv.setUint16(12, 0, true);
-        lv.setUint32(14, crc, true);
-        lv.setUint32(18, dataBytes.length, true);
-        lv.setUint32(22, dataBytes.length, true);
-        lv.setUint16(26, nameBytes.length, true);
-        lv.setUint16(28, 0, true);
-        localHeader.set(nameBytes, 30);
-
-        parts.push(localHeader, dataBytes);
-
-        const cdHeader = new Uint8Array(46 + nameBytes.length);
-        const cv = new DataView(cdHeader.buffer);
-        cv.setUint32(0, 0x02014b50, true);
-        cv.setUint16(4, 20, true);
-        cv.setUint16(6, 20, true);
-        cv.setUint16(8, 0x0800, true);
-        cv.setUint16(10, 0, true);
-        cv.setUint16(12, 0, true);
-        cv.setUint16(14, 0, true);
-        cv.setUint32(16, crc, true);
-        cv.setUint32(20, dataBytes.length, true);
-        cv.setUint32(24, dataBytes.length, true);
-        cv.setUint16(28, nameBytes.length, true);
-        cv.setUint16(30, 0, true);
-        cv.setUint16(32, 0, true);
-        cv.setUint16(34, 0, true);
-        cv.setUint16(36, 0, true);
-        cv.setUint32(38, 0, true);
-        cv.setUint32(42, offset, true);
-        cdHeader.set(nameBytes, 46);
-
-        centralDir.push(cdHeader);
-        offset += localHeader.length + dataBytes.length;
-      }
-
-      const cdSize = centralDir.reduce((sum, item) => sum + item.length, 0);
-      const eocd = new Uint8Array(22);
-      const ev = new DataView(eocd.buffer);
-      ev.setUint32(0, 0x06054b50, true);
-      ev.setUint16(4, 0, true);
-      ev.setUint16(6, 0, true);
-      ev.setUint16(8, files.length, true);
-      ev.setUint16(10, files.length, true);
-      ev.setUint32(12, cdSize, true);
-      ev.setUint32(16, offset, true);
-      ev.setUint16(20, 0, true);
-
-      return new Blob([...parts, ...centralDir, eocd], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      });
     }
 
     function handleExportExcel() {
-      if (state.cycles.length === 0) return;
-
-      const chronological = [...state.cycles].reverse();
-      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      const top3Ids = sortedDesc.slice(0, 3).map((c) => c.id);
-      const unit = getUnitSymbol();
-
-      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
-      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
-      const efficiencyPct = calculateLineEfficiency().toFixed(1);
-
-      const inlineStrCell = (ref, val, style = 0) =>
-        `<c r="${ref}" t="inlineStr" s="${style}"><is><t>${escapeXml(val)}</t></is></c>`;
-      const numCell = (ref, val, style = 0) =>
-        `<c r="${ref}" s="${style}"><v>${val}</v></c>`;
-
-      let rowsXml = `
-        <row r="1" ht="24" customHeight="1">${inlineStrCell('A1', 'REPORT CYCLE TIME HARYAN', 1)}</row>
-        <row r="2" ht="19" customHeight="1">${inlineStrCell('A2', `Line: ${state.lineName} | Style: ${state.styleName} | Takt Time: ${state.taktTime}${unit}`, 2)}</row>
-        <row r="3" ht="19" customHeight="1">${inlineStrCell('A3', `Total CT: ${formatTimeValue(totalCT)}${unit} | Efisiensi: ${efficiencyPct}% | Avg CT: ${formatTimeValue(avgCT)}${unit} | Kapasitas: ${capPcs} pcs/jam`, 2)}</row>
-        <row r="5" ht="22" customHeight="1">
-          ${inlineStrCell('A5', 'Cycle #', 3)}
-          ${inlineStrCell('B5', `Lap Time (${unit})`, 3)}
-          ${inlineStrCell('C5', `Vs Target (${unit})`, 3)}
-          ${inlineStrCell('D5', 'Proses', 3)}
-          ${inlineStrCell('E5', 'Operator', 3)}
-          ${inlineStrCell('F5', 'Machine', 3)}
-          ${inlineStrCell('G5', 'Action', 3)}
-          ${inlineStrCell('H5', 'Kapasitas (pcs/jam)', 3)}
-        </row>`;
-
-      chronological.forEach((c, idx) => {
-        const r = idx + 6;
-        const isTop3 = top3Ids.includes(c.id);
-        const isOver = c.lapTime > state.taktTime;
-        const isCombine = c.lapTime <= state.taktTime / 2;
-
-        let statusText = 'Normal Balance';
-        let statusStyle = 4;
-        if (isTop3) {
-          statusText = 'Improve Immediately (Top 3 Bottleneck)';
-          statusStyle = 5;
-        } else if (isOver) {
-          statusText = 'Bottleneck';
-          statusStyle = 6;
-        } else if (isCombine) {
-          statusText = 'Potential Combine';
-        }
-
-        const lapVal = parseFloat(formatTimeValue(c.lapTime));
-        const vsVal = parseFloat(formatTimeValue(c.vsTarget));
-        const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
-
-        rowsXml += `
-        <row r="${r}" ht="20" customHeight="1">
-          ${numCell(`A${r}`, idx + 1, 4)}
-          ${numCell(`B${r}`, lapVal, 4)}
-          ${numCell(`C${r}`, vsVal, 4)}
-          ${inlineStrCell(`D${r}`, c.processName || '-', 4)}
-          ${inlineStrCell(`E${r}`, c.operatorName || '-', 4)}
-          ${inlineStrCell(`F${r}`, c.machineName || '-', 4)}
-          ${inlineStrCell(`G${r}`, statusText, statusStyle)}
-          ${numCell(`H${r}`, cap, 4)}
-        </row>`;
-      });
-
-      const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
-  <Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
-  <Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
-</Types>`;
-
-      const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
-</Relationships>`;
-
-      const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <sheets>
-    <sheet name="Cycle Time Report" sheetId="1" r:id="rId1"/>
-  </sheets>
-</workbook>`;
-
-      const workbookRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
-  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
-</Relationships>`;
-
-      const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-  <fonts count="6">
-    <font><sz val="11"/><name val="Calibri"/></font>
-    <font><b/><sz val="14"/><color rgb="FF0F172A"/><name val="Calibri"/></font>
-    <font><b/><sz val="10"/><color rgb="FF334155"/><name val="Calibri"/></font>
-    <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
-    <font><b/><sz val="10"/><color rgb="FFB91C1C"/><name val="Calibri"/></font>
-    <font><b/><sz val="10"/><color rgb="FFB45309"/><name val="Calibri"/></font>
-  </fonts>
-  <fills count="5">
-    <fill><patternFill patternType="none"/></fill>
-    <fill><patternFill patternType="gray125"/></fill>
-    <fill><patternFill patternType="solid"><fgColor rgb="FF0F172A"/></patternFill></fill>
-    <fill><patternFill patternType="solid"><fgColor rgb="FFFEE2E2"/></patternFill></fill>
-    <fill><patternFill patternType="solid"><fgColor rgb="FFFEF3C7"/></patternFill></fill>
-  </fills>
-  <borders count="2">
-    <border><left/><right/><top/><bottom/><diagonal/></border>
-    <border>
-      <left style="thin"><color rgb="FFCBD5E1"/></left>
-      <right style="thin"><color rgb="FFCBD5E1"/></right>
-      <top style="thin"><color rgb="FFCBD5E1"/></top>
-      <bottom style="thin"><color rgb="FFCBD5E1"/></bottom>
-      <diagonal/>
-    </border>
-  </borders>
-  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
-  <cellXfs count="7">
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
-    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>
-    <xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0"/>
-    <xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/>
-    <xf numFmtId="0" fontId="4" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
-    <xf numFmtId="0" fontId="5" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
-  </cellXfs>
-</styleSheet>`;
-
-      const sheetXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-  <cols>
-    <col min="1" max="1" width="10" customWidth="1"/>
-    <col min="2" max="3" width="16" customWidth="1"/>
-    <col min="4" max="6" width="24" customWidth="1"/>
-    <col min="7" max="7" width="34" customWidth="1"/>
-    <col min="8" max="8" width="20" customWidth="1"/>
-  </cols>
-  <sheetData>${rowsXml}</sheetData>
-</worksheet>`;
-
-      const xlsxBlob = createZipBlob([
-        { name: '[Content_Types].xml', content: contentTypesXml },
-        { name: '_rels/.rels', content: relsXml },
-        { name: 'xl/workbook.xml', content: workbookXml },
-        { name: 'xl/_rels/workbook.xml.rels', content: workbookRelsXml },
-        { name: 'xl/styles.xml', content: stylesXml },
-        { name: 'xl/worksheets/sheet1.xml', content: sheetXml }
-      ]);
-
-      const url = URL.createObjectURL(xlsxBlob);
+      const rows = [
+        ['Line', 'Style', 'Takt Time', 'Cycle', 'Proses', 'Operator', 'Machine', `CT (${getUnitSymbol()})`],
+        ...state.laps.map(l => [state.line, state.style, state.taktTime, l.cycle, l.process, l.operator, l.machine, formatDuration(l.durationSec)])
+      ];
+      const csv = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `Cycle_Time_${state.lineName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`;
-      document.body.appendChild(a);
+      a.href = URL.createObjectURL(blob);
+      a.download = `CycleTime_${state.line.replace(/\s+/g, '_')}.csv`;
       a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1500);
     }
 
     function handleShareWhatsApp() {
-      if (state.cycles.length === 0) return;
-
-      const chronological = [...state.cycles].reverse();
-      const sortedDesc = [...chronological].sort((a, b) => b.lapTime - a.lapTime);
-      const top3 = sortedDesc.slice(0, 3);
-      const unit = getUnitSymbol();
-
-      const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
-      const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
-      const efficiencyPct = calculateLineEfficiency().toFixed(1);
-
-      const top3Text = top3
-        .map((c, i) => `${i + 1}. ${c.processName} (${formatTimeValue(c.lapTime)}${unit}${c.operatorName ? ` - ${c.operatorName}` : ''})`)
-        .join('\n');
-
-      const detailText = chronological
-        .map((c, i) => `#${i + 1} ${c.processName}: ${formatTimeValue(c.lapTime)}${unit}${c.operatorName ? ` (${c.operatorName})` : ''}`)
-        .join('\n');
-
-      const message = `*LAPORAN CYCLE TIME HARYAN*\n` +
-        `Line: *${state.lineName}*\n` +
-        `Style: *${state.styleName}*\n` +
-        `Target Takt: *${state.taktTime}${unit}*\n\n` +
-        `*RINGKASAN PERFORMA:*\n` +
-        `• Total CT: *${formatTimeValue(totalCT)}${unit}*\n` +
-        `• Avg CT: *${formatTimeValue(avgCT)}${unit}*\n` +
-        `• Line Efficiency: *${efficiencyPct}%*\n` +
-        `• Kapasitas Est.: *${capPcs} pcs/jam*\n\n` +
-        `*TOP 3 BOTTLENECK:*\n${top3Text}\n\n` +
-        `*RINCIAN SIKLUS (${chronological.length} Proses):*\n${detailText}`;
-
-      const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-      window.open(waUrl, '_blank');
+      const totalSec = state.laps.reduce((a, b) => a + b.durationSec, 0);
+      const avgSec = state.laps.length ? totalSec / state.laps.length : 0;
+      const msg = `*LAPORAN CYCLE TIME HARYAN*\nLine: ${state.line}\nStyle: ${state.style}\nTarget Takt: ${state.taktTime}${getUnitSymbol()}\nJumlah Cycle: ${state.laps.length}\nAvg CT: ${formatDuration(avgSec)}${getUnitSymbol()}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // 10. INTERACTIVE TUTORIAL BANNER (SWIPE TO DISMISS / TAP TO START) & STEP GUIDE + VOICE-OVER
-    let tutorialPromptTimer = null;
-    let currentTutorialStep = 0;
-    let isTutorialVoiceOn = true;
-    let isTutorialAutoPlaying = false;
-    let tutorialAutoTimer = null;
+    // =========================================================================
+    // TUTORIAL 11 LANGKAH + SUARA NATIVE HP/DESKTOP
+    // =========================================================================
+    let currentTutStep = 0;
+    let tutVoiceEnabled = true;
+    let tutAutoPlay = false;
+    let tutAutoTimer = null;
+    let cachedVoices = [];
 
-    function stopTutorialSpeech() {
+    const TUTORIAL_STEPS = [
+      { target: '#btnOpenMenu', title: '1. Buka Tombol Menu', desc: 'Ketuk tombol Menu di pojok kanan atas untuk membuka pengaturan dan pilihan halaman.', voice: 'Halo rekan-rekan! Pertama, ketuk tombol Menu di pojok kanan atas ya untuk membuka pilihan halaman.', action: () => closeMenu() },
+      { target: '#menuBtnSetting', title: '2. Masuk ke Menu Setting', desc: 'Pilih Setting untuk mengisi identitas line, style, dan target takt time sebelum mulai ukur.', voice: 'Sekarang, pilih menu Setting untuk mengisi data line dan target takt time sebelum kita mulai ukur.', action: () => openMenu() },
+      { target: '#settingLineGroup', title: '3. Isi Nama Line & Model / Style', desc: 'Masukkan nama line produksi dan nama model atau style yang sedang diamati.', voice: 'Di halaman Setting ini, silakan isi nama line produksi beserta nama model atau style yang sedang diamati.', action: () => { closeMenu(); switchTab('settings'); } },
+      { target: '#settingTaktGroup', title: '4. Atur Target Takt Time & Satuan', desc: 'Tentukan angka Target Takt Time dan pilih satuan waktunya (detik atau menit).', voice: 'Lanjut, masukkan angka Target Takt Time dan pilih satuan waktunya, mau pakai detik atau menit.', action: () => { closeMenu(); switchTab('settings'); } },
+      { target: '#btnSaveSettings', title: '5. Simpan Pengaturan', desc: 'Ketuk tombol Simpan agar seluruh parameter line langsung diterapkan ke stopwatch dan analisis.', voice: 'Kalau sudah pas, langsung tap tombol Simpan biar pengaturannya aktif.', action: () => { closeMenu(); switchTab('settings'); } },
+      { target: '#bottomControllerBar', title: '6. Kontrol Stopwatch (Start, Lap, Stop)', desc: 'Gunakan START untuk mulai, + LAP / CYCLE setiap operator selesai 1 siklus, dan STOP jika selesai.', voice: 'Sekarang kita masuk ke layar Stopwatch. Tekan Start untuk mulai, tap Lap setiap operator selesai satu siklus, dan tekan Stop kalau sudah selesai.', action: () => { closeMenu(); switchTab('tracker'); } },
+      { target: '#logTableContainer', title: '7. Edit Proses, Operator, Mesin & Waktu', desc: 'Ketuk kolom di tabel Log untuk mengubah nama proses, nama operator, jenis mesin, atau koreksi waktu.', voice: 'Di tabel Log ini, kamu bisa langsung tap kolomnya untuk ganti nama proses, nama operator, jenis mesin, atau koreksi waktu.', action: () => { closeMenu(); switchTab('tracker'); } },
+      { target: '#menuBtnAnalisis', title: '8. Buka Menu Analisis', desc: 'Buka Menu lalu pilih Analisis untuk melihat hasil perhitungan otomatis.', voice: 'Setelah data terkumpul, buka lagi tombol Menu di kanan atas, lalu pilih Analisis.', action: () => openMenu() },
+      { target: '#analisisSummarySection', title: '9. Cek Pareto, CT, Action & Kapasitas', desc: 'Pantau grafik bottleneck, rata-rata cycle time, rekomendasi action, dan kapasitas per jam.', voice: 'Di sini langsung kelihatan grafik bottleneck, rata-rata cycle time, rekomendasi action perbaikan, serta kapasitas output per jam.', action: () => { closeMenu(); switchTab('analysis'); } },
+      { target: '#btnExportExcel', title: '10. Download Laporan Excel', desc: 'Buka Menu lalu ketuk Download Laporan Excel untuk menyimpan file laporan ke perangkat.', voice: 'Mau simpan datanya? Buka Menu lalu tap Download Laporan Excel untuk mengunduh file laporan ke perangkat kamu.', action: () => openMenu() },
+      { target: '#btnShareWhatsApp', title: '11. Kirim Rangkuman ke WhatsApp', desc: 'Ketuk Kirim Rangkuman ke WhatsApp untuk langsung membagikan ringkasan laporan ke grup atau atasan.', voice: 'Terakhir, tap Kirim Rangkuman ke WhatsApp kalau mau langsung laporan cepat ke grup atau atasan. Selamat bekerja!', action: () => openMenu() }
+    ];
+
+    function openMenu() {
+      document.getElementById('menuDropdown')?.classList.remove('hidden');
+      document.getElementById('menuOverlay')?.classList.remove('hidden');
+    }
+    function closeMenu() {
+      document.getElementById('menuDropdown')?.classList.add('hidden');
+      document.getElementById('menuOverlay')?.classList.add('hidden');
+    }
+
+    function loadSystemVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const v = window.speechSynthesis.getVoices();
+      if (v && v.length) cachedVoices = v;
+    }
+    if ('speechSynthesis' in window) {
+      loadSystemVoices();
+      window.speechSynthesis.onvoiceschanged = loadSystemVoices;
+    }
+
+    function unlockMobileAudio() {
+      if (!('speechSynthesis' in window)) return;
+      const u = new SpeechSynthesisUtterance('');
+      u.volume = 0;
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakTutorialVoice(rawText, onDone) {
+      if (!('speechSynthesis' in window) || !tutVoiceEnabled) {
+        if (onDone && tutAutoPlay) tutAutoTimer = setTimeout(onDone, 3200);
+        return;
+      }
+      const spoken = rawText
+        .replace(/\bcycle\s*time\b/gi, 'saikel taim')
+        .replace(/\bCT\b/g, 'saikel taim')
+        .replace(/\btakt\s*time\b/gi, 'tak taim')
+        .replace(/\bbottleneck\b/gi, 'botelnek');
+
       try {
-        if ('speechSynthesis' in window) {
+        if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
           window.speechSynthesis.cancel();
         }
       } catch (e) {}
-      clearTimeout(tutorialAutoTimer);
-    }
 
-    function speakTutorialStep(step) {
-      stopTutorialSpeech();
-      if (!step) return;
+      const utt = new SpeechSynthesisUtterance(spoken);
+      const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+      const idVoice =
+        voices.find(v => /id[-_]ID/i.test(v.lang) && /google|natural|neural/i.test(v.name)) ||
+        voices.find(v => /id[-_]ID/i.test(v.lang)) ||
+        voices.find(v => /^id/i.test(v.lang));
 
-      const cleanDesc = step.desc.replace(/\(✏️\)/g, '').replace(/→/g, ' lalu ');
-      const spokenText = `${step.title.replace(/^\d+\.\s*/, '')}. ${cleanDesc}`;
-
-      const scheduleNextIfAuto = (fallbackMs = 4500) => {
-        if (!isTutorialAutoPlaying) return;
-        clearTimeout(tutorialAutoTimer);
-        tutorialAutoTimer = setTimeout(() => {
-          if (!isTutorialAutoPlaying) return;
-          if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
-            currentTutorialStep++;
-            renderTutorialStep();
-          } else {
-            endTutorial();
-          }
-        }, fallbackMs);
-      };
-
-      if (!isTutorialVoiceOn || !('speechSynthesis' in window)) {
-        scheduleNextIfAuto(4200);
-        return;
-      }
-
-      try {
-        const utterance = new SpeechSynthesisUtterance(spokenText);
-        utterance.lang = 'id-ID';
-        utterance.rate = 1.02;
-        utterance.pitch = 1.0;
-
-        const voices = window.speechSynthesis.getVoices();
-        const idVoice = voices.find((v) => v.lang && v.lang.toLowerCase().includes('id'));
-        if (idVoice) utterance.voice = idVoice;
-
-        utterance.onend = () => scheduleNextIfAuto(900);
-        utterance.onerror = () => scheduleNextIfAuto(4200);
-
-        window.speechSynthesis.speak(utterance);
-      } catch (e) {
-        scheduleNextIfAuto(4200);
-      }
-    }
-
-    function toggleTutorialVoice() {
-      isTutorialVoiceOn = !isTutorialVoiceOn;
-      const btn = document.getElementById('btnTutVoiceToggle');
-      if (btn) {
-        btn.innerText = isTutorialVoiceOn ? 'Suara: ON' : 'Suara: OFF';
-        btn.className = isTutorialVoiceOn
-          ? 'text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 cursor-pointer'
-          : 'text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 cursor-pointer';
-      }
-      if (isTutorialVoiceOn) {
-        speakTutorialStep(TUTORIAL_STEPS[currentTutorialStep]);
+      if (idVoice) {
+        utt.voice = idVoice;
+        utt.lang = idVoice.lang;
       } else {
-        stopTutorialSpeech();
+        utt.lang = 'id-ID';
       }
+      utt.rate = 0.96;
+      utt.pitch = 1.03;
+      utt.volume = 1.0;
+      utt.onend = () => { if (onDone && tutAutoPlay) tutAutoTimer = setTimeout(onDone, 650); };
+      utt.onerror = () => { if (onDone && tutAutoPlay) tutAutoTimer = setTimeout(onDone, 3000); };
+
+      setTimeout(() => window.speechSynthesis.speak(utt), 60);
     }
 
-    function toggleTutorialAutoPlay() {
-      isTutorialAutoPlaying = !isTutorialAutoPlaying;
-      updateAutoPlayButtonUI();
-      if (isTutorialAutoPlaying) {
-        speakTutorialStep(TUTORIAL_STEPS[currentTutorialStep]);
-      } else {
-        clearTimeout(tutorialAutoTimer);
-      }
+    function startTutorial(autoPlay = true) {
+      unlockMobileAudio();
+      dismissTutorialBanner();
+      tutAutoPlay = autoPlay;
+      currentTutStep = 0;
+      renderTutorialStep(0);
     }
 
-    function updateAutoPlayButtonUI() {
-      const btn = document.getElementById('btnTutAutoPlay');
-      if (!btn) return;
-      btn.innerText = isTutorialAutoPlaying ? '⏸ Jeda' : '▶ Auto';
-      btn.className = isTutorialAutoPlaying
-        ? 'text-xs font-extrabold px-2 py-1 rounded-lg bg-amber-500 text-slate-950 cursor-pointer'
-        : 'text-xs font-bold px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 cursor-pointer';
-    }
+    function renderTutorialStep(idx) {
+      clearTimeout(tutAutoTimer);
+      if (idx < 0) idx = 0;
+      if (idx >= TUTORIAL_STEPS.length) { endTutorial(); return; }
+      currentTutStep = idx;
+      const step = TUTORIAL_STEPS[idx];
+      if (typeof step.action === 'function') step.action();
 
-    const TUTORIAL_STEPS = [
-      {
-        title: '1. Buka Tombol Menu',
-        desc: 'Ketuk tombol "Menu" di pojok kanan atas untuk berpindah antar modul dan mengakses pengaturan.',
-        targetId: 'btnMenuToggle',
-        cardPos: 'bottom',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('tracker');
-        }
-      },
-      {
-        title: '2. Pilih Modul Setting',
-        desc: 'Pada daftar navigasi di dalam Menu, ketuk tombol "Setting" untuk mengatur parameter line.',
-        targetId: 'navBtnSettings',
-        cardPos: 'bottom',
-        setup: () => {
-          setTabDirect('tracker');
-          openMenuIfClosed();
-        }
-      },
-      {
-        title: '3. Isi Nama Line & Model / Style',
-        desc: 'Masukkan nama jalur produksi pada kolom "Line" dan kode produk pada kolom "Model / Style".',
-        targetId: 'settingStyleInput',
-        cardPos: 'bottom',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('settings');
-        }
-      },
-      {
-        title: '4. Isi Target Takt Time & Satuan Waktu',
-        desc: 'Tentukan batas target waktu per siklus pada "Target Takt Time" dan pilih satuan Detik (s) atau Menit (m).',
-        targetId: 'settingUnitSelect',
-        cardPos: 'bottom',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('settings');
-        }
-      },
-      {
-        title: '5. Simpan Parameter',
-        desc: 'Ketuk "Simpan & Kembali ke Stopwatch" untuk menerapkan pengaturan dan masuk ke layar pengambilan waktu.',
-        targetId: 'btnSaveSettings',
-        cardPos: 'top',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('settings');
-        }
-      },
-      {
-        title: '6. Mulai Stopwatch: START → LAP → STOP',
-        desc: 'Tekan START untuk menjalankan waktu, tekan LAP / CYCLE setiap kali 1 siklus proses selesai (waktu otomatis lanjut), dan tekan STOP saat selesai.',
-        targetId: 'stopwatchButtonsGroup',
-        cardPos: 'top',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('tracker');
-        }
-      },
-      {
-        title: '7. Edit Proses, Nama, Mesin & Edit Time',
-        desc: 'Pada tabel Log di atas, Anda dapat langsung mengetik nama Proses, Nama Operator, Jenis Machine, atau menekan ikon pensil (✏️) untuk mengambil ulang waktu.',
-        targetId: 'cardLogSection',
-        cardPos: 'bottom',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('tracker');
-        }
-      },
-      {
-        title: '8. Masuk ke Menu → Analisis',
-        desc: 'Setelah pencatatan selesai, buka kembali "Menu" lalu ketuk "Analisis" untuk melihat hasil evaluasi line.',
-        targetId: 'navBtnAnalysis',
-        cardPos: 'bottom',
-        setup: () => {
-          openMenuIfClosed();
-        }
-      },
-      {
-        title: '9. Cek Grafik Pareto, CT, Action & Kapasitas',
-        desc: 'Modul Analisis menampilkan grafik Pareto (Top 3 Bottleneck ditandai merah), nilai CT, rekomendasi Action, serta Kapasitas Maks (pcs/jam) tiap proses.',
-        targetId: 'cardDetailAnalysisSection',
-        cardPos: 'top',
-        setup: () => {
-          closeMenuIfOpen();
-          setTabDirect('analysis');
-        }
-      },
-      {
-        title: '10. Download Laporan Excel (.xlsx)',
-        desc: 'Buka "Menu" lalu ketuk tombol biru "Download Laporan Excel (.xlsx)" untuk menyimpan file Excel asli (siap buka di WPS/MS Office HP) sebagai arsip.',
-        targetId: 'btnExportExcel',
-        cardPos: 'bottom',
-        setup: () => {
-          openMenuIfClosed();
-        }
-      },
-      {
-        title: '11. Kirim Rangkuman ke WhatsApp',
-        desc: 'Ketuk tombol hijau "Kirim Rangkuman ke WhatsApp" untuk langsung membagikan ringkasan Cycle Time dan Top 3 Bottleneck ke grup produksi.',
-        targetId: 'btnShareWa',
-        cardPos: 'bottom',
-        setup: () => {
-          openMenuIfClosed();
-        }
-      }
-    ];
-
-    function openMenuIfClosed() {
-      const dropdown = document.getElementById('menuDropdown');
-      const overlay = document.getElementById('menuOverlay');
-      if (dropdown && dropdown.classList.contains('hidden')) {
-        dropdown.classList.remove('hidden');
-      }
-      if (overlay) overlay.classList.add('hidden');
-    }
-
-    function closeMenuIfOpen() {
-      const dropdown = document.getElementById('menuDropdown');
-      const overlay = document.getElementById('menuOverlay');
-      if (dropdown && !dropdown.classList.contains('hidden')) {
-        dropdown.classList.add('hidden');
-      }
-      if (overlay) overlay.classList.add('hidden');
-    }
-
-    function setTabDirect(tab) {
-      state.activeTab = tab;
-      document.getElementById('viewTracker').classList.toggle('hidden', tab !== 'tracker');
-      document.getElementById('viewAnalysis').classList.toggle('hidden', tab !== 'analysis');
-      document.getElementById('viewSettings').classList.toggle('hidden', tab !== 'settings');
-
-      const labelMap = { tracker: 'Stopwatch', analysis: 'Analisis', settings: 'Setting' };
-      document.getElementById('activeModuleBadge').innerText = labelMap[tab];
-
-      ['tracker', 'analysis', 'settings'].forEach((t) => {
-        const btn = document.getElementById(`navBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-        if (!btn) return;
-        if (t === tab) {
-          btn.className = 'p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer bg-emerald-500 border-emerald-500 text-slate-950 shadow-md';
-        } else {
-          btn.className = `p-2 rounded-xl text-xs font-bold border text-center transition-all cursor-pointer ${state.isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-300 text-slate-700'}`;
-        }
-      });
-      renderAll();
-    }
-
-    function showTutorialPromptBanner() {
-      const banner = document.getElementById('tutorialPromptBanner');
-      if (!banner) return;
-      banner.classList.remove('hidden');
-      requestAnimationFrame(() => {
-        banner.classList.remove('-translate-y-28', 'opacity-0');
-        banner.classList.add('translate-y-0', 'opacity-100');
-      });
-
-      clearTimeout(tutorialPromptTimer);
-      tutorialPromptTimer = setTimeout(() => {
-        dismissTutorialPromptBanner();
-      }, 9000);
-    }
-
-    function dismissTutorialPromptBanner(direction = 'up') {
-      const banner = document.getElementById('tutorialPromptBanner');
-      if (!banner || banner.classList.contains('hidden')) return;
-      clearTimeout(tutorialPromptTimer);
-
-      banner.classList.remove('translate-y-0', 'opacity-100');
-      if (direction === 'left') {
-        banner.classList.add('-translate-x-full', 'opacity-0');
-      } else if (direction === 'right') {
-        banner.classList.add('translate-x-full', 'opacity-0');
-      } else {
-        banner.classList.add('-translate-y-28', 'opacity-0');
-      }
-
-      setTimeout(() => {
-        banner.classList.add('hidden');
-        banner.classList.remove('-translate-x-full', 'translate-x-full');
-        banner.style.transform = '';
-      }, 300);
-    }
-
-    function initTutorialSwipeGestures() {
-      const banner = document.getElementById('tutorialPromptBanner');
-      const card = document.getElementById('tutorialPromptCard');
-      if (!banner || !card) return;
-
-      let startX = 0;
-      let startY = 0;
-      let currentX = 0;
-      let currentY = 0;
-      let isDragging = false;
-      let moved = false;
-
-      card.addEventListener('touchstart', (e) => {
-        if (!e.touches || e.touches.length === 0) return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        currentX = 0;
-        currentY = 0;
-        isDragging = true;
-        moved = false;
-        banner.style.transition = 'none';
-      }, { passive: true });
-
-      card.addEventListener('touchmove', (e) => {
-        if (!isDragging || !e.touches || e.touches.length === 0) return;
-        currentX = e.touches[0].clientX - startX;
-        currentY = e.touches[0].clientY - startY;
-        if (Math.abs(currentX) > 8 || Math.abs(currentY) > 8) {
-          moved = true;
-        }
-        const clampedY = Math.min(20, currentY);
-        banner.style.transform = `translate(${currentX}px, ${clampedY}px)`;
-      }, { passive: true });
-
-      card.addEventListener('touchend', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        banner.style.transition = '';
-
-        if (currentY < -35) {
-          dismissTutorialPromptBanner('up');
-        } else if (currentX < -65) {
-          dismissTutorialPromptBanner('left');
-        } else if (currentX > 65) {
-          dismissTutorialPromptBanner('right');
-        } else {
-          banner.style.transform = '';
-          if (!moved) {
-            dismissTutorialPromptBanner('up');
-            startTutorial();
-          }
-        }
-      });
-
-      card.addEventListener('click', () => {
-        if (!moved) {
-          dismissTutorialPromptBanner('up');
-          startTutorial();
-        }
-      });
-
-      window.addEventListener('resize', () => {
-        const guideCard = document.getElementById('tutorialGuideCard');
-        if (guideCard && !guideCard.classList.contains('hidden')) {
-          positionTutorialCard(TUTORIAL_STEPS[currentTutorialStep]);
-        }
-      });
-    }
-
-    function clearTutorialSpotlights() {
-      document.querySelectorAll('.tutorial-spotlight').forEach((el) => {
-        el.classList.remove('tutorial-spotlight');
-      });
-    }
-
-    function positionTutorialCard(step) {
-      const guideCard = document.getElementById('tutorialGuideCard');
-      const arrow = document.getElementById('tutorialPointerArrow');
-      const targetEl = step.targetId ? document.getElementById(step.targetId) : null;
-      if (!guideCard) return;
-
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const cardRect = guideCard.getBoundingClientRect();
-      const cardW = cardRect.width || Math.min(380, vw - 24);
-      const cardH = cardRect.height || 195;
-      const margin = 12;
-      const gap = 14;
-
-      if (!targetEl) {
-        guideCard.style.left = `${Math.max(margin, (vw - cardW) / 2)}px`;
-        guideCard.style.top = `${Math.max(margin, (vh - cardH) / 2)}px`;
-        if (arrow) arrow.style.display = 'none';
-        return;
-      }
-
-      const tRect = targetEl.getBoundingClientRect();
-      let placeAbove = step.cardPos === 'top';
-
-      if (placeAbove && tRect.top - cardH - gap < margin) {
-        placeAbove = false;
-      } else if (!placeAbove && tRect.bottom + cardH + gap > vh - margin) {
-        placeAbove = true;
-      }
-
-      let topPos = placeAbove
-        ? Math.max(margin, tRect.top - cardH - gap)
-        : Math.min(vh - cardH - margin, tRect.bottom + gap);
-
-      const targetCenterX = tRect.left + tRect.width / 2;
-      let leftPos = targetCenterX - cardW / 2;
-      leftPos = Math.max(margin, Math.min(vw - cardW - margin, leftPos));
-
-      guideCard.style.left = `${Math.round(leftPos)}px`;
-      guideCard.style.top = `${Math.round(topPos)}px`;
-
-      if (arrow) {
-        arrow.style.display = 'block';
-        const arrowX = Math.max(20, Math.min(cardW - 28, targetCenterX - leftPos - 7));
-        arrow.style.left = `${Math.round(arrowX)}px`;
-        if (placeAbove) {
-          arrow.style.top = 'auto';
-          arrow.style.bottom = '-8px';
-          arrow.style.borderTop = 'none';
-          arrow.style.borderLeft = 'none';
-          arrow.style.borderBottom = '2px solid #10b981';
-          arrow.style.borderRight = '2px solid #10b981';
-        } else {
-          arrow.style.bottom = 'auto';
-          arrow.style.top = '-8px';
-          arrow.style.borderBottom = 'none';
-          arrow.style.borderRight = 'none';
-          arrow.style.borderTop = '2px solid #10b981';
-          arrow.style.borderLeft = '2px solid #10b981';
-        }
-      }
-    }
-
-    function startTutorial() {
-      currentTutorialStep = 0;
-      isTutorialAutoPlaying = true;
-      updateAutoPlayButtonUI();
       document.getElementById('tutorialBackdrop').classList.remove('hidden');
-      document.getElementById('tutorialGuideCard').classList.remove('hidden');
-      renderTutorialStep();
-    }
+      const card = document.getElementById('tutorialGuideCard');
+      card.classList.remove('hidden');
 
-    function renderTutorialStep() {
-      const step = TUTORIAL_STEPS[currentTutorialStep];
-      if (!step) return;
-
-      clearTutorialSpotlights();
-      if (typeof step.setup === 'function') step.setup();
-
-      document.getElementById('tutorialStepBadge').innerText = `Langkah ${currentTutorialStep + 1} / ${TUTORIAL_STEPS.length}`;
-      document.getElementById('tutorialStepTitle').innerText = step.title;
-      document.getElementById('tutorialStepDesc').innerText = step.desc;
-
-      const btnPrev = document.getElementById('btnTutPrev');
-      const btnNext = document.getElementById('btnTutNext');
-      btnPrev.disabled = currentTutorialStep === 0;
-      btnNext.innerText = currentTutorialStep === TUTORIAL_STEPS.length - 1 ? 'Selesai ✓' : 'Lanjut →';
-
-      const dotsContainer = document.getElementById('tutorialDots');
-      dotsContainer.innerHTML = TUTORIAL_STEPS.map((_, i) => `
-        <span class="h-1.5 rounded-full transition-all ${i === currentTutorialStep ? 'w-4 bg-emerald-400' : 'w-1.5 bg-slate-700'}"></span>
-      `).join('');
+      document.querySelectorAll('.tutorial-spotlight').forEach(el => el.classList.remove('tutorial-spotlight'));
 
       setTimeout(() => {
-        const targetEl = step.targetId ? document.getElementById(step.targetId) : null;
-        if (targetEl) {
-          targetEl.classList.add('tutorial-spotlight');
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const target = document.querySelector(step.target);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('tutorial-spotlight');
+          positionCardNear(card, target);
+        } else {
+          card.style.top = '25%';
+          card.style.left = '50%';
+          card.style.transform = 'translateX(-50%)';
         }
-        positionTutorialCard(step);
-        speakTutorialStep(step);
-      }, 80);
+      }, 120);
+
+      document.getElementById('tutorialStepBadge').textContent = `Langkah ${idx + 1} / ${TUTORIAL_STEPS.length}`;
+      document.getElementById('tutorialStepTitle').textContent = step.title;
+      document.getElementById('tutorialStepDesc').textContent = step.desc;
+      document.getElementById('btnTutPrev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+      document.getElementById('btnTutNext').textContent = idx === TUTORIAL_STEPS.length - 1 ? 'Selesai ✓' : 'Lanjut →';
+      document.getElementById('btnTutVoiceToggle').textContent = tutVoiceEnabled ? 'Suara: ON' : 'Suara: OFF';
+      document.getElementById('btnTutAutoPlay').textContent = tutAutoPlay ? '⏸ Jeda' : '▶ Auto';
+
+      speakTutorialVoice(step.voice, () => { if (tutAutoPlay) nextTutorialStep(); });
     }
 
-    function nextTutorialStep() {
-      if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
-        currentTutorialStep++;
-        renderTutorialStep();
+    function positionCardNear(card, target) {
+      const rect = target.getBoundingClientRect();
+      const cardH = card.offsetHeight || 200;
+      const vh = window.innerHeight;
+      const gap = 14;
+      card.style.left = '50%';
+      card.style.transform = 'translateX(-50%)';
+      if (rect.top < vh * 0.45) {
+        card.style.top = `${Math.max(gap, Math.min(rect.bottom + gap, vh - cardH - gap))}px`;
       } else {
-        endTutorial();
+        card.style.top = `${Math.max(gap, rect.top - cardH - gap)}px`;
       }
     }
 
-    function prevTutorialStep() {
-      if (currentTutorialStep > 0) {
-        currentTutorialStep--;
-        renderTutorialStep();
-      }
+    function nextTutorialStep() { clearTimeout(tutAutoTimer); renderTutorialStep(currentTutStep + 1); }
+    function prevTutorialStep() { clearTimeout(tutAutoTimer); renderTutorialStep(currentTutStep - 1); }
+    function toggleTutorialVoice() {
+      tutVoiceEnabled = !tutVoiceEnabled;
+      document.getElementById('btnTutVoiceToggle').textContent = tutVoiceEnabled ? 'Suara: ON' : 'Suara: OFF';
+      if (!tutVoiceEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+      else speakTutorialVoice(TUTORIAL_STEPS[currentTutStep].voice, () => { if (tutAutoPlay) nextTutorialStep(); });
     }
-
+    function toggleTutorialAutoPlay() {
+      tutAutoPlay = !tutAutoPlay;
+      document.getElementById('btnTutAutoPlay').textContent = tutAutoPlay ? '⏸ Jeda' : '▶ Auto';
+      if (tutAutoPlay) speakTutorialVoice(TUTORIAL_STEPS[currentTutStep].voice, () => { if (tutAutoPlay) nextTutorialStep(); });
+      else clearTimeout(tutAutoTimer);
+    }
     function endTutorial() {
-      isTutorialAutoPlaying = false;
-      updateAutoPlayButtonUI();
-      stopTutorialSpeech();
-      clearTutorialSpotlights();
-      closeMenuIfOpen();
+      clearTimeout(tutAutoTimer);
+      tutAutoPlay = false;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.querySelectorAll('.tutorial-spotlight').forEach(el => el.classList.remove('tutorial-spotlight'));
       document.getElementById('tutorialBackdrop').classList.add('hidden');
       document.getElementById('tutorialGuideCard').classList.add('hidden');
-      setTabDirect('tracker');
-    }
-  </script>
-  <script>
-  // =========================================================================
-  // MODUL TUTORIAL INTERAKTIF 11 LANGKAH + SUARA NATIVE HP/DESKTOP
-  // =========================================================================
-
-  let currentTutorialStep = 0;
-  let isTutorialMuted = false;
-  let isTutorialAutoPlay = false;
-  let tutorialAutoTimer = null;
-  let cachedVoices = [];
-
-  // 1. Naskah Tutorial Gaya Santai Rekan Pabrik (11 Langkah Terpisah)
-  const TUTORIAL_STEPS = [
-    {
-      target: '#btnOpenMenu',
-      title: '1. Buka Tombol Menu',
-      desc: 'Ketuk tombol Menu di pojok kanan atas untuk membuka pengaturan dan pilihan halaman.',
-      voice: 'Halo rekan-rekan! Pertama, ketuk tombol Menu di pojok kanan atas ya untuk membuka pilihan halaman.',
-      action: () => closeMenuDropdownIfOpen()
-    },
-    {
-      target: '#menuBtnSetting',
-      title: '2. Masuk ke Menu Setting',
-      desc: 'Pilih Setting untuk mengisi identitas line, style, dan target takt time sebelum mulai ukur.',
-      voice: 'Sekarang, pilih menu Setting untuk mengisi data line dan target takt time sebelum kita mulai ukur.',
-      action: () => openMenuDropdownIfClosed()
-    },
-    {
-      target: '#settingLineGroup',
-      title: '3. Isi Nama Line & Model / Style',
-      desc: 'Masukkan nama line produksi dan nama model atau style yang sedang diamati.',
-      voice: 'Di halaman Setting ini, silakan isi nama line produksi beserta nama model atau style yang sedang diamati.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('setting'); }
-    },
-    {
-      target: '#settingTaktGroup',
-      title: '4. Atur Target Takt Time & Satuan',
-      desc: 'Tentukan angka Target Takt Time dan pilih satuan waktunya (detik atau menit).',
-      voice: 'Lanjut, masukkan angka Target Takt Time dan pilih satuan waktunya, mau pakai detik atau menit.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('setting'); }
-    },
-    {
-      target: '#btnSaveSettings',
-      title: '5. Simpan Pengaturan',
-      desc: 'Ketuk tombol Simpan agar seluruh parameter line langsung diterapkan ke stopwatch dan analisis.',
-      voice: 'Kalau sudah pas, langsung tap tombol Simpan biar pengaturannya aktif.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('setting'); }
-    },
-    {
-      target: '#bottomControllerBar',
-      title: '6. Kontrol Stopwatch (Start, Lap, Stop)',
-      desc: 'Gunakan START untuk mulai, LAP / CYCLE setiap kali operator selesai 1 siklus, dan STOP jika selesai.',
-      voice: 'Sekarang kita masuk ke layar Stopwatch. Tekan Start untuk mulai, tap Lap setiap operator selesai satu siklus, dan tekan Stop kalau sudah selesai.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('stopwatch'); }
-    },
-    {
-      target: '#logTableContainer',
-      title: '7. Edit Proses, Operator, Mesin & Waktu',
-      desc: 'Ketuk kolom di tabel Log untuk mengubah nama proses, nama operator, jenis mesin, atau koreksi waktu.',
-      voice: 'Di tabel Log ini, kamu bisa langsung tap kolomnya untuk ganti nama proses, nama operator, jenis mesin, atau koreksi waktu.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('stopwatch'); }
-    },
-    {
-      target: '#menuBtnAnalisis',
-      title: '8. Buka Menu Analisis',
-      desc: 'Buka Menu lalu pilih Analisis untuk melihat hasil perhitungan otomatis.',
-      voice: 'Setelah data terkumpul, buka lagi tombol Menu di kanan atas, lalu pilih Analisis.',
-      action: () => openMenuDropdownIfClosed()
-    },
-    {
-      target: '#analisisSummarySection',
-      title: '9. Cek Pareto, CT, Action & Kapasitas',
-      desc: 'Pantau grafik Top 3 Bottleneck, nilai Cycle Time (CT), rekomendasi Action, dan kapasitas per jam.',
-      voice: 'Di sini langsung kelihatan grafik bottleneck, rata-rata cycle time, rekomendasi action perbaikan, serta kapasitas output per jam.',
-      action: () => { closeMenuDropdownIfOpen(); switchTab('analisis'); }
-    },
-    {
-      target: '#btnExportExcel',
-      title: '10. Download Laporan Excel (.xlsx)',
-      desc: 'Buka Menu lalu ketuk Download Laporan Excel (.xlsx) untuk menyimpan file Excel asli langsung di HP.',
-      voice: 'Mau simpan datanya? Buka Menu lalu tap Download Laporan Excel untuk mengunduh file Excel asli langsung ke HP kamu.',
-      action: () => openMenuDropdownIfClosed()
-    },
-    {
-      target: '#btnShareWhatsApp',
-      title: '11. Kirim Rangkuman ke WhatsApp',
-      desc: 'Ketuk Kirim Rangkuman ke WhatsApp untuk langsung membagikan ringkasan laporan ke grup atau atasan.',
-      voice: 'Terakhir, tap Kirim Rangkuman ke WhatsApp kalau mau langsung laporan cepat ke grup atau atasan. Selamat bekerja!',
-      action: () => openMenuDropdownIfClosed()
-    }
-  ];
-
-  // Helper aman membuka/menutup tab & dropdown (menyesuaikan fungsi yang ada di index.html)
-  function openMenuDropdownIfClosed() {
-    const dropdown = document.getElementById('menuDropdown');
-    if (dropdown && dropdown.classList.contains('hidden')) {
-      dropdown.classList.remove('hidden');
-    }
-  }
-
-  function closeMenuDropdownIfOpen() {
-    const dropdown = document.getElementById('menuDropdown');
-    if (dropdown && !dropdown.classList.contains('hidden')) {
-      dropdown.classList.add('hidden');
-    }
-  }
-
-  // 2. Preload Suara Bahasa Indonesia Terbaik
-  function loadSystemVoices() {
-    if (!('speechSynthesis' in window)) return;
-    const voices = window.speechSynthesis.getVoices();
-    if (voices && voices.length > 0) {
-      cachedVoices = voices;
-    }
-  }
-
-  if ('speechSynthesis' in window) {
-    loadSystemVoices();
-    window.speechSynthesis.onvoiceschanged = loadSystemVoices;
-  }
-
-  // 3. Mesin Pembaca Suara (Anti-Eja "Cycle Time" & Fix Bisu di HP Android/iOS)
-  function speakTutorialVoice(rawText, onDoneCallback = null) {
-    if (!('speechSynthesis' in window) || isTutorialMuted) {
-      if (onDoneCallback) tutorialAutoTimer = setTimeout(onDoneCallback, 3500);
-      return;
+      closeMenu();
     }
 
-    // Ubah pelafalan istilah Inggris agar dibaca utuh dan luwes oleh mesin TTS Indonesia
-    const naturalText = rawText
-      .replace(/\bcycle\s*time\b/gi, 'saikel taim')
-      .replace(/\bCT\b/g, 'saikel taim')
-      .replace(/\btakt\s*time\b/gi, 'tak taim')
-      .replace(/\bbottleneck\b/gi, 'botelnek')
-      .replace(/\bstart\b/gi, 'setart')
-      .replace(/\bstop\b/gi, 'setop');
-
-    try {
-      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-        window.speechSynthesis.cancel();
-      }
-    } catch (e) {}
-
-    const utterance = new SpeechSynthesisUtterance(naturalText);
-    const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
-
-    // Prioritaskan suara Google / Natural Indonesia
-    const selectedVoice =
-      voices.find(v => /id[-_]ID/i.test(v.lang) && /google|natural|wavenet|neural/i.test(v.name)) ||
-      voices.find(v => /id[-_]ID/i.test(v.lang)) ||
-      voices.find(v => /^id/i.test(v.lang));
-
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedVoice.lang;
-    } else {
-      utterance.lang = 'id-ID';
-    }
-
-    utterance.rate = 0.96;  // Tempo bicara santai & jelas
-    utterance.pitch = 1.03; // Intonasi ramah
-    utterance.volume = 1.0;
-
-    utterance.onend = () => {
-      if (onDoneCallback && isTutorialAutoPlay) {
-        tutorialAutoTimer = setTimeout(onDoneCallback, 700);
-      }
-    };
-
-    utterance.onerror = () => {
-      if (onDoneCallback && isTutorialAutoPlay) {
-        tutorialAutoTimer = setTimeout(onDoneCallback, 3200);
-      }
-    };
-
-    // Jeda 60ms mengatasi bug Chrome Android yang membatalkan speak() tepat setelah cancel()
-    setTimeout(() => {
-      window.speechSynthesis.speak(utterance);
-    }, 60);
-  }
-
-  // Unlock audio engine di HP pada sentuhan pertama pengguna
-  function unlockMobileAudio() {
-    if ('speechSynthesis' in window) {
-      const silentUtterance = new SpeechSynthesisUtterance('');
-      silentUtterance.volume = 0;
-      window.speechSynthesis.speak(silentUtterance);
-    }
-  }
-
-  // 4. Navigasi & Render Kartu Tutorial Adaptif (Tanpa Blur Background)
-  function startTutorial(autoPlay = false) {
-    unlockMobileAudio();
-    const banner = document.getElementById('tutorialPromptBanner');
-    if (banner) banner.classList.add('hidden');
-
-    isTutorialAutoPlay = autoPlay;
-    currentTutorialStep = 0;
-    renderTutorialStep(0);
-  }
-
-  function renderTutorialStep(index) {
-    clearTimeout(tutorialAutoTimer);
-    if (index < 0) index = 0;
-    if (index >= TUTORIAL_STEPS.length) {
-      endTutorial();
-      return;
-    }
-
-    currentTutorialStep = index;
-    const step = TUTORIAL_STEPS[index];
-
-    // Jalankan aksi pindah tab/buka menu sesuai langkah
-    if (typeof step.action === 'function') {
-      step.action();
-    }
-
-    const overlay = document.getElementById('tutorialOverlay');
-    const card = document.getElementById('tutorialCard');
-    if (!overlay || !card) return;
-
-    overlay.classList.remove('hidden');
-
-    // Hapus highlight sebelumnya
-    document.querySelectorAll('.tutorial-highlight-ring').forEach(el => {
-      el.classList.remove('tutorial-highlight-ring');
-    });
-
-    // Sorot elemen target & posisikan kartu tepat di dekatnya
-    setTimeout(() => {
-      const targetEl = document.querySelector(step.target);
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        targetEl.classList.add('tutorial-highlight-ring');
-        positionTutorialCardNearTarget(card, targetEl);
-      } else {
-        card.style.top = '50%';
-        card.style.left = '50%';
-        card.style.transform = 'translate(-50%, -50%)';
-      }
-    }, 120);
-
-    // Update isi teks kartu
-    const badgeEl = document.getElementById('tutStepBadge');
-    const titleEl = document.getElementById('tutStepTitle');
-    const descEl = document.getElementById('tutStepDesc');
-    const btnNext = document.getElementById('tutBtnNext');
-    const btnPrev = document.getElementById('tutBtnPrev');
-    const btnMute = document.getElementById('tutBtnMute');
-    const btnAuto = document.getElementById('tutBtnAuto');
-
-    if (badgeEl) badgeEl.textContent = `LANGKAH ${index + 1} / ${TUTORIAL_STEPS.length}`;
-    if (titleEl) titleEl.textContent = step.title;
-    if (descEl) descEl.textContent = step.desc;
-    if (btnPrev) btnPrev.style.visibility = index === 0 ? 'hidden' : 'visible';
-    if (btnNext) btnNext.textContent = index === TUTORIAL_STEPS.length - 1 ? 'Selesai ✓' : 'Lanjut →';
-    if (btnMute) btnMute.textContent = isTutorialMuted ? '🔇 Bisu' : '🔊 Suara';
-    if (btnAuto) btnAuto.textContent = isTutorialAutoPlay ? '⏸ Jeda' : '▶ Auto';
-
-    // Putar suara langkah ini
-    speakTutorialVoice(step.voice, () => {
-      if (isTutorialAutoPlay) {
-        nextTutorialStep();
-      }
-    });
-  }
-
-  function positionTutorialCardNearTarget(card, targetEl) {
-    const rect = targetEl.getBoundingClientRect();
-    const cardHeight = card.offsetHeight || 210;
-    const viewportHeight = window.innerHeight;
-    const margin = 14;
-
-    card.style.left = '50%';
-    card.style.transform = 'translateX(-50%)';
-
-    // Jika target berada di bagian atas layar, taruh kartu di bawah target
-    if (rect.top < viewportHeight * 0.45) {
-      const topPos = Math.min(rect.bottom + margin, viewportHeight - cardHeight - margin);
-      card.style.top = `${Math.max(margin, topPos)}px`;
-      card.style.bottom = 'auto';
-    } else {
-      // Jika target berada di bagian bawah layar, taruh kartu di atas target
-      const topPos = Math.max(margin, rect.top - cardHeight - margin);
-      card.style.top = `${topPos}px`;
-      card.style.bottom = 'auto';
-    }
-  }
-
-  function nextTutorialStep() {
-    clearTimeout(tutorialAutoTimer);
-    if (currentTutorialStep + 1 < TUTORIAL_STEPS.length) {
-      renderTutorialStep(currentTutorialStep + 1);
-    } else {
-      endTutorial();
-    }
-  }
-
-  function prevTutorialStep() {
-    clearTimeout(tutorialAutoTimer);
-    if (currentTutorialStep > 0) {
-      renderTutorialStep(currentTutorialStep - 1);
-    }
-  }
-
-  function toggleTutorialMute() {
-    isTutorialMuted = !isTutorialMuted;
-    const btnMute = document.getElementById('tutBtnMute');
-    if (btnMute) btnMute.textContent = isTutorialMuted ? '🔇 Bisu' : '🔊 Suara';
-
-    if (isTutorialMuted && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    } else {
-      speakTutorialVoice(TUTORIAL_STEPS[currentTutorialStep].voice);
-    }
-  }
-
-  function toggleTutorialAutoPlay() {
-    isTutorialAutoPlay = !isTutorialAutoPlay;
-    const btnAuto = document.getElementById('tutBtnAuto');
-    if (btnAuto) btnAuto.textContent = isTutorialAutoPlay ? '⏸ Jeda' : '▶ Auto';
-
-    if (isTutorialAutoPlay) {
-      speakTutorialVoice(TUTORIAL_STEPS[currentTutorialStep].voice, () => {
-        if (isTutorialAutoPlay) nextTutorialStep();
+    function showTutorialBanner() {
+      const b = document.getElementById('tutorialPromptBanner');
+      if (!b) return;
+      b.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        b.classList.remove('-translate-y-28', 'opacity-0');
+        b.classList.add('translate-y-0', 'opacity-100');
       });
-    } else {
-      clearTimeout(tutorialAutoTimer);
     }
-  }
+    function dismissTutorialBanner() {
+      const b = document.getElementById('tutorialPromptBanner');
+      if (!b || b.classList.contains('hidden')) return;
+      b.classList.add('-translate-y-28', 'opacity-0');
+      b.classList.remove('translate-y-0', 'opacity-100');
+      setTimeout(() => b.classList.add('hidden'), 280);
+    }
+    function initBannerSwipe() {
+      const b = document.getElementById('tutorialPromptBanner');
+      if (!b) return;
+      let sx = 0, sy = 0;
+      b.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+      b.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - sx;
+        const dy = e.changedTouches[0].clientY - sy;
+        if (dy < -30 || Math.abs(dx) > 40) dismissTutorialBanner();
+      }, { passive: true });
+    }
 
-  function endTutorial() {
-    clearTimeout(tutorialAutoTimer);
-    isTutorialAutoPlay = false;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-    document.querySelectorAll('.tutorial-highlight-ring').forEach(el => {
-      el.classList.remove('tutorial-highlight-ring');
+    // Init Splash & App
+    document.addEventListener('DOMContentLoaded', () => {
+      updateHeaderAndUnits();
+      renderTable();
+      updateMetrics();
+      initBannerSwipe();
+
+      const prog = document.getElementById('splashProgress');
+      const splash = document.getElementById('splashScreen');
+      const bar = document.getElementById('bottomControllerBar');
+      setTimeout(() => { if (prog) prog.style.width = '100%'; }, 80);
+      setTimeout(() => {
+        if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 350); }
+        if (bar) { bar.classList.remove('hidden', 'opacity-0', 'pointer-events-none'); bar.classList.add('opacity-100'); }
+        showTutorialBanner();
+      }, 1100);
     });
-    closeMenuDropdownIfOpen();
-    const overlay = document.getElementById('tutorialOverlay');
-    if (overlay) overlay.classList.add('hidden');
-  }
-
-  // 5. Gesture Swipe Banner Tutorial Atas (Muncul Setelah Splash Screen)
-  function showTutorialPromptBanner() {
-    const banner = document.getElementById('tutorialPromptBanner');
-    if (!banner) return;
-    banner.classList.remove('hidden');
-    banner.style.transform = 'translate(-50%, 0)';
-    banner.style.opacity = '1';
-  }
-
-  function dismissTutorialPromptBanner() {
-    const banner = document.getElementById('tutorialPromptBanner');
-    if (!banner) return;
-    banner.style.transform = 'translate(-50%, -120%)';
-    banner.style.opacity = '0';
-    setTimeout(() => banner.classList.add('hidden'), 280);
-  }
-
-  function initTutorialSwipeGestures() {
-    const banner = document.getElementById('tutorialPromptBanner');
-    if (!banner) return;
-
-    let startX = 0;
-    let startY = 0;
-
-    banner.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    }, { passive: true });
-
-    banner.addEventListener('touchend', (e) => {
-      const diffX = e.changedTouches[0].clientX - startX;
-      const diffY = e.changedTouches[0].clientY - startY;
-
-      // Jika di-swipe ke atas, kiri, atau kanan (> 35px), tutup banner
-      if (diffY < -35 || Math.abs(diffX) > 45) {
-        dismissTutorialPromptBanner();
-      }
-    }, { passive: true });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initTutorialSwipeGestures();
-  });
-</script>
+  </script>
 </body>
 </html>
