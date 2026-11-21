@@ -96,13 +96,21 @@
   <div id="tutorialBackdrop" class="hidden fixed inset-0 bg-transparent pointer-events-none z-[55]"></div>
   <div id="tutorialGuideCard" class="hidden fixed w-[calc(100vw-24px)] max-w-[380px] z-[70] bg-slate-900/95 border-2 border-emerald-500 text-white rounded-2xl p-4 shadow-[0_12px_36px_rgba(0,0,0,0.65)] transition-all duration-300 space-y-2.5">
     <div id="tutorialPointerArrow" class="hidden sm:block absolute w-3.5 h-3.5 bg-slate-900 border-emerald-500 rotate-45"></div>
-    <div class="flex items-center justify-between gap-2">
+    <div class="flex items-center justify-between gap-1.5">
       <span id="tutorialStepBadge" class="text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-        Langkah 1 / 10
+        Langkah 1 / 11
       </span>
-      <button onclick="endTutorial()" class="text-xs font-bold text-slate-400 hover:text-rose-400 px-2 py-1 rounded-lg cursor-pointer">
-        Lewati ✕
-      </button>
+      <div class="flex items-center gap-1">
+        <button id="btnTutVoiceToggle" onclick="toggleTutorialVoice()" class="text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 cursor-pointer" title="Aktifkan/Matikan Suara Panduan">
+          Suara: ON
+        </button>
+        <button id="btnTutAutoPlay" onclick="toggleTutorialAutoPlay()" class="text-xs font-bold px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 cursor-pointer" title="Putar Otomatis Seperti Video">
+          ▶ Auto
+        </button>
+        <button onclick="endTutorial()" class="text-xs font-bold text-slate-400 hover:text-rose-400 px-1.5 py-1 rounded-lg cursor-pointer">
+          ✕
+        </button>
+      </div>
     </div>
     <div>
       <h3 id="tutorialStepTitle" class="text-sm sm:text-base font-extrabold text-white">Judul Langkah</h3>
@@ -375,7 +383,7 @@
 
           <div class="pt-4 border-t border-slate-800/60 flex justify-end">
             <button id="btnSaveSettings" onclick="saveSettingsAndReturn()" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               <span>Simpan & Kembali ke Stopwatch</span>
             </button>
           </div>
@@ -383,92 +391,89 @@
       </div>
 
     </main>
-  </div>
 
-  <!-- Sticky Bottom Stopwatch Controller Bar -->
-  <div id="bottomControllerBar" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500 opacity-0 pointer-events-none">
-    <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
-      
-      <!-- Real-time Metric Indicators -->
-      <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
-        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 sm:pr-3 border-slate-700/50">
-          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">STOPWATCH:</span>
-          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
-            <span id="metricStopwatch">0.0</span>
-            <span class="text-[10px] font-normal text-amber-500 unit-symbol">s</span>
+    <!-- Sticky Bottom Stopwatch Controller Bar (Disembunyikan saat Splash Screen) -->
+    <div id="bottomControllerBar" class="hidden opacity-0 pointer-events-none fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-slate-800 border-t backdrop-blur-md p-3 sm:p-4 shadow-2xl transition-opacity duration-500">
+      <div class="max-w-7xl mx-auto flex flex-col gap-2.5">
+        <div id="metricsStrip" class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 px-3 py-2 rounded-xl border w-full bg-slate-900/90 border-slate-800">
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 border-slate-700/50">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">STOPWATCH:</span>
+            <div class="font-mono text-base sm:text-lg font-black text-amber-400 flex items-baseline gap-0.5">
+              <span id="metricStopwatch">0.0</span>
+              <span class="text-[10px] font-normal text-amber-500 unit-symbol">s</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-2 border-slate-700/50">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">TOTAL CT:</span>
+            <div class="font-mono text-base sm:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
+              <span id="metricTotalCT">0.0</span>
+              <span class="text-[10px] font-normal text-emerald-500 unit-symbol">s</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r border-b sm:border-b-0 pb-1 sm:pb-0 pr-2 border-slate-700/50">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">EFISIENSI:</span>
+            <div class="font-mono text-base sm:text-lg font-black text-rose-400 flex items-baseline gap-0.5">
+              <span id="metricEfficiency">0.0</span>
+              <span class="text-[10px] font-normal text-rose-400">%</span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-2 border-slate-700/50">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">AVG CT:</span>
+            <div class="font-mono text-base sm:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
+              <span id="metricAvgCT">0.0</span>
+              <span class="text-[10px] font-normal text-cyan-500 unit-symbol">s</span>
+            </div>
+          </div>
+
+          <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center gap-1.5 pt-1 sm:pt-0">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">KAPASITAS:</span>
+            <div class="font-mono text-base sm:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
+              <span id="metricCapacity">0</span>
+              <span class="text-[10px] font-normal text-purple-400">pcs/h</span>
+            </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pl-1 sm:pl-0 sm:pr-3 border-slate-700/50">
-          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">TOTAL CT:</span>
-          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-emerald-400 flex items-baseline gap-0.5">
-            <span id="metricTotalCT">0.0</span>
-            <span class="text-[10px] font-normal text-emerald-500 unit-symbol">s</span>
-          </div>
-        </div>
+        <div id="stopwatchButtonsGroup" class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
+          <button id="btnStart" onclick="handleStart()" class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            <span>START</span>
+          </button>
 
-        <div class="col-span-2 sm:col-span-1 flex items-center justify-between sm:justify-center gap-1.5 border-b sm:border-b-0 sm:border-r pb-1 sm:pb-0 pt-1 sm:pt-0 sm:pr-3 border-slate-700/50">
-          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">EFISIENSI:</span>
-          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-rose-400 flex items-baseline gap-0.5">
-            <span id="metricEfficiency">0.0</span>
-            <span class="text-[10px] font-normal text-rose-400">%</span>
-          </div>
-        </div>
+          <button id="btnStop" onclick="handleStop()" disabled class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-600/20 transition-all cursor-pointer active:scale-95">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+            <span>STOP</span>
+          </button>
 
-        <div class="flex items-center justify-between sm:justify-center gap-1.5 border-r pt-1 sm:pt-0 pr-2 sm:pr-3 border-slate-700/50">
-          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">AVG CT:</span>
-          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-cyan-400 flex items-baseline gap-0.5">
-            <span id="metricAvgCT">0.0</span>
-            <span class="text-[10px] font-normal text-cyan-500 unit-symbol">s</span>
-          </div>
-        </div>
+          <button id="btnReset" onclick="handleReset()" class="flex items-center justify-center gap-1.5 p-3 rounded-xl font-bold border bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 text-xs sm:text-sm transition-all cursor-pointer active:scale-95" title="Reset Stopwatch">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span class="hidden sm:inline">RESET</span>
+          </button>
 
-        <div class="flex items-center justify-between sm:justify-center gap-1.5 pt-1 sm:pt-0 pl-1 sm:pl-0">
-          <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">KAPASITAS:</span>
-          <div class="font-mono text-sm sm:text-base lg:text-lg font-black text-purple-400 flex items-baseline gap-0.5">
-            <span id="metricCapacity">0</span>
-            <span class="text-[10px] font-normal text-purple-400">pcs/h</span>
-          </div>
+          <button id="btnLap" onclick="handleLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition-all cursor-pointer active:scale-95">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+            <span>LAP / CYCLE</span>
+          </button>
         </div>
       </div>
-
-      <!-- Interactive Stopwatch Action Buttons -->
-      <div id="stopwatchButtonsGroup" class="grid grid-cols-4 gap-2 sm:gap-3 w-full">
-        <button id="btnStart" onclick="handleStart()" class="flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
-          <span>▶ START</span>
-        </button>
-
-        <button id="btnStop" onclick="handleStop()" disabled class="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-40 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-600/20 transition-all cursor-pointer active:scale-95">
-          <span>⏹ STOP</span>
-        </button>
-
-        <button id="btnReset" onclick="handleReset()" class="flex items-center justify-center p-3 rounded-xl font-bold border transition-all cursor-pointer active:scale-95 bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700" title="Reset Stopwatch">
-          <span>↺ RESET</span>
-        </button>
-
-        <button id="btnLap" onclick="handleLap()" class="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 rounded-xl font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition-all cursor-pointer active:scale-95">
-          <span>+ LAP / CYCLE</span>
-        </button>
-      </div>
-
     </div>
   </div>
 
   <!-- ================================================================= -->
-  <!-- JAVASCRIPT ENGINE (INDEXEDDB OFFLINE + STOPWATCH + PARETO + WA)    -->
+  <!-- PURE VANILLA JAVASCRIPT ENGINE (100% OFFLINE & ANTI-BLANK)         -->
   <!-- ================================================================= -->
   <script>
-    // 1. INDEXED-DB OFFLINE STORAGE HELPER
+    // 1. OFFLINE INDEXED-DB STORAGE
     const DB_NAME = 'CycleTimeHaryanOfflineDB';
     const DB_VERSION = 1;
     const STORE_NAME = 'appStateStore';
 
     function openOfflineDB() {
       return new Promise((resolve, reject) => {
-        if (!window.indexedDB) {
-          reject(new Error('IndexedDB tidak didukung'));
-          return;
-        }
+        if (!window.indexedDB) return reject(new Error('IndexedDB tidak didukung'));
         const request = window.indexedDB.open(DB_NAME, DB_VERSION);
         request.onupgradeneeded = (e) => {
           const db = e.target.result;
@@ -1289,25 +1294,22 @@
   <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
   <cellXfs count="7">
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
-    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
-    <xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>
-    <xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
-    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
-    <xf numFmtId="0" fontId="4" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
-    <xf numFmtId="0" fontId="5" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+    <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>
+    <xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0"/>
+    <xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+    <xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/>
+    <xf numFmtId="0" fontId="4" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+    <xf numFmtId="0" fontId="5" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
   </cellXfs>
 </styleSheet>`;
 
-      const sheet1Xml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      const sheetXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
   <cols>
     <col min="1" max="1" width="10" customWidth="1"/>
-    <col min="2" max="2" width="14" customWidth="1"/>
-    <col min="3" max="3" width="14" customWidth="1"/>
-    <col min="4" max="4" width="26" customWidth="1"/>
-    <col min="5" max="5" width="20" customWidth="1"/>
-    <col min="6" max="6" width="20" customWidth="1"/>
-    <col min="7" max="7" width="32" customWidth="1"/>
+    <col min="2" max="3" width="16" customWidth="1"/>
+    <col min="4" max="6" width="24" customWidth="1"/>
+    <col min="7" max="7" width="34" customWidth="1"/>
     <col min="8" max="8" width="20" customWidth="1"/>
   </cols>
   <sheetData>${rowsXml}</sheetData>
@@ -1319,17 +1321,17 @@
         { name: 'xl/workbook.xml', content: workbookXml },
         { name: 'xl/_rels/workbook.xml.rels', content: workbookRelsXml },
         { name: 'xl/styles.xml', content: stylesXml },
-        { name: 'xl/worksheets/sheet1.xml', content: sheet1Xml }
+        { name: 'xl/worksheets/sheet1.xml', content: sheetXml }
       ]);
 
       const url = URL.createObjectURL(xlsxBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `report_cycletime_${state.lineName.replace(/\s+/g, '_')}.xlsx`;
+      a.download = `Cycle_Time_${state.lineName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
     }
 
     function handleShareWhatsApp() {
@@ -1341,41 +1343,129 @@
       const unit = getUnitSymbol();
 
       const totalCT = state.cycles.reduce((acc, c) => acc + c.lapTime, 0);
-      const avgCT = totalCT / state.cycles.length;
+      const avgCT = state.cycles.length > 0 ? totalCT / state.cycles.length : 0;
       const capPcs = avgCT > 0 ? Math.floor(3600 / avgCT) : 0;
       const efficiencyPct = calculateLineEfficiency().toFixed(1);
 
-      const top3Lines = top3.map((c, idx) => {
-        const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
-        return `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - ${c.operatorName || '-'} | ${c.machineName || '-'} | ${cap} pcs/jam`;
-      }).join('\n');
+      const top3Text = top3
+        .map((c, i) => `${i + 1}. ${c.processName} (${formatTimeValue(c.lapTime)}${unit}${c.operatorName ? ` - ${c.operatorName}` : ''})`)
+        .join('\n');
 
-      const detailLines = chronological.map((c, idx) => {
-        const cap = c.lapTime > 0 ? Math.floor(3600 / c.lapTime) : 0;
-        return `  ${idx + 1}. *${c.processName}* (${formatTimeValue(c.lapTime)}${unit}) - ${c.operatorName || '-'} | ${c.machineName || '-'} | ${cap} pcs/jam`;
-      }).join('\n');
+      const detailText = chronological
+        .map((c, i) => `#${i + 1} ${c.processName}: ${formatTimeValue(c.lapTime)}${unit}${c.operatorName ? ` (${c.operatorName})` : ''}`)
+        .join('\n');
 
-      const summaryText = 
-`*LAPORAN CYCLE TIME HARYAN*
-*Line:* ${state.lineName}
-*Style:* ${state.styleName}
-*Takt Time:* ${state.taktTime}${unit} | *Kapasitas:* ${capPcs} pcs/jam
-*Total CT:* ${formatTimeValue(totalCT)}${unit} | *Efisiensi:* ${efficiencyPct}% | *Avg CT:* ${formatTimeValue(avgCT)}${unit}
+      const message = `*LAPORAN CYCLE TIME HARYAN*\n` +
+        `Line: *${state.lineName}*\n` +
+        `Style: *${state.styleName}*\n` +
+        `Target Takt: *${state.taktTime}${unit}*\n\n` +
+        `*RINGKASAN PERFORMA:*\n` +
+        `• Total CT: *${formatTimeValue(totalCT)}${unit}*\n` +
+        `• Avg CT: *${formatTimeValue(avgCT)}${unit}*\n` +
+        `• Line Efficiency: *${efficiencyPct}%*\n` +
+        `• Kapasitas Est.: *${capPcs} pcs/jam*\n\n` +
+        `*TOP 3 BOTTLENECK:*\n${top3Text}\n\n` +
+        `*RINCIAN SIKLUS (${chronological.length} Proses):*\n${detailText}`;
 
-*Top 3 Bottleneck:*
-${top3Lines}
-
-*Rincian Proses (${state.cycles.length}):*
-${detailLines}`;
-
-      // Gunakan protokol langsung whatsapp://send agar langsung membuka aplikasi WhatsApp tanpa halaman perantara web
-      const directWaUri = `whatsapp://send?text=${encodeURIComponent(summaryText)}`;
-      window.location.href = directWaUri;
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank');
     }
 
-    // 10. INTERACTIVE TUTORIAL BANNER (SWIPE TO DISMISS / TAP TO START) & STEP GUIDE
+    // 10. INTERACTIVE TUTORIAL BANNER (SWIPE TO DISMISS / TAP TO START) & STEP GUIDE + VOICE-OVER
     let tutorialPromptTimer = null;
     let currentTutorialStep = 0;
+    let isTutorialVoiceOn = true;
+    let isTutorialAutoPlaying = false;
+    let tutorialAutoTimer = null;
+
+    function stopTutorialSpeech() {
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      } catch (e) {}
+      clearTimeout(tutorialAutoTimer);
+    }
+
+    function speakTutorialStep(step) {
+      stopTutorialSpeech();
+      if (!step) return;
+
+      const cleanDesc = step.desc.replace(/\(✏️\)/g, '').replace(/→/g, ' lalu ');
+      const spokenText = `${step.title.replace(/^\d+\.\s*/, '')}. ${cleanDesc}`;
+
+      const scheduleNextIfAuto = (fallbackMs = 4500) => {
+        if (!isTutorialAutoPlaying) return;
+        clearTimeout(tutorialAutoTimer);
+        tutorialAutoTimer = setTimeout(() => {
+          if (!isTutorialAutoPlaying) return;
+          if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
+            currentTutorialStep++;
+            renderTutorialStep();
+          } else {
+            endTutorial();
+          }
+        }, fallbackMs);
+      };
+
+      if (!isTutorialVoiceOn || !('speechSynthesis' in window)) {
+        scheduleNextIfAuto(4200);
+        return;
+      }
+
+      try {
+        const utterance = new SpeechSynthesisUtterance(spokenText);
+        utterance.lang = 'id-ID';
+        utterance.rate = 1.02;
+        utterance.pitch = 1.0;
+
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find((v) => v.lang && v.lang.toLowerCase().includes('id'));
+        if (idVoice) utterance.voice = idVoice;
+
+        utterance.onend = () => scheduleNextIfAuto(900);
+        utterance.onerror = () => scheduleNextIfAuto(4200);
+
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        scheduleNextIfAuto(4200);
+      }
+    }
+
+    function toggleTutorialVoice() {
+      isTutorialVoiceOn = !isTutorialVoiceOn;
+      const btn = document.getElementById('btnTutVoiceToggle');
+      if (btn) {
+        btn.innerText = isTutorialVoiceOn ? 'Suara: ON' : 'Suara: OFF';
+        btn.className = isTutorialVoiceOn
+          ? 'text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 cursor-pointer'
+          : 'text-xs font-bold px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 cursor-pointer';
+      }
+      if (isTutorialVoiceOn) {
+        speakTutorialStep(TUTORIAL_STEPS[currentTutorialStep]);
+      } else {
+        stopTutorialSpeech();
+      }
+    }
+
+    function toggleTutorialAutoPlay() {
+      isTutorialAutoPlaying = !isTutorialAutoPlaying;
+      updateAutoPlayButtonUI();
+      if (isTutorialAutoPlaying) {
+        speakTutorialStep(TUTORIAL_STEPS[currentTutorialStep]);
+      } else {
+        clearTimeout(tutorialAutoTimer);
+      }
+    }
+
+    function updateAutoPlayButtonUI() {
+      const btn = document.getElementById('btnTutAutoPlay');
+      if (!btn) return;
+      btn.innerText = isTutorialAutoPlaying ? '⏸ Jeda' : '▶ Auto';
+      btn.className = isTutorialAutoPlaying
+        ? 'text-xs font-extrabold px-2 py-1 rounded-lg bg-amber-500 text-slate-950 cursor-pointer'
+        : 'text-xs font-bold px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 cursor-pointer';
+    }
 
     const TUTORIAL_STEPS = [
       {
@@ -1702,6 +1792,8 @@ ${detailLines}`;
 
     function startTutorial() {
       currentTutorialStep = 0;
+      isTutorialAutoPlaying = true;
+      updateAutoPlayButtonUI();
       document.getElementById('tutorialBackdrop').classList.remove('hidden');
       document.getElementById('tutorialGuideCard').classList.remove('hidden');
       renderTutorialStep();
@@ -1735,6 +1827,7 @@ ${detailLines}`;
           targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         positionTutorialCard(step);
+        speakTutorialStep(step);
       }, 80);
     }
 
@@ -1755,6 +1848,9 @@ ${detailLines}`;
     }
 
     function endTutorial() {
+      isTutorialAutoPlaying = false;
+      updateAutoPlayButtonUI();
+      stopTutorialSpeech();
       clearTutorialSpotlights();
       closeMenuIfOpen();
       document.getElementById('tutorialBackdrop').classList.add('hidden');
